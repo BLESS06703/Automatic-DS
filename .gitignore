@@ -70,3 +70,4 @@ static/qrcodes/*.png
 # OS files
 Thumbs.db
 Desktop.ini
+.env
