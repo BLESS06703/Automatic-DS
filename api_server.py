@@ -13,33 +13,47 @@ CORS(app)
 db = Database()
 engine = DiagnosticEngine()
 
-# ========== ROOT ROUTES ==========
+# ========== WEB INTERFACE ROUTES ==========
 @app.route('/')
 def home():
-    return "🚗 Bless Digital Auto Care API is running! Go to /web_interface.html"
+    return redirect('/web_interface.html')
 
 @app.route('/web_interface.html')
-def web_interface():
-    try:
-        with open('web_interface.html', 'r') as f:
-            return f.read()
-    except:
-        return "web_interface.html not found", 404
+def serve_web_interface():
+    """Serve the main web interface"""
+    web_file = os.path.join(os.path.dirname(__file__), 'web_interface.html')
+    if os.path.exists(web_file):
+        return send_file(web_file)
+    return "web_interface.html not found. Please check the file exists.", 404
 
+# ========== STATIC FILES ==========
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_file('manifest.json')
+
+@app.route('/sw.js')
+def serve_sw():
+    return send_file('sw.js')
+
+# ========== API INFO ==========
 @app.route('/api')
-def api_root():
-    return {
-        "message": "Bless Digital Auto Care API",
-        "endpoints": {
-            "web_interface": "/web_interface.html",
-            "health": "/api/health",
-            "diagnose_engine": "/api/diagnose/engine",
-            "diagnose_battery": "/api/diagnose/battery",
-            "diagnose_starter": "/api/diagnose/starter",
-            "vehicles": "/api/vehicles",
-            "statistics": "/api/statistics"
+def api_info():
+    return jsonify({
+        'system': 'Bless Digital Auto Care',
+        'version': '2.0',
+        'status': 'online',
+        'endpoints': {
+            'web_interface': '/web_interface.html',
+            'health': '/api/health',
+            'diagnose_engine': '/api/diagnose/engine (POST)',
+            'diagnose_battery': '/api/diagnose/battery (POST)',
+            'diagnose_starter': '/api/diagnose/starter (POST)',
+            'vehicles': '/api/vehicles (GET)',
+            'statistics': '/api/statistics (GET)',
+            'add_customer': '/api/customer/add (POST)',
+            'add_vehicle': '/api/vehicle/add (POST)'
         }
-    }
+    })
 
 # ========== HEALTH CHECK ==========
 @app.route('/api/health', methods=['GET'])
@@ -149,7 +163,10 @@ def add_vehicle():
         year=data.get('year'),
         vin=data.get('vin', ''),
         license_plate=data.get('license_plate', ''),
-        mileage=data.get('mileage', 0)
+        mileage=data.get('mileage', 0),
+        color=data.get('color', ''),
+        engine_type=data.get('engine_type', ''),
+        transmission=data.get('transmission', '')
     )
     return jsonify({'success': True, 'vehicle_id': vehicle_id})
 
