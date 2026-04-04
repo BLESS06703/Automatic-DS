@@ -327,89 +327,27 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=False)
 
 # ========== TEMPORARY SETUP ENDPOINT ==========
-@app.route('/api/setup', methods=['GET'])
-def setup_admin():
-    """Create admin user (remove after first use)"""
-    try:
-        from auth import UserManager
-        um = UserManager()
-        
-        # Connect directly to database
-        import sqlite3
-        conn = sqlite3.connect('/tmp/workshop.db')
-        cursor = conn.cursor()
-        
-        # Delete existing admin
-        cursor.execute("DELETE FROM users WHERE username = 'admin'")
-        conn.commit()
-        
-        # Create new admin using UserManager
-        user_id = um.create_user('admin', 'admin123', 'System Administrator', 'admin')
-        
-        if user_id:
-            # Verify user was created
-            cursor.execute("SELECT username, role FROM users WHERE username = 'admin'")
-            user = cursor.fetchone()
-            conn.close()
-            return {
-                "success": True, 
-                "message": f"Admin user created: admin/admin123",
-                "user": {"username": user[0], "role": user[1]} if user else None
-            }
-        else:
-            conn.close()
-            return {"success": False, "message": "Failed to create admin user"}
-    except Exception as e:
-        return {"success": False, "message": str(e)}
 
-# ========== TEMPORARY SETUP ENDPOINT ==========
+# ========== SETUP ENDPOINT (Remove after first use) ==========
 @app.route('/api/setup', methods=['GET'])
 def setup_admin():
-    """Create admin user - visit this endpoint once"""
-    import sqlite3
-    import hashlib
-    import secrets
+    """Create admin user - visit once"""
+    import sqlite3, hashlib, secrets
     
-    def hash_password(pwd):
+    def hash_pwd(pwd):
         salt = secrets.token_hex(16)
-        hash_obj = hashlib.sha256((pwd + salt).encode())
-        return f"{salt}:{hash_obj.hexdigest()}"
+        return f"{salt}:{hashlib.sha256((pwd + salt).encode()).hexdigest()}"
     
-    db_path = '/tmp/workshop.db'
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    conn = sqlite3.connect('/tmp/workshop.db')
+    c = conn.cursor()
     
-    # Create users table if not exists
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            full_name TEXT,
-            role TEXT DEFAULT 'technician',
-            is_active INTEGER DEFAULT 1,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Delete existing admin
-    cursor.execute("DELETE FROM users WHERE username = 'admin'")
-    
-    # Create new admin
-    hashed = hash_password('admin123')
-    cursor.execute('''
-        INSERT INTO users (username, password, full_name, role, is_active)
-        VALUES (?, ?, ?, ?, ?)
-    ''', ('admin', hashed, 'System Administrator', 'admin', 1))
-    
+    c.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, full_name TEXT, role TEXT, is_active INTEGER DEFAULT 1)')
+    c.execute("DELETE FROM users WHERE username = 'admin'")
+    c.execute("INSERT INTO users (username, password, full_name, role, is_active) VALUES (?, ?, ?, ?, ?)", 
+              ('admin', hash_pwd('admin123'), 'System Administrator', 'admin', 1))
     conn.commit()
-    
-    # Verify
-    cursor.execute("SELECT username, role FROM users WHERE username = 'admin'")
-    user = cursor.fetchone()
+    c.execute("SELECT username, role FROM users WHERE username = 'admin'")
+    user = c.fetchone()
     conn.close()
     
-    if user:
-        return {"success": True, "message": f"Admin created: {user[0]}/admin123", "role": user[1]}
-    else:
-        return {"success": False, "message": "Failed to create admin"}
+    return {"success": True, "message": f"Admin created: {user[0]}/admin123"} if user else {"success": False}
