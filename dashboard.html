@@ -10,42 +10,42 @@
         * { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-100">
-    <!-- Top Bar -->
-    <div class="bg-white border-b border-gray-200 px-6 py-4">
+<body style="background: #f0f4f8;">
+    <!-- Top Bar - Prussian Blue -->
+    <div style="background: #003153;" class="px-6 py-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="text-3xl">🚗</div>
                 <div>
-                    <h1 class="text-xl font-bold text-[#003153]">Bless Auto Care</h1>
-                    <p class="text-xs text-gray-500">Industrial Diagnostic System</p>
+                    <h1 class="text-xl font-bold text-white">Bless Auto Care</h1>
+                    <p class="text-xs text-blue-200">Industrial Diagnostic System</p>
                 </div>
             </div>
-            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
+            <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Logout</button>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto px-6 py-6">
-        <!-- Stats -->
+        <!-- Stats - Prussian Blue accents -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="text-center">
+            <div class="bg-white rounded-xl shadow-md p-4 text-center">
                 <div class="text-3xl mb-1">👥</div>
-                <div class="text-2xl font-bold text-[#003153]" id="statCustomers">0</div>
+                <div class="text-2xl font-bold" style="color: #003153;" id="statCustomers">0</div>
                 <div class="text-xs text-gray-500">Customers</div>
             </div>
-            <div class="text-center">
+            <div class="bg-white rounded-xl shadow-md p-4 text-center">
                 <div class="text-3xl mb-1">🚙</div>
-                <div class="text-2xl font-bold text-[#003153]" id="statVehicles">0</div>
+                <div class="text-2xl font-bold" style="color: #003153;" id="statVehicles">0</div>
                 <div class="text-xs text-gray-500">Vehicles</div>
             </div>
-            <div class="text-center">
+            <div class="bg-white rounded-xl shadow-md p-4 text-center">
                 <div class="text-3xl mb-1">🔧</div>
-                <div class="text-2xl font-bold text-[#003153]" id="statDiagnostics">0</div>
+                <div class="text-2xl font-bold" style="color: #003153;" id="statDiagnostics">0</div>
                 <div class="text-xs text-gray-500">Diagnostics</div>
             </div>
-            <div class="text-center">
+            <div class="bg-white rounded-xl shadow-md p-4 text-center">
                 <div class="text-3xl mb-1">💰</div>
-                <div class="text-2xl font-bold text-[#003153]" id="statRevenue">$0</div>
+                <div class="text-2xl font-bold" style="color: #003153;" id="statRevenue">$0</div>
                 <div class="text-xs text-gray-500">Revenue</div>
             </div>
         </div>
@@ -54,11 +54,11 @@
         <div class="grid lg:grid-cols-2 gap-6">
             <!-- Controls Panel -->
             <div class="bg-white rounded-xl shadow-md p-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Diagnostic Controls</h2>
+                <h2 class="text-lg font-semibold mb-4" style="color: #003153;">Diagnostic Controls</h2>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select System</label>
-                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
+                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#003153] focus:border-transparent">
                             <option value="engine">🔧 Engine Diagnostic</option>
                             <option value="battery">🔋 Battery & Charging</option>
                             <option value="starter">⚡ Starter System</option>
@@ -68,7 +68,7 @@
                         <!-- Dynamic questions -->
                     </div>
                     <div class="flex gap-3 pt-2">
-                        <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg font-medium hover:bg-[#1B4F72] transition">Start Diagnosis</button>
+                        <button onclick="runDiagnostic()" class="flex-1 text-white py-2 rounded-lg font-medium transition" style="background: #003153; hover:background: #1B4F72;">Start Diagnosis</button>
                         <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 transition">Cancel</button>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
 
             <!-- Results Panel -->
             <div class="bg-white rounded-xl shadow-md p-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Analysis Results</h2>
+                <h2 class="text-lg font-semibold mb-4" style="color: #003153;">Analysis Results</h2>
                 <div id="resultsPanel" class="min-h-[350px]">
                     <div class="text-center text-gray-400 py-12">
                         <div class="text-5xl mb-3">🔍</div>
@@ -108,33 +108,33 @@
             const questions = {
                 engine: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine overheating?</label>
-                    <select id="q_overheating" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_overheating" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Smoke from exhaust?</label>
-                    <select id="q_smoke" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_smoke" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Unusual engine noise?</label>
-                    <select id="q_noise" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_noise" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Check engine light ON?</label>
-                    <select id="q_check_light" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_check_light" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 battery: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Car fails to start?</label>
-                    <select id="q_start" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_start" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Dashboard lights dim?</label>
-                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Rapid clicking?</label>
-                    <select id="q_clicks" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_clicks" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Battery over 3 years?</label>
-                    <select id="q_age" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_age" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 starter: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Clicking when turning key?</label>
-                    <select id="q_click" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_click" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine cranks?</label>
-                    <select id="q_crank" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_crank" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Headlights work?</label>
-                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="yes">Yes</option><option value="no">No</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Burning smell?</label>
-                    <select id="q_smell" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_smell" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003153]"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `
             };
             document.getElementById('questionsPanel').innerHTML = questions[currentSystem];
@@ -187,8 +187,8 @@
                             <p class="text-sm mt-1">${result.results || 'No issues found'}</p>
                         </div>
                         <div class="flex gap-2 pt-2">
-                            <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg text-sm">Run Again</button>
-                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-sm">Clear</button>
+                            <button onclick="runDiagnostic()" class="flex-1 text-white py-2 rounded-lg text-sm" style="background: #003153;">Run Again</button>
+                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-sm hover:bg-gray-300">Clear</button>
                         </div>
                     </div>
                 `;
