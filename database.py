@@ -348,3 +348,10 @@ class Database:
         
         conn.close()
         return stats
+
+# Make sure database file exists when app starts
+def ensure_db_exists(self):
+    """Ensure database file exists"""
+    if not os.path.exists(self.db_path):
+        print(f"Creating database at {self.db_path}")
+        self.init_database()
