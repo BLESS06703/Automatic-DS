@@ -9,20 +9,24 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)
+db = Database()
+engine = DiagnosticEngine()
 
-@app.route("/")
+# ========== ROOT ROUTES ==========
+@app.route('/')
 def home():
     return "🚗 Bless Digital Auto Care API is running! Go to /web_interface.html"
 
-@app.route("/web_interface.html")
+@app.route('/web_interface.html')
 def web_interface():
     try:
-        with open("web_interface.html", "r") as f:
+        with open('web_interface.html', 'r') as f:
             return f.read()
     except:
         return "web_interface.html not found", 404
 
-@app.route("/api")
+@app.route('/api')
 def api_root():
     return {
         "message": "Bless Digital Auto Care API",
@@ -36,26 +40,6 @@ def api_root():
             "statistics": "/api/statistics"
         }
     }
-CORS(app)
-db = Database()
-engine = DiagnosticEngine()
-
-# ========== ROOT REDIRECT TO WEB INTERFACE ==========
-@app.route('/')
-def home():
-    """Redirect to the web interface"""
-    return redirect('/web_interface.html')
-
-# ========== STATIC FILES (for PWA) ==========
-@app.route('/manifest.json')
-def serve_manifest():
-    """Serve PWA manifest"""
-    return send_file('manifest.json')
-
-@app.route('/sw.js')
-def serve_sw():
-    """Serve service worker"""
-    return send_file('sw.js')
 
 # ========== HEALTH CHECK ==========
 @app.route('/api/health', methods=['GET'])
@@ -155,20 +139,6 @@ def add_customer():
     )
     return jsonify({'success': True, 'customer_id': customer_id})
 
-@app.route('/api/customer/search', methods=['GET'])
-def search_customers():
-    search_term = request.args.get('q', '')
-    customers = db.search_customers(search_term)
-    return jsonify({'customers': customers})
-
-@app.route('/api/customer/<int:customer_id>', methods=['GET'])
-def get_customer(customer_id):
-    customer = db.get_customer(customer_id)
-    if customer:
-        return jsonify(customer)
-    return jsonify({'error': 'Customer not found'}), 404
-
-# ========== VEHICLE ENDPOINTS ==========
 @app.route('/api/vehicle/add', methods=['POST'])
 def add_vehicle():
     data = request.json
@@ -179,37 +149,19 @@ def add_vehicle():
         year=data.get('year'),
         vin=data.get('vin', ''),
         license_plate=data.get('license_plate', ''),
-        mileage=data.get('mileage', 0),
-        color=data.get('color', ''),
-        engine_type=data.get('engine_type', ''),
-        transmission=data.get('transmission', '')
+        mileage=data.get('mileage', 0)
     )
     return jsonify({'success': True, 'vehicle_id': vehicle_id})
-
-@app.route('/api/vehicle/<int:vehicle_id>', methods=['GET'])
-def get_vehicle(vehicle_id):
-    vehicle = db.get_vehicle(vehicle_id)
-    if vehicle:
-        return jsonify(vehicle)
-    return jsonify({'error': 'Vehicle not found'}), 404
 
 @app.route('/api/vehicles', methods=['GET'])
 def get_vehicles():
     vehicles = db.get_all_vehicles()
     return jsonify({'vehicles': vehicles})
 
-# ========== HISTORY & REPORTS ==========
-@app.route('/api/history/<int:vehicle_id>', methods=['GET'])
-def get_history(vehicle_id):
-    history = db.get_vehicle_history(vehicle_id)
-    return jsonify({'history': history})
-
-@app.route('/api/diagnostic/<int:diagnostic_id>', methods=['GET'])
-def get_diagnostic(diagnostic_id):
-    diagnostic = db.get_diagnostic(diagnostic_id)
-    if diagnostic:
-        return jsonify(diagnostic)
-    return jsonify({'error': 'Diagnostic not found'}), 404
+@app.route('/api/statistics', methods=['GET'])
+def get_statistics():
+    stats = db.get_statistics()
+    return jsonify(stats)
 
 @app.route('/api/report/generate/<int:diagnostic_id>', methods=['GET'])
 def generate_report(diagnostic_id):
@@ -249,34 +201,6 @@ def generate_report(diagnostic_id):
     )
     
     return send_file(filename, as_attachment=True)
-
-# ========== STATISTICS ==========
-@app.route('/api/statistics', methods=['GET'])
-def get_statistics():
-    stats = db.get_statistics()
-    return jsonify(stats)
-
-# ========== API INFO ==========
-@app.route('/api', methods=['GET'])
-def api_info():
-    return jsonify({
-        'system': Config.WORKSHOP_NAME,
-        'version': '2.0',
-        'status': 'online',
-        'endpoints': {
-            'web_interface': '/',
-            'health': '/api/health',
-            'diagnose': {
-                'engine': '/api/diagnose/engine (POST)',
-                'battery': '/api/diagnose/battery (POST)',
-                'starter': '/api/diagnose/starter (POST)'
-            },
-            'customers': '/api/customer/add (POST)',
-            'vehicles': '/api/vehicles (GET)',
-            'reports': '/api/report/generate/<id> (GET)',
-            'statistics': '/api/statistics (GET)'
-        }
-    })
 
 # ========== MAIN ==========
 if __name__ == '__main__':
