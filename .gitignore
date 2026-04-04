@@ -71,3 +71,5 @@ static/qrcodes/*.png
 Thumbs.db
 Desktop.ini
 .env
+*_backup.py
+fix_*.py
