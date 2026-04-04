@@ -238,27 +238,15 @@ def api_info():
         'status': 'online',
         'endpoints': {
             'web_interface': '/',
-            'api_docs': '/api',
             'health': '/api/health',
             'diagnose': {
                 'engine': '/api/diagnose/engine (POST)',
                 'battery': '/api/diagnose/battery (POST)',
                 'starter': '/api/diagnose/starter (POST)'
             },
-            'customers': {
-                'add': '/api/customer/add (POST)',
-                'search': '/api/customer/search (GET)',
-                'get': '/api/customer/<id> (GET)'
-            },
-            'vehicles': {
-                'add': '/api/vehicle/add (POST)',
-                'get': '/api/vehicle/<id> (GET)',
-                'list': '/api/vehicles (GET)'
-            },
-            'reports': {
-                'generate': '/api/report/generate/<diagnostic_id> (GET)'
-            },
-            'history': '/api/history/<vehicle_id> (GET)',
+            'customers': '/api/customer/add (POST)',
+            'vehicles': '/api/vehicles (GET)',
+            'reports': '/api/report/generate/<id> (GET)',
             'statistics': '/api/statistics (GET)'
         }
     })
