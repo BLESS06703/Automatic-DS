@@ -1,0 +1,4 @@
+flask==3.0.0
+flask-cors==4.0.0
+segno==1.5.2
+gunicorn==21.2.0

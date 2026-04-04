@@ -1,0 +1,18 @@
+def check_starter():
+    print("\n[Starter Diagnostic]")
+
+    click = input("Do you hear a clicking sound? (yes/no): ").lower()
+    crank = input("Does the engine crank? (yes/no): ").lower()
+
+    if click == "yes" and crank == "no":
+        print("\nPossible causes:")
+        print("- Weak battery")
+        print("- Faulty starter motor")
+
+    elif click == "no" and crank == "no":
+        print("\nPossible causes:")
+        print("- Ignition switch failure")
+        print("- Wiring issue")
+
+    else:
+        print("\nStarter system seems operational")

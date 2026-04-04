@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: bless-auto-diagnostic
+    runtime: python
+    repo: https://github.com/YOUR_USERNAME/auto-diagnostic-system
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api_server:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: FLASK_ENV
+        value: production
