@@ -361,3 +361,55 @@ def setup_admin():
             return {"success": False, "message": "Failed to create admin user"}
     except Exception as e:
         return {"success": False, "message": str(e)}
+
+# ========== TEMPORARY SETUP ENDPOINT ==========
+@app.route('/api/setup', methods=['GET'])
+def setup_admin():
+    """Create admin user - visit this endpoint once"""
+    import sqlite3
+    import hashlib
+    import secrets
+    
+    def hash_password(pwd):
+        salt = secrets.token_hex(16)
+        hash_obj = hashlib.sha256((pwd + salt).encode())
+        return f"{salt}:{hash_obj.hexdigest()}"
+    
+    db_path = '/tmp/workshop.db'
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    
+    # Create users table if not exists
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            full_name TEXT,
+            role TEXT DEFAULT 'technician',
+            is_active INTEGER DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    # Delete existing admin
+    cursor.execute("DELETE FROM users WHERE username = 'admin'")
+    
+    # Create new admin
+    hashed = hash_password('admin123')
+    cursor.execute('''
+        INSERT INTO users (username, password, full_name, role, is_active)
+        VALUES (?, ?, ?, ?, ?)
+    ''', ('admin', hashed, 'System Administrator', 'admin', 1))
+    
+    conn.commit()
+    
+    # Verify
+    cursor.execute("SELECT username, role FROM users WHERE username = 'admin'")
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user:
+        return {"success": True, "message": f"Admin created: {user[0]}/admin123", "role": user[1]}
+    else:
+        return {"success": False, "message": "Failed to create admin"}
