@@ -13,16 +13,16 @@
             border-bottom: 2px solid #e2e8f0;
             transition: all 0.3s ease;
             background: transparent;
-            font-size: 16px;
-            padding: 12px 4px;
+            font-size: 18px;
+            padding: 14px 4px;
         }
         .bottom-line-input:focus {
             outline: none;
             border-bottom-color: #003153;
         }
         .checkbox-custom {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border: 2px solid #cbd5e1;
             border-radius: 4px;
             cursor: pointer;
@@ -34,59 +34,59 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-lg w-full">
+    <div class="max-w-2xl w-full">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <!-- Tabs -->
+            <!-- Tabs - BIGGER -->
             <div class="flex border-b border-gray-200">
-                <button id="loginTab" class="flex-1 py-5 text-center font-semibold text-lg transition-all border-b-2 border-[#003153] text-[#003153]">Sign In</button>
-                <button id="registerTab" class="flex-1 py-5 text-center font-semibold text-lg transition-all text-gray-500">Create Account</button>
+                <button id="loginTab" class="flex-1 py-6 text-center font-semibold text-xl transition-all border-b-2 border-[#003153] text-[#003153]">Sign In</button>
+                <button id="registerTab" class="flex-1 py-6 text-center font-semibold text-xl transition-all text-gray-500">Create Account</button>
             </div>
 
-            <!-- Login Form -->
-            <div id="loginForm" class="p-10">
-                <div class="mb-10 text-center">
-                    <div class="text-6xl mb-4">🚗</div>
-                    <h2 class="text-3xl font-bold text-[#003153]">Welcome Back</h2>
-                    <p class="text-gray-500 text-base mt-2">Sign in to continue to dashboard</p>
+            <!-- Login Form - BIGGER -->
+            <div id="loginForm" class="p-12">
+                <div class="mb-12 text-center">
+                    <div class="text-7xl mb-5">🚗</div>
+                    <h2 class="text-4xl font-bold text-[#003153]">Welcome Back</h2>
+                    <p class="text-gray-500 text-lg mt-3">Sign in to continue to dashboard</p>
                 </div>
                 <div class="space-y-8">
                     <div>
-                        <input type="text" id="loginUsername" placeholder="Username" class="bottom-line-input w-full text-base">
+                        <input type="text" id="loginUsername" placeholder="Username" class="bottom-line-input w-full text-lg">
                     </div>
                     <div>
-                        <input type="password" id="loginPassword" placeholder="Password" class="bottom-line-input w-full text-base">
+                        <input type="password" id="loginPassword" placeholder="Password" class="bottom-line-input w-full text-lg">
                     </div>
                     <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-2 text-sm text-gray-600">
+                        <label class="flex items-center gap-3 text-base text-gray-600">
                             <input type="checkbox" class="checkbox-custom"> Remember me
                         </label>
-                        <a href="#" class="text-sm text-[#003153] hover:underline">Forgot password?</a>
+                        <a href="#" class="text-base text-[#003153] hover:underline">Forgot password?</a>
                     </div>
-                    <button onclick="handleLogin()" class="w-full bg-[#003153] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1B4F72] transition">Sign In</button>
+                    <button onclick="handleLogin()" class="w-full bg-[#003153] text-white py-5 rounded-xl font-semibold text-lg hover:bg-[#1B4F72] transition">Sign In</button>
                 </div>
-                <div class="mt-8 pt-6 border-t border-gray-200 text-center">
-                    <p class="text-sm text-gray-500">Demo Credentials: <strong class="text-[#003153]">admin</strong> / <strong class="text-[#003153]">admin123</strong></p>
+                <div class="mt-10 pt-6 border-t border-gray-200 text-center">
+                    <p class="text-base text-gray-500">Demo Credentials: <strong class="text-[#003153] text-lg">admin</strong> / <strong class="text-[#003153] text-lg">admin123</strong></p>
                 </div>
             </div>
 
-            <!-- Register Form -->
-            <div id="registerForm" class="p-10 hidden">
-                <div class="mb-8 text-center">
-                    <div class="text-5xl mb-3">✨</div>
-                    <h2 class="text-2xl font-bold text-[#003153]">Create Account</h2>
-                    <p class="text-gray-500 text-sm mt-1">Join Bless Auto Care</p>
+            <!-- Register Form - BIGGER -->
+            <div id="registerForm" class="p-12 hidden">
+                <div class="mb-10 text-center">
+                    <div class="text-6xl mb-4">✨</div>
+                    <h2 class="text-3xl font-bold text-[#003153]">Create Account</h2>
+                    <p class="text-gray-500 text-base mt-2">Join Bless Auto Care</p>
                 </div>
-                <div class="space-y-5">
-                    <div><input type="text" id="regFullname" placeholder="Full name" class="bottom-line-input w-full py-3"></div>
-                    <div><input type="text" id="regUsername" placeholder="Username" class="bottom-line-input w-full py-3"></div>
-                    <div><input type="email" id="regEmail" placeholder="Email address" class="bottom-line-input w-full py-3"></div>
-                    <div><input type="password" id="regPassword" placeholder="Password" class="bottom-line-input w-full py-3"></div>
-                    <div><input type="password" id="regConfirm" placeholder="Confirm password" class="bottom-line-input w-full py-3"></div>
+                <div class="space-y-6">
+                    <div><input type="text" id="regFullname" placeholder="Full name" class="bottom-line-input w-full py-3 text-base"></div>
+                    <div><input type="text" id="regUsername" placeholder="Username" class="bottom-line-input w-full py-3 text-base"></div>
+                    <div><input type="email" id="regEmail" placeholder="Email address" class="bottom-line-input w-full py-3 text-base"></div>
+                    <div><input type="password" id="regPassword" placeholder="Password" class="bottom-line-input w-full py-3 text-base"></div>
+                    <div><input type="password" id="regConfirm" placeholder="Confirm password" class="bottom-line-input w-full py-3 text-base"></div>
                     <div class="flex items-center gap-3">
                         <input type="checkbox" id="termsCheck" class="checkbox-custom">
-                        <label class="text-sm text-gray-600">I agree to the <a href="#" class="text-[#003153]">Terms & Conditions</a></label>
+                        <label class="text-base text-gray-600">I agree to the <a href="#" class="text-[#003153]">Terms & Conditions</a></label>
                     </div>
-                    <button onclick="handleRegister()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">Create Account</button>
+                    <button onclick="handleRegister()" class="w-full bg-[#003153] text-white py-4 rounded-xl font-semibold text-base hover:bg-[#1B4F72] transition">Create Account</button>
                 </div>
             </div>
         </div>
@@ -96,15 +96,15 @@
         const API_BASE = window.location.origin;
         
         document.getElementById('loginTab').onclick = () => {
-            document.getElementById('loginTab').className = 'flex-1 py-5 text-center font-semibold text-lg transition-all border-b-2 border-[#003153] text-[#003153]';
-            document.getElementById('registerTab').className = 'flex-1 py-5 text-center font-semibold text-lg transition-all text-gray-500';
+            document.getElementById('loginTab').className = 'flex-1 py-6 text-center font-semibold text-xl transition-all border-b-2 border-[#003153] text-[#003153]';
+            document.getElementById('registerTab').className = 'flex-1 py-6 text-center font-semibold text-xl transition-all text-gray-500';
             document.getElementById('loginForm').classList.remove('hidden');
             document.getElementById('registerForm').classList.add('hidden');
         };
         
         document.getElementById('registerTab').onclick = () => {
-            document.getElementById('registerTab').className = 'flex-1 py-5 text-center font-semibold text-lg transition-all border-b-2 border-[#003153] text-[#003153]';
-            document.getElementById('loginTab').className = 'flex-1 py-5 text-center font-semibold text-lg transition-all text-gray-500';
+            document.getElementById('registerTab').className = 'flex-1 py-6 text-center font-semibold text-xl transition-all border-b-2 border-[#003153] text-[#003153]';
+            document.getElementById('loginTab').className = 'flex-1 py-6 text-center font-semibold text-xl transition-all text-gray-500';
             document.getElementById('registerForm').classList.remove('hidden');
             document.getElementById('loginForm').classList.add('hidden');
         };
