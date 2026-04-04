@@ -9,6 +9,33 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "🚗 Bless Digital Auto Care API is running! Go to /web_interface.html"
+
+@app.route("/web_interface.html")
+def web_interface():
+    try:
+        with open("web_interface.html", "r") as f:
+            return f.read()
+    except:
+        return "web_interface.html not found", 404
+
+@app.route("/api")
+def api_root():
+    return {
+        "message": "Bless Digital Auto Care API",
+        "endpoints": {
+            "web_interface": "/web_interface.html",
+            "health": "/api/health",
+            "diagnose_engine": "/api/diagnose/engine",
+            "diagnose_battery": "/api/diagnose/battery",
+            "diagnose_starter": "/api/diagnose/starter",
+            "vehicles": "/api/vehicles",
+            "statistics": "/api/statistics"
+        }
+    }
 CORS(app)
 db = Database()
 engine = DiagnosticEngine()
