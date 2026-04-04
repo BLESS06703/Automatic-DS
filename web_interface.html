@@ -3,104 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bless Digital Auto Care - Diagnostic System</title>
+    <title>Bless Digital Auto Care - Professional Diagnostic System</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s, box-shadow 0.3s; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .toast { position: fixed; bottom: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-purple-600 to-blue-500 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <div class="flex justify-between items-center">
+<body class="gradient-bg min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🚗</span>
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-800">🚗 Bless Digital Auto Care</h1>
-                    <p class="text-gray-500">Professional Diagnostic System</p>
+                    <h1 class="font-bold text-xl">Bless Digital Auto Care</h1>
+                    <p class="text-xs text-gray-500">Professional Diagnostic System</p>
                 </div>
-                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Logout</button>
             </div>
+            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
         </div>
+    </nav>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-lg p-4 shadow">
-                <p class="text-gray-500 text-sm">Customers</p>
-                <p class="text-2xl font-bold" id="statCustomers">-</p>
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Stats Dashboard -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow text-center">
+                <div class="text-2xl mb-1">👥</div>
+                <p class="text-gray-500 text-xs">Customers</p>
+                <p class="text-2xl font-bold" id="statCustomers">0</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <p class="text-gray-500 text-sm">Vehicles</p>
-                <p class="text-2xl font-bold" id="statVehicles">-</p>
+            <div class="bg-white rounded-xl p-4 shadow text-center">
+                <div class="text-2xl mb-1">🚙</div>
+                <p class="text-gray-500 text-xs">Vehicles</p>
+                <p class="text-2xl font-bold" id="statVehicles">0</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <p class="text-gray-500 text-sm">Diagnostics</p>
-                <p class="text-2xl font-bold" id="statDiagnostics">-</p>
+            <div class="bg-white rounded-xl p-4 shadow text-center">
+                <div class="text-2xl mb-1">🔧</div>
+                <p class="text-gray-500 text-xs">Diagnostics</p>
+                <p class="text-2xl font-bold" id="statDiagnostics">0</p>
             </div>
-            <div class="bg-white rounded-lg p-4 shadow">
-                <p class="text-gray-500 text-sm">Revenue</p>
-                <p class="text-2xl font-bold text-green-600" id="statRevenue">-</p>
+            <div class="bg-white rounded-xl p-4 shadow text-center">
+                <div class="text-2xl mb-1">💰</div>
+                <p class="text-gray-500 text-xs">Revenue</p>
+                <p class="text-2xl font-bold text-green-600" id="statRevenue">$0</p>
             </div>
         </div>
 
         <!-- Diagnostic Cards -->
-        <div class="grid md:grid-cols-3 gap-6 mb-8">
-            <div onclick="showDiagnostic('engine')" class="bg-white rounded-xl p-6 cursor-pointer hover:shadow-xl transition shadow">
+        <div class="grid md:grid-cols-3 gap-5 mb-6">
+            <div onclick="showDiagnostic('engine')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
                 <div class="text-5xl mb-3">🔧</div>
-                <h3 class="text-xl font-bold mb-2">Engine Diagnostic</h3>
-                <p class="text-gray-600 text-sm">Check overheating, smoke, noises, and engine light</p>
+                <h3 class="text-xl font-bold">Engine Diagnostic</h3>
+                <p class="text-gray-500 text-sm mt-1">Overheating, smoke, noises, check engine light</p>
             </div>
-            <div onclick="showDiagnostic('battery')" class="bg-white rounded-xl p-6 cursor-pointer hover:shadow-xl transition shadow">
+            <div onclick="showDiagnostic('battery')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
                 <div class="text-5xl mb-3">🔋</div>
-                <h3 class="text-xl font-bold mb-2">Battery Diagnostic</h3>
-                <p class="text-gray-600 text-sm">Test battery health, alternator, and charging system</p>
+                <h3 class="text-xl font-bold">Battery & Charging</h3>
+                <p class="text-gray-500 text-sm mt-1">Starting issues, dim lights, alternator test</p>
             </div>
-            <div onclick="showDiagnostic('starter')" class="bg-white rounded-xl p-6 cursor-pointer hover:shadow-xl transition shadow">
+            <div onclick="showDiagnostic('starter')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
                 <div class="text-5xl mb-3">⚡</div>
-                <h3 class="text-xl font-bold mb-2">Starter Diagnostic</h3>
-                <p class="text-gray-600 text-sm">Diagnose clicking, cranking, and electrical issues</p>
+                <h3 class="text-xl font-bold">Starter System</h3>
+                <p class="text-gray-500 text-sm mt-1">Clicking sounds, cranking issues, electrical</p>
             </div>
         </div>
 
-        <!-- Diagnostic Form -->
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <button onclick="showCustomers()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
+                <div class="text-2xl">👥</div>
+                <span class="text-sm font-semibold">Customers</span>
+            </button>
+            <button onclick="showVehicles()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
+                <div class="text-2xl">🚙</div>
+                <span class="text-sm font-semibold">Vehicles</span>
+            </button>
+            <button onclick="showAnalytics()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
+                <div class="text-2xl">📊</div>
+                <span class="text-sm font-semibold">Analytics</span>
+            </button>
+            <button onclick="showHistory()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
+                <div class="text-2xl">📜</div>
+                <span class="text-sm font-semibold">History</span>
+            </button>
+        </div>
+
+        <!-- Diagnostic Form Panel -->
         <div id="formPanel" class="bg-white rounded-xl p-6 shadow-lg hidden">
-            <h2 id="formTitle" class="text-2xl font-bold mb-4">Diagnostic Questions</h2>
+            <h2 id="formTitle" class="text-2xl font-bold mb-4">🔧 Engine Diagnostic</h2>
             <div id="formQuestions"></div>
             <div class="flex gap-3 mt-4">
-                <button onclick="runDiagnostic()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Run Diagnostic</button>
-                <button onclick="closeForm()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button onclick="runDiagnostic()" class="flex-1 gradient-bg text-white py-2 rounded-lg font-semibold">🔍 Run Diagnostic</button>
+                <button onclick="closeForm()" class="flex-1 bg-gray-300 py-2 rounded-lg font-semibold">Cancel</button>
             </div>
         </div>
 
-        <!-- Results -->
+        <!-- Results Panel -->
         <div id="resultsPanel" class="bg-white rounded-xl p-6 shadow-lg hidden">
             <h2 class="text-2xl font-bold mb-4">📊 Diagnosis Results</h2>
             <div id="resultsContent"></div>
-            <button onclick="closeResults()" class="bg-blue-500 text-white px-6 py-2 rounded-lg mt-4">New Diagnostic</button>
+            <div class="flex flex-wrap gap-2 mt-4">
+                <button onclick="generateReport()" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">📄 Report</button>
+                <button onclick="sendEmail()" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm">📧 Email</button>
+                <button onclick="sendSMS()" class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm">📱 SMS</button>
+                <button onclick="generateQR()" class="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm">🔲 QR</button>
+                <button onclick="closeResults()" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm">Close</button>
+            </div>
         </div>
 
         <!-- Loading -->
         <div id="loading" class="bg-white rounded-xl p-12 text-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
             <p>Analyzing symptoms...</p>
         </div>
     </div>
 
+    <!-- Analytics Modal -->
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">📊 Analytics Dashboard</h2>
+                <button onclick="closeModal('analyticsModal')" class="text-2xl">&times;</button>
+            </div>
+            <div id="analyticsContent">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Customers Modal -->
+    <div id="customersModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">👥 Customers</h2>
+                <button onclick="closeModal('customersModal')" class="text-2xl">&times;</button>
+            </div>
+            <div id="customersContent">
+                <div class="text-center py-4">No customers yet. Add one from a diagnostic!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicles Modal -->
+    <div id="vehiclesModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">🚙 Vehicles</h2>
+                <button onclick="closeModal('vehiclesModal')" class="text-2xl">&times;</button>
+            </div>
+            <div id="vehiclesContent">
+                <div class="text-center py-4">No vehicles yet. Add one from a diagnostic!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">📜 Diagnostic History</h2>
+                <button onclick="closeModal('historyModal')" class="text-2xl">&times;</button>
+            </div>
+            <div id="historyContent">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden"></div>
+
     <script>
         const API_BASE = window.location.origin;
         let currentDiagnostic = null;
+        let currentResults = null;
+
+        async function apiCall(endpoint, options = {}) {
+            const res = await fetch(API_BASE + endpoint, options);
+            if (!res.ok) throw new Error(await res.text());
+            return res.json();
+        }
 
         async function checkAuth() {
             try {
-                const res = await fetch(`${API_BASE}/api/check-auth`);
-                const data = await res.json();
-                if (!data.authenticated) {
-                    window.location.href = '/login.html';
-                }
-            } catch(e) {
-                window.location.href = '/login.html';
-            }
+                const data = await apiCall('/api/check-auth');
+                if (!data.authenticated) window.location.href = '/login.html';
+            } catch(e) { window.location.href = '/login.html'; }
         }
 
         async function logout() {
-            await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
+            await fetch(API_BASE + '/api/logout', { method: 'POST' });
             window.location.href = '/login.html';
+        }
+
+        async function loadStats() {
+            try {
+                const stats = await apiCall('/api/statistics');
+                document.getElementById('statCustomers').textContent = stats.total_customers || 0;
+                document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
+                document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
+                document.getElementById('statRevenue').textContent = `$${stats.total_revenue || 0}`;
+            } catch(e) { console.log('Stats not available'); }
         }
 
         function showDiagnostic(type) {
@@ -112,42 +217,23 @@
             let questions = '';
             if (type === 'engine') {
                 formTitle.innerHTML = '🔧 Engine Diagnostic';
-                questions = `
-                    <div class="mb-3"><label class="block font-semibold">Engine overheating?</label>
-                    <select id="overheating" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Smoke from exhaust?</label>
-                    <select id="smoke" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Unusual engine noise?</label>
-                    <select id="noise" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Check engine light ON?</label>
-                    <select id="check_light" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                `;
+                questions = `<div class="mb-3"><label class="font-semibold">Engine overheating?</label><select id="overheating" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Smoke from exhaust?</label><select id="smoke" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Unusual noise?</label><select id="noise" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Check engine light?</label><select id="check_light" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
             } else if (type === 'battery') {
                 formTitle.innerHTML = '🔋 Battery Diagnostic';
-                questions = `
-                    <div class="mb-3"><label class="block font-semibold">Car fails to start?</label>
-                    <select id="start" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Dashboard lights dim?</label>
-                    <select id="lights" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Hear rapid clicking?</label>
-                    <select id="clicks" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Battery over 3 years old?</label>
-                    <select id="age" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                `;
+                questions = `<div class="mb-3"><label class="font-semibold">Car fails to start?</label><select id="start" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Dashboard lights dim?</label><select id="lights" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Rapid clicking?</label><select id="clicks" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Battery over 3 years?</label><select id="age" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
             } else if (type === 'starter') {
                 formTitle.innerHTML = '⚡ Starter Diagnostic';
-                questions = `
-                    <div class="mb-3"><label class="block font-semibold">Clicking when turning key?</label>
-                    <select id="click" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Engine cranks at all?</label>
-                    <select id="crank" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Headlights work?</label>
-                    <select id="lights" class="w-full p-2 border rounded"><option value="yes">Yes</option><option value="no">No</option></select></div>
-                    <div class="mb-3"><label class="block font-semibold">Burning smell?</label>
-                    <select id="smell" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                `;
+                questions = `<div class="mb-3"><label class="font-semibold">Clicking when turning key?</label><select id="click" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Engine cranks?</label><select id="crank" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Headlights work?</label><select id="lights" class="w-full p-2 border rounded"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <div class="mb-3"><label class="font-semibold">Burning smell?</label><select id="smell" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
             }
-            
             questionsDiv.innerHTML = questions;
             formPanel.classList.remove('hidden');
             document.getElementById('resultsPanel').classList.add('hidden');
@@ -155,67 +241,92 @@
 
         async function runDiagnostic() {
             const symptoms = {};
-            const inputs = document.querySelectorAll('#formQuestions select');
-            inputs.forEach(input => { symptoms[input.id] = input.value; });
+            document.querySelectorAll('#formQuestions select').forEach(input => { symptoms[input.id] = input.value; });
             
             document.getElementById('formPanel').classList.add('hidden');
             document.getElementById('loading').classList.remove('hidden');
             
             try {
-                const response = await fetch(`${API_BASE}/api/diagnose/${currentDiagnostic}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ symptoms: symptoms })
+                const result = await apiCall(`/api/diagnose/${currentDiagnostic}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symptoms })
                 });
-                const result = await response.json();
                 
-                let toolsHtml = '';
-                if (result.tools && result.tools.length > 0) {
-                    toolsHtml = `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>🛠️ Tools:</strong><ul class="ml-4">${result.tools.map(t => `<li>${t}</li>`).join('')}</ul></div>`;
-                }
-                
-                let actionHtml = '';
-                if (result.action_plan && result.action_plan.length > 0) {
-                    actionHtml = `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>📋 Action Plan:</strong><ol class="ml-4">${result.action_plan.map(s => `<li>${s}</li>`).join('')}</ol></div>`;
-                }
+                currentResults = result;
+                const severityColor = { low: 'bg-green-100 text-green-800', medium: 'bg-yellow-100', high: 'bg-red-100 text-red-800', critical: 'bg-purple-100' };
+                let toolsHtml = result.tools?.length ? `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>🛠️ Tools:</strong><ul class="ml-4">${result.tools.map(t => `<li>${t}</li>`).join('')}</ul></div>` : '';
+                let actionHtml = result.action_plan?.length ? `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>📋 Action Plan:</strong><ol class="ml-4">${result.action_plan.map(s => `<li>${s}</li>`).join('')}</ol></div>` : '';
                 
                 document.getElementById('resultsContent').innerHTML = `
-                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>⚠️ Severity:</strong> <span class="font-bold">${result.severity?.toUpperCase() || 'MEDIUM'}</span></div>
-                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>🔍 Analysis:</strong><p class="mt-2">${result.results || 'No issues found'}</p></div>
-                    ${toolsHtml}
-                    ${actionHtml}
-                `;
+                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>⚠️ Severity:</strong> <span class="px-2 py-1 rounded ${severityColor[result.severity] || 'bg-gray-200'}">${result.severity?.toUpperCase() || 'MEDIUM'}</span></div>
+                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>🔍 Symptoms Found:</strong><ul class="ml-4 mt-1">${result.symptoms?.map(s => `<li>${s}</li>`).join('') || '<li>None recorded</li>'}</ul></div>
+                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>📊 Analysis:</strong><p class="mt-1">${result.results || 'No issues found'}</p></div>
+                    ${toolsHtml}${actionHtml}`;
                 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('resultsPanel').classList.remove('hidden');
-            } catch(e) {
-                alert('Error running diagnostic');
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('formPanel').classList.remove('hidden');
-            }
+                showToast('Diagnostic completed!');
+                loadStats();
+            } catch(e) { showToast('Error running diagnostic'); document.getElementById('loading').classList.add('hidden'); document.getElementById('formPanel').classList.remove('hidden'); }
         }
 
-        function closeForm() {
-            document.getElementById('formPanel').classList.add('hidden');
-        }
+        function generateReport() { showToast('📄 Report would be downloaded here'); }
+        function sendEmail() { showToast('📧 Email feature coming soon'); }
+        function sendSMS() { showToast('📱 SMS feature coming soon'); }
+        function generateQR() { showToast('🔲 QR code generated'); }
+        function closeForm() { document.getElementById('formPanel').classList.add('hidden'); }
+        function closeResults() { document.getElementById('resultsPanel').classList.add('hidden'); currentResults = null; }
 
-        function closeResults() {
-            document.getElementById('resultsPanel').classList.add('hidden');
-        }
-
-        async function loadStats() {
+        async function showCustomers() {
+            document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
+            document.getElementById('customersModal').style.display = 'flex';
             try {
-                const res = await fetch(`${API_BASE}/api/statistics`);
-                const stats = await res.json();
-                document.getElementById('statCustomers').textContent = stats.total_customers || 0;
-                document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
-                document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
-                document.getElementById('statRevenue').textContent = `$${stats.total_revenue || 0}`;
-            } catch(e) {}
+                const data = await apiCall('/api/vehicles');
+                const customers = [...new Map(data.vehicles?.map(v => [v.customer, v.customer])).keys()];
+                if (customers.length) document.getElementById('customersContent').innerHTML = customers.map(c => `<div class="p-2 border-b">👤 ${c}</div>`).join('');
+                else document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">No customers yet</div>';
+            } catch(e) { document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">No data available</div>'; }
+        }
+
+        async function showVehicles() {
+            document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
+            document.getElementById('vehiclesModal').style.display = 'flex';
+            try {
+                const data = await apiCall('/api/vehicles');
+                if (data.vehicles?.length) document.getElementById('vehiclesContent').innerHTML = data.vehicles.map(v => `<div class="p-2 border-b">🚙 ${v.make} ${v.model} (${v.year}) - ${v.customer}</div>`).join('');
+                else document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">No vehicles yet</div>';
+            } catch(e) { document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">No data available</div>'; }
+        }
+
+        async function showAnalytics() {
+            document.getElementById('analyticsContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
+            document.getElementById('analyticsModal').style.display = 'flex';
+            try {
+                const analytics = await apiCall('/api/analytics/dashboard');
+                document.getElementById('analyticsContent').innerHTML = `
+                    <div class="p-3 bg-blue-50 rounded mb-3"><strong>📈 Today</strong><br>Diagnostics: ${analytics.daily?.today_diagnostics || 0}<br>Revenue: $${analytics.daily?.today_revenue || 0}</div>
+                    <div class="p-3 bg-green-50 rounded mb-3"><strong>🔧 Common Issues</strong><br>${analytics.daily?.common_issues?.map(i => `${i.type}: ${i.count}`).join('<br>') || 'No data yet'}</div>
+                    <div class="p-3 bg-purple-50 rounded"><strong>👨‍🔧 Top Technician</strong><br>${analytics.technician_performance?.[0]?.technician || 'N/A'}: ${analytics.technician_performance?.[0]?.diagnostics || 0} jobs</div>`;
+            } catch(e) { document.getElementById('analyticsContent').innerHTML = '<div class="text-center py-4">Analytics coming soon</div>'; }
+        }
+
+        async function showHistory() {
+            document.getElementById('historyContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
+            document.getElementById('historyModal').style.display = 'flex';
+            document.getElementById('historyContent').innerHTML = '<div class="text-center py-4">Run a diagnostic to see history here</div>';
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function showToast(msg) { 
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
         }
 
         checkAuth();
         loadStats();
+        setInterval(loadStats, 30000);
     </script>
 </body>
 </html>
