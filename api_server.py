@@ -118,12 +118,12 @@ engine = DiagnosticEngine()
 # ========== WEB INTERFACE ROUTES ==========
 @app.route('/')
 def home():
-    return redirect('/web_interface.html')
+    return redirect('/login.html')
 
-@app.route('/web_interface.html')
+@app.route('/login.html')
 def serve_web_interface():
     """Serve the main web interface"""
-    web_file = os.path.join(os.path.dirname(__file__), 'web_interface.html')
+    web_file = os.path.join(os.path.dirname(__file__), 'login.html')
     if os.path.exists(web_file):
         return send_file(web_file)
     return "web_interface.html not found. Please check the file exists.", 404
@@ -145,7 +145,7 @@ def api_info():
         'version': '2.0',
         'status': 'online',
         'endpoints': {
-            'web_interface': '/web_interface.html',
+            'web_interface': '/login.html',
             'health': '/api/health',
             'diagnose_engine': '/api/diagnose/engine (POST)',
             'diagnose_battery': '/api/diagnose/battery (POST)',
