@@ -5,158 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bless Auto Care - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         * { font-family: 'Inter', sans-serif; }
-        .sidebar-item {
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-        .sidebar-item:hover, .sidebar-item.active {
-            background: rgba(0, 49, 83, 0.05);
-            border-left-color: #003153;
-        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
-        <!-- SIDEBAR -->
-        <aside class="w-72 bg-white border-r border-gray-200 flex flex-col">
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex items-center gap-3">
-                    <div class="text-3xl">🚗</div>
-                    <div>
-                        <h1 class="text-xl font-bold text-[#003153]">Bless Auto Care</h1>
-                        <p class="text-xs text-gray-500">Industrial Diagnostic System</p>
-                    </div>
-                </div>
-            </div>
-            
-            <nav class="flex-1 py-6">
-                <div class="px-4 mb-2">
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">Main</p>
-                </div>
-                <a href="#" onclick="switchTab('diagnostic')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700 active">
-                    <span class="mdi mdi-car-wrench text-xl"></span>
-                    <span>Diagnostic Machine</span>
-                </a>
-                <a href="#" onclick="switchTab('scanner')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700">
-                    <span class="mdi mdi-scan-helper text-xl"></span>
-                    <span>Car Scanner Tools</span>
-                </a>
-                <a href="#" onclick="switchTab('history')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700">
-                    <span class="mdi mdi-history text-xl"></span>
-                    <span>Diagnostic History</span>
-                </a>
-                <a href="#" onclick="switchTab('analytics')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700">
-                    <span class="mdi mdi-chart-line text-xl"></span>
-                    <span>Industrial Analytics</span>
-                </a>
-                
-                <div class="px-4 mt-6 mb-2">
-                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">System</p>
-                </div>
-                <a href="#" onclick="switchTab('settings')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700">
-                    <span class="mdi mdi-cog text-xl"></span>
-                    <span>Settings</span>
-                </a>
-                <a href="#" onclick="logout()" class="sidebar-item flex items-center gap-3 px-6 py-3 text-red-600 mt-auto">
-                    <span class="mdi mdi-logout text-xl"></span>
-                    <span>Disconnect</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 flex flex-col overflow-hidden">
-            <!-- TOP BAR -->
-            <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+    <!-- Top Bar -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="text-3xl">🚗</div>
                 <div>
-                    <h2 id="pageTitle" class="text-xl font-semibold text-gray-800">Diagnostic Machine</h2>
-                    <p id="pageSubtitle" class="text-sm text-gray-500">Run real-time vehicle diagnostics</p>
+                    <h1 class="text-xl font-bold text-[#003153]">Bless Auto Care</h1>
+                    <p class="text-xs text-gray-500">Industrial Diagnostic System</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <p id="userName" class="text-sm font-semibold text-gray-800">Technician</p>
-                            <p class="text-xs text-gray-500">Online</p>
-                        </div>
-                        <div class="w-10 h-10 bg-[#003153] rounded-full flex items-center justify-center text-white font-bold">
-                            T
-                        </div>
+            </div>
+            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                <div class="text-2xl mb-1">👥</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statCustomers">0</div>
+                <div class="text-xs text-gray-500">Customers</div>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                <div class="text-2xl mb-1">🚙</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statVehicles">0</div>
+                <div class="text-xs text-gray-500">Vehicles</div>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                <div class="text-2xl mb-1">🔧</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statDiagnostics">0</div>
+                <div class="text-xs text-gray-500">Diagnostics</div>
+            </div>
+            <div class="bg-white rounded-lg border border-gray-200 p-4 text-center">
+                <div class="text-2xl mb-1">💰</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statRevenue">$0</div>
+                <div class="text-xs text-gray-500">Revenue</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Controls Panel -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Diagnostic Controls</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select System</label>
+                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                            <option value="engine">🔧 Engine Diagnostic</option>
+                            <option value="battery">🔋 Battery & Charging</option>
+                            <option value="starter">⚡ Starter System</option>
+                        </select>
                     </div>
+                    <div id="questionsPanel" class="space-y-4">
+                        <!-- Dynamic questions will appear here -->
+                    </div>
+                    <button onclick="runDiagnostic()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">
+                        Start Diagnosis
+                    </button>
                 </div>
             </div>
 
-            <!-- WORKSPACE -->
-            <div class="flex-1 overflow-y-auto p-6">
-                <!-- Diagnostic Tab -->
-                <div id="diagnosticTab" class="tab-content">
-                    <div class="grid lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-xl border border-gray-200 p-6">
-                            <h3 class="font-semibold text-gray-800 mb-4">Diagnostic Controls</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">System Selection</label>
-                                    <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2">
-                                        <option value="engine">🔧 Engine Diagnostic</option>
-                                        <option value="battery">🔋 Battery & Charging</option>
-                                        <option value="starter">⚡ Starter System</option>
-                                    </select>
-                                </div>
-                                <div id="dynamicQuestions" class="space-y-4"></div>
-                                <button onclick="runDiagnostic()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">
-                                    Start Diagnosis
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-xl border border-gray-200 p-6">
-                            <h3 class="font-semibold text-gray-800 mb-4">Analysis Results</h3>
-                            <div id="resultsArea" class="min-h-[400px]">
-                                <div class="text-center text-gray-400 py-12">
-                                    <span class="mdi mdi-robot-industrial text-6xl"></span>
-                                    <p class="mt-4">Awaiting diagnostic input...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Other tabs simplified for now -->
-                <div id="scannerTab" class="tab-content hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 p-6">
-                        <h3 class="font-semibold text-gray-800 mb-4">OBD2 Scanner Tools</h3>
-                        <p class="text-gray-500">Coming soon...</p>
-                    </div>
-                </div>
-                <div id="historyTab" class="tab-content hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 p-6">
-                        <h3 class="font-semibold text-gray-800 mb-4">Diagnostic History</h3>
-                        <div id="historyLogs" class="space-y-3"></div>
-                    </div>
-                </div>
-                <div id="analyticsTab" class="tab-content hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 p-6">
-                        <h3 class="font-semibold text-gray-800 mb-4">Analytics Dashboard</h3>
-                        <p class="text-gray-500">Coming soon...</p>
-                    </div>
-                </div>
-                <div id="settingsTab" class="tab-content hidden">
-                    <div class="bg-white rounded-xl border border-gray-200 p-6">
-                        <h3 class="font-semibold text-gray-800 mb-4">Settings</h3>
-                        <p class="text-gray-500">Customization options coming soon...</p>
+            <!-- Results Panel -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Analysis Results</h2>
+                <div id="resultsPanel" class="min-h-[300px]">
+                    <div class="text-center text-gray-400 py-8">
+                        <div class="text-5xl mb-3">🔍</div>
+                        <p>Select a system and run diagnosis</p>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
     <script>
         const API_BASE = window.location.origin;
-        let currentDiagnosticType = 'engine';
-        
+        let currentSystem = 'engine';
+
+        // Check authentication
         async function checkAuth() {
             try {
                 const res = await fetch(`${API_BASE}/api/check-auth`);
@@ -168,113 +102,127 @@
                 window.location.href = '/login.html';
             }
         }
-        
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-            document.getElementById(`${tabName}Tab`).classList.remove('hidden');
-            
-            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
-            const titles = {
-                diagnostic: { title: 'Diagnostic Machine', subtitle: 'Run real-time vehicle diagnostics' },
-                scanner: { title: 'Car Scanner Tools', subtitle: 'OBD2 scanner interface' },
-                history: { title: 'Diagnostic History', subtitle: 'View past diagnostic logs' },
-                analytics: { title: 'Industrial Analytics', subtitle: 'Performance metrics' },
-                settings: { title: 'Settings', subtitle: 'Customize your dashboard' }
-            };
-            document.getElementById('pageTitle').innerHTML = titles[tabName].title;
-            document.getElementById('pageSubtitle').innerHTML = titles[tabName].subtitle;
-        }
-        
+
+        // Load questions based on selected system
         function loadQuestions() {
-            const questionsMap = {
+            const questions = {
                 engine: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine overheating?</label>
-                    <select id="engine_overheating" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_overheating" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Smoke from exhaust?</label>
-                    <select id="engine_smoke" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_smoke" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Unusual engine noise?</label>
-                    <select id="engine_noise" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_noise" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Check engine light ON?</label>
-                    <select id="engine_check_light" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_check_light" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 battery: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Car fails to start?</label>
-                    <select id="battery_start" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_start" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Dashboard lights dim?</label>
-                    <select id="battery_lights" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Rapid clicking?</label>
-                    <select id="battery_clicks" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Battery over 3 years?</label>
-                    <select id="battery_age" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Rapid clicking sound?</label>
+                    <select id="q_clicks" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Battery over 3 years old?</label>
+                    <select id="q_age" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 starter: `
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Clicking when turning key?</label>
-                    <select id="starter_click" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine cranks?</label>
-                    <select id="starter_crank" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_click" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine cranks at all?</label>
+                    <select id="q_crank" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Headlights work?</label>
-                    <select id="starter_lights" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="yes">Yes</option><option value="no">No</option></select></div>
                     <div><label class="block text-sm font-medium text-gray-700 mb-2">Burning smell?</label>
-                    <select id="starter_smell" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <select id="q_smell" class="w-full border border-gray-300 rounded-lg px-4 py-2"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `
             };
-            
-            document.getElementById('dynamicQuestions').innerHTML = questionsMap[currentDiagnosticType];
-            document.getElementById('systemSelect').addEventListener('change', (e) => {
-                currentDiagnosticType = e.target.value;
-                document.getElementById('dynamicQuestions').innerHTML = questionsMap[currentDiagnosticType];
-            });
+            document.getElementById('questionsPanel').innerHTML = questions[currentSystem];
         }
-        
+
+        // Run diagnostic
         async function runDiagnostic() {
             const symptoms = {};
-            const prefix = currentDiagnosticType + '_';
-            document.querySelectorAll(`[id^="${prefix}"]`).forEach(el => {
-                symptoms[el.id.replace(prefix, '')] = el.value;
+            const inputs = document.querySelectorAll('#questionsPanel select');
+            inputs.forEach(input => {
+                const key = input.id.replace('q_', '');
+                symptoms[key] = input.value;
             });
-            
-            const resultsArea = document.getElementById('resultsArea');
-            resultsArea.innerHTML = '<div class="text-center py-12"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#003153]"></div><p class="mt-4">Running diagnostic...</p></div>';
-            
+
+            const resultsPanel = document.getElementById('resultsPanel');
+            resultsPanel.innerHTML = '<div class="text-center py-8"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#003153]"></div><p class="mt-4">Analyzing...</p></div>';
+
             try {
-                const res = await fetch(`${API_BASE}/api/diagnose/${currentDiagnosticType}`, {
+                const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ symptoms })
                 });
                 const result = await res.json();
-                
+
                 const severityColors = {
                     low: 'bg-green-100 text-green-800',
                     medium: 'bg-yellow-100 text-yellow-800',
-                    high: 'bg-red-100 text-red-800'
+                    high: 'bg-red-100 text-red-800',
+                    critical: 'bg-purple-100 text-purple-800'
                 };
-                
-                resultsArea.innerHTML = `
+
+                resultsPanel.innerHTML = `
                     <div class="space-y-4">
                         <div class="p-4 rounded-lg ${severityColors[result.severity] || 'bg-gray-100'}">
-                            <strong>Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
+                            <strong class="block mb-1">Severity</strong>
+                            <span>${result.severity?.toUpperCase() || 'MEDIUM'}</span>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <strong>Analysis:</strong>
-                            <p class="mt-2">${result.results || 'No issues found'}</p>
+                            <strong class="block mb-2">Analysis</strong>
+                            <p class="text-gray-700">${result.results || 'No issues found'}</p>
                         </div>
+                        ${result.tools?.length ? `
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <strong class="block mb-2">Tools Required</strong>
+                            <ul class="list-disc list-inside">${result.tools.map(t => `<li>${t}</li>`).join('')}</ul>
+                        </div>` : ''}
+                        ${result.action_plan?.length ? `
+                        <div class="p-4 bg-gray-50 rounded-lg">
+                            <strong class="block mb-2">Action Plan</strong>
+                            <ol class="list-decimal list-inside">${result.action_plan.map(s => `<li>${s}</li>`).join('')}</ol>
+                        </div>` : ''}
                     </div>
                 `;
             } catch(e) {
-                resultsArea.innerHTML = '<div class="text-center py-12 text-red-500">Error running diagnostic</div>';
+                resultsPanel.innerHTML = '<div class="text-center py-8 text-red-500">Error running diagnostic. Please try again.</div>';
             }
         }
-        
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/statistics`);
+                const stats = await res.json();
+                document.getElementById('statCustomers').textContent = stats.total_customers || 0;
+                document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
+                document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
+                document.getElementById('statRevenue').textContent = `$${stats.total_revenue || 0}`;
+            } catch(e) {}
+        }
+
+        // Logout
         async function logout() {
             await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
             window.location.href = '/login.html';
         }
-        
+
+        // Event listeners
+        document.getElementById('systemSelect').addEventListener('change', (e) => {
+            currentSystem = e.target.value;
+            loadQuestions();
+        });
+
+        // Initialize
         checkAuth();
         loadQuestions();
+        loadStats();
+        setInterval(loadStats, 30000);
     </script>
 </body>
 </html>
