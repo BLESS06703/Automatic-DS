@@ -43,7 +43,7 @@ A **production-ready, professional car diagnostic system** that helps mechanics 
 
 ```bash
 # Clone the repository
-git clone https://github.com/BLESS06703/auto-diagnostic-system.git
+git clone https://github.com/BLESS06703/Automatic-DS.git
 cd auto-diagnostic-system
 
 # Install dependencies
