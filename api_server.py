@@ -11,6 +11,37 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
+# ========== AUTO-CREATE ADMIN USER ==========
+import sqlite3, hashlib, secrets
+
+def hash_password(password):
+    salt = secrets.token_hex(16)
+    return f"{salt}:{hashlib.sha256((password + salt).encode()).hexdigest()}"
+
+try:
+    conn = sqlite3.connect('/tmp/workshop.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT,
+        full_name TEXT,
+        role TEXT,
+        is_active INTEGER DEFAULT 1
+    )''')
+    c.execute("SELECT COUNT(*) FROM users WHERE username = 'admin'")
+    if c.fetchone()[0] == 0:
+        c.execute("INSERT INTO users (username, password, full_name, role) VALUES (?, ?, ?, ?)",
+                  ('admin', hash_password('admin123'), 'System Administrator', 'admin'))
+        conn.commit()
+        print("✅ Admin user created: admin / admin123")
+    else:
+        print("✅ Admin user already exists")
+    conn.close()
+except Exception as e:
+    print(f"Admin creation error: {e}")
+# ============================================
+
 # ========== AUTHENTICATION SETUP ==========
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from auth import UserManager
@@ -26,12 +57,10 @@ user_manager = UserManager()
 def load_user(user_id):
     return user_manager.get_user(int(user_id))
 
-
 # ========== AUTHENTICATION ENDPOINTS ==========
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    """Login endpoint"""
     data = request.json
     username = data.get('username')
     password = data.get('password')
@@ -59,13 +88,11 @@ def login():
 @app.route('/api/logout', methods=['POST'])
 @login_required
 def logout():
-    """Logout endpoint"""
     logout_user()
     return jsonify({'success': True, 'message': 'Logged out successfully'})
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    """Register new user (admin only in production)"""
     data = request.json
     username = data.get('username')
     password = data.get('password')
@@ -89,7 +116,6 @@ def register():
 @app.route('/api/current-user', methods=['GET'])
 @login_required
 def current_user_info():
-    """Get current logged in user info"""
     return jsonify({
         'id': current_user.id,
         'username': current_user.username,
@@ -100,7 +126,6 @@ def current_user_info():
 
 @app.route('/api/check-auth', methods=['GET'])
 def check_auth():
-    """Check if user is authenticated"""
     if current_user.is_authenticated:
         return jsonify({
             'authenticated': True,
@@ -122,11 +147,10 @@ def home():
 
 @app.route('/login.html')
 def serve_web_interface():
-    """Serve the main web interface"""
     web_file = os.path.join(os.path.dirname(__file__), 'login.html')
     if os.path.exists(web_file):
         return send_file(web_file)
-    return "web_interface.html not found. Please check the file exists.", 404
+    return "login.html not found", 404
 
 # ========== STATIC FILES ==========
 @app.route('/manifest.json')
@@ -151,9 +175,7 @@ def api_info():
             'diagnose_battery': '/api/diagnose/battery (POST)',
             'diagnose_starter': '/api/diagnose/starter (POST)',
             'vehicles': '/api/vehicles (GET)',
-            'statistics': '/api/statistics (GET)',
-            'add_customer': '/api/customer/add (POST)',
-            'add_vehicle': '/api/vehicle/add (POST)'
+            'statistics': '/api/statistics (GET)'
         }
     })
 
@@ -325,29 +347,3 @@ def generate_report(diagnostic_id):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
-# ========== TEMPORARY SETUP ENDPOINT ==========
-
-# ========== SETUP ENDPOINT (Remove after first use) ==========
-@app.route('/api/setup', methods=['GET'])
-def setup_admin():
-    """Create admin user - visit once"""
-    import sqlite3, hashlib, secrets
-    
-    def hash_pwd(pwd):
-        salt = secrets.token_hex(16)
-        return f"{salt}:{hashlib.sha256((pwd + salt).encode()).hexdigest()}"
-    
-    conn = sqlite3.connect('/tmp/workshop.db')
-    c = conn.cursor()
-    
-    c.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, full_name TEXT, role TEXT, is_active INTEGER DEFAULT 1)')
-    c.execute("DELETE FROM users WHERE username = 'admin'")
-    c.execute("INSERT INTO users (username, password, full_name, role, is_active) VALUES (?, ?, ?, ?, ?)", 
-              ('admin', hash_pwd('admin123'), 'System Administrator', 'admin', 1))
-    conn.commit()
-    c.execute("SELECT username, role FROM users WHERE username = 'admin'")
-    user = c.fetchone()
-    conn.close()
-    
-    return {"success": True, "message": f"Admin created: {user[0]}/admin123"} if user else {"success": False}
