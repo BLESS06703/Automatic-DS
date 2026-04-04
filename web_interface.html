@@ -2,183 +2,437 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bless Digital Auto Care - Professional Diagnostic System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Bless Auto Care - Dashboard</title>
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card-hover { transition: transform 0.3s, box-shadow 0.3s; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        .toast { position: fixed; bottom: 20px; right: 20px; z-index: 1000; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; border-radius: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 20px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0e5ec 0%, #f0f4f8 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Neumorphism Classes */
+        .neumorph {
+            background: #e0e5ec;
+            box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+            border-radius: 30px;
+        }
+
+        .neumorph-inset {
+            background: #e0e5ec;
+            box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+            border-radius: 25px;
+        }
+
+        .neumorph-btn {
+            background: #e0e5ec;
+            box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .neumorph-btn:active {
+            transform: scale(0.97);
+            box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo p {
+            color: #8e9aaf;
+            font-size: 12px;
+        }
+
+        .logout-btn {
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #dc2626;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+
+        .stat-label {
+            color: #8e9aaf;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Diagnostic Sections */
+        .diagnostic-section {
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            padding: 20px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .section-arrow {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            color: #667eea;
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .section-content.active {
+            max-height: 500px;
+        }
+
+        .questions-panel {
+            padding: 20px 30px 30px;
+        }
+
+        .question-row {
+            margin-bottom: 20px;
+        }
+
+        .question-row label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px 18px;
+            border: none;
+            background: #e0e5ec;
+            box-shadow: inset 3px 3px 8px #a3b1c6, inset -3px -3px 8px #ffffff;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #2c3e50;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+        }
+
+        .run-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .severity-low { background: #10b981; color: white; }
+        .severity-medium { background: #f59e0b; color: white; }
+        .severity-high { background: #ef4444; color: white; }
+        .severity-critical { background: #8b5cf6; color: white; }
+
+        .result-block {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #e0e5ec;
+            box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 50px;
+            background: #2c3e50;
+            color: white;
+            font-weight: 500;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .stat-card { padding: 15px; }
+            .stat-value { font-size: 24px; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { width: 100%; }
+        }
     </style>
 </head>
-<body class="gradient-bg min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-3xl">🚗</span>
-                <div>
-                    <h1 class="font-bold text-xl">Bless Digital Auto Care</h1>
-                    <p class="text-xs text-gray-500">Professional Diagnostic System</p>
-                </div>
-            </div>
-            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
+<body>
+    <!-- Header -->
+    <div class="header neumorph">
+        <div class="logo">
+            <h2>🚗 Bless Auto Care</h2>
+            <p>Professional Diagnostic System</p>
         </div>
-    </nav>
+        <button class="neumorph-btn logout-btn" onclick="logout()">Logout</button>
+    </div>
 
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <!-- Stats Dashboard -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl p-4 shadow text-center">
-                <div class="text-2xl mb-1">👥</div>
-                <p class="text-gray-500 text-xs">Customers</p>
-                <p class="text-2xl font-bold" id="statCustomers">0</p>
-            </div>
-            <div class="bg-white rounded-xl p-4 shadow text-center">
-                <div class="text-2xl mb-1">🚙</div>
-                <p class="text-gray-500 text-xs">Vehicles</p>
-                <p class="text-2xl font-bold" id="statVehicles">0</p>
-            </div>
-            <div class="bg-white rounded-xl p-4 shadow text-center">
-                <div class="text-2xl mb-1">🔧</div>
-                <p class="text-gray-500 text-xs">Diagnostics</p>
-                <p class="text-2xl font-bold" id="statDiagnostics">0</p>
-            </div>
-            <div class="bg-white rounded-xl p-4 shadow text-center">
-                <div class="text-2xl mb-1">💰</div>
-                <p class="text-gray-500 text-xs">Revenue</p>
-                <p class="text-2xl font-bold text-green-600" id="statRevenue">$0</p>
-            </div>
+    <!-- Stats Dashboard -->
+    <div class="stats-grid">
+        <div class="stat-card neumorph">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value" id="statCustomers">0</div>
+            <div class="stat-label">Customers</div>
         </div>
+        <div class="stat-card neumorph">
+            <div class="stat-icon">🚙</div>
+            <div class="stat-value" id="statVehicles">0</div>
+            <div class="stat-label">Vehicles</div>
+        </div>
+        <div class="stat-card neumorph">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-value" id="statDiagnostics">0</div>
+            <div class="stat-label">Diagnostics</div>
+        </div>
+        <div class="stat-card neumorph">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value" id="statRevenue">$0</div>
+            <div class="stat-label">Revenue</div>
+        </div>
+    </div>
 
-        <!-- Diagnostic Cards -->
-        <div class="grid md:grid-cols-3 gap-5 mb-6">
-            <div onclick="showDiagnostic('engine')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
-                <div class="text-5xl mb-3">🔧</div>
-                <h3 class="text-xl font-bold">Engine Diagnostic</h3>
-                <p class="text-gray-500 text-sm mt-1">Overheating, smoke, noises, check engine light</p>
-            </div>
-            <div onclick="showDiagnostic('battery')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
-                <div class="text-5xl mb-3">🔋</div>
-                <h3 class="text-xl font-bold">Battery & Charging</h3>
-                <p class="text-gray-500 text-sm mt-1">Starting issues, dim lights, alternator test</p>
-            </div>
-            <div onclick="showDiagnostic('starter')" class="bg-white rounded-xl p-6 cursor-pointer card-hover shadow">
-                <div class="text-5xl mb-3">⚡</div>
-                <h3 class="text-xl font-bold">Starter System</h3>
-                <p class="text-gray-500 text-sm mt-1">Clicking sounds, cranking issues, electrical</p>
+    <!-- Engine Section -->
+    <div class="diagnostic-section neumorph">
+        <div class="section-header" onclick="toggleSection('engineSection')">
+            <h3>🔧 Engine Diagnostic</h3>
+            <span class="section-arrow" id="engineArrow">▼</span>
+        </div>
+        <div id="engineSection" class="section-content">
+            <div class="questions-panel">
+                <div class="question-row"><label>Is the engine overheating?</label><select id="engine_overheating"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Is there smoke from exhaust?</label><select id="engine_smoke"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Any unusual engine noise?</label><select id="engine_noise"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Is check engine light ON?</label><select id="engine_check_light"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <button class="neumorph-btn run-btn" onclick="runDiagnostic('engine')">Run Diagnostic</button>
             </div>
         </div>
+    </div>
 
-        <!-- Action Buttons -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            <button onclick="showCustomers()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
-                <div class="text-2xl">👥</div>
-                <span class="text-sm font-semibold">Customers</span>
-            </button>
-            <button onclick="showVehicles()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
-                <div class="text-2xl">🚙</div>
-                <span class="text-sm font-semibold">Vehicles</span>
-            </button>
-            <button onclick="showAnalytics()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
-                <div class="text-2xl">📊</div>
-                <span class="text-sm font-semibold">Analytics</span>
-            </button>
-            <button onclick="showHistory()" class="bg-white rounded-lg p-3 shadow hover:shadow-lg transition text-center">
-                <div class="text-2xl">📜</div>
-                <span class="text-sm font-semibold">History</span>
-            </button>
+    <!-- Battery Section -->
+    <div class="diagnostic-section neumorph">
+        <div class="section-header" onclick="toggleSection('batterySection')">
+            <h3>🔋 Battery & Charging</h3>
+            <span class="section-arrow" id="batteryArrow">▼</span>
         </div>
-
-        <!-- Diagnostic Form Panel -->
-        <div id="formPanel" class="bg-white rounded-xl p-6 shadow-lg hidden">
-            <h2 id="formTitle" class="text-2xl font-bold mb-4">🔧 Engine Diagnostic</h2>
-            <div id="formQuestions"></div>
-            <div class="flex gap-3 mt-4">
-                <button onclick="runDiagnostic()" class="flex-1 gradient-bg text-white py-2 rounded-lg font-semibold">🔍 Run Diagnostic</button>
-                <button onclick="closeForm()" class="flex-1 bg-gray-300 py-2 rounded-lg font-semibold">Cancel</button>
+        <div id="batterySection" class="section-content">
+            <div class="questions-panel">
+                <div class="question-row"><label>Does the car fail to start?</label><select id="battery_start"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Are dashboard lights dim?</label><select id="battery_lights"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Do you hear rapid clicking?</label><select id="battery_clicks"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Is battery more than 3 years old?</label><select id="battery_age"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <button class="neumorph-btn run-btn" onclick="runDiagnostic('battery')">Run Diagnostic</button>
             </div>
         </div>
+    </div>
 
-        <!-- Results Panel -->
-        <div id="resultsPanel" class="bg-white rounded-xl p-6 shadow-lg hidden">
-            <h2 class="text-2xl font-bold mb-4">📊 Diagnosis Results</h2>
-            <div id="resultsContent"></div>
-            <div class="flex flex-wrap gap-2 mt-4">
-                <button onclick="generateReport()" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">📄 Report</button>
-                <button onclick="sendEmail()" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm">📧 Email</button>
-                <button onclick="sendSMS()" class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm">📱 SMS</button>
-                <button onclick="generateQR()" class="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm">🔲 QR</button>
-                <button onclick="closeResults()" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm">Close</button>
+    <!-- Starter Section -->
+    <div class="diagnostic-section neumorph">
+        <div class="section-header" onclick="toggleSection('starterSection')">
+            <h3>⚡ Starter System</h3>
+            <span class="section-arrow" id="starterArrow">▼</span>
+        </div>
+        <div id="starterSection" class="section-content">
+            <div class="questions-panel">
+                <div class="question-row"><label>Do you hear clicking when turning key?</label><select id="starter_click"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Does the engine crank at all?</label><select id="starter_crank"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <div class="question-row"><label>Do headlights work?</label><select id="starter_lights"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                <div class="question-row"><label>Any burning smell?</label><select id="starter_smell"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                <button class="neumorph-btn run-btn" onclick="runDiagnostic('starter')">Run Diagnostic</button>
             </div>
         </div>
+    </div>
 
-        <!-- Loading -->
-        <div id="loading" class="bg-white rounded-xl p-12 text-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-            <p>Analyzing symptoms...</p>
+    <!-- Results Panel -->
+    <div id="resultsPanel" class="neumorph results-panel" style="display: none;">
+        <h3 style="margin-bottom: 15px;">📊 Diagnosis Results</h3>
+        <div id="resultsContent"></div>
+        <div class="action-buttons">
+            <button class="neumorph-btn action-btn" onclick="generateReport()">📄 Report</button>
+            <button class="neumorph-btn action-btn" onclick="sendEmail()">📧 Email</button>
+            <button class="neumorph-btn action-btn" onclick="sendSMS()">📱 SMS</button>
+            <button class="neumorph-btn action-btn" onclick="generateQR()">🔲 QR</button>
+            <button class="neumorph-btn action-btn" onclick="closeResults()">Close</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="neumorph" style="display: none; margin-top: 20px;">
+        <div class="loading-overlay">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #8e9aaf;">Analyzing symptoms...</p>
         </div>
     </div>
 
     <!-- Analytics Modal -->
     <div id="analyticsModal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">📊 Analytics Dashboard</h2>
-                <button onclick="closeModal('analyticsModal')" class="text-2xl">&times;</button>
+        <div class="modal-content neumorph">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>📊 Analytics Dashboard</h3>
+                <button onclick="closeModal('analyticsModal')" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
             </div>
             <div id="analyticsContent">Loading...</div>
         </div>
     </div>
 
-    <!-- Customers Modal -->
-    <div id="customersModal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">👥 Customers</h2>
-                <button onclick="closeModal('customersModal')" class="text-2xl">&times;</button>
-            </div>
-            <div id="customersContent">
-                <div class="text-center py-4">No customers yet. Add one from a diagnostic!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Vehicles Modal -->
-    <div id="vehiclesModal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">🚙 Vehicles</h2>
-                <button onclick="closeModal('vehiclesModal')" class="text-2xl">&times;</button>
-            </div>
-            <div id="vehiclesContent">
-                <div class="text-center py-4">No vehicles yet. Add one from a diagnostic!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- History Modal -->
-    <div id="historyModal" class="modal">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">📜 Diagnostic History</h2>
-                <button onclick="closeModal('historyModal')" class="text-2xl">&times;</button>
-            </div>
-            <div id="historyContent">Loading...</div>
-        </div>
-    </div>
-
     <!-- Toast -->
-    <div id="toast" class="toast bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg hidden"></div>
+    <div id="toast" class="toast"></div>
 
     <script>
         const API_BASE = window.location.origin;
-        let currentDiagnostic = null;
         let currentResults = null;
+        let activeDiagnostic = null;
 
         async function apiCall(endpoint, options = {}) {
             const res = await fetch(API_BASE + endpoint, options);
@@ -208,121 +462,90 @@
             } catch(e) { console.log('Stats not available'); }
         }
 
-        function showDiagnostic(type) {
-            currentDiagnostic = type;
-            const formPanel = document.getElementById('formPanel');
-            const formTitle = document.getElementById('formTitle');
-            const questionsDiv = document.getElementById('formQuestions');
-            
-            let questions = '';
-            if (type === 'engine') {
-                formTitle.innerHTML = '🔧 Engine Diagnostic';
-                questions = `<div class="mb-3"><label class="font-semibold">Engine overheating?</label><select id="overheating" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Smoke from exhaust?</label><select id="smoke" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Unusual noise?</label><select id="noise" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Check engine light?</label><select id="check_light" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
-            } else if (type === 'battery') {
-                formTitle.innerHTML = '🔋 Battery Diagnostic';
-                questions = `<div class="mb-3"><label class="font-semibold">Car fails to start?</label><select id="start" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Dashboard lights dim?</label><select id="lights" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Rapid clicking?</label><select id="clicks" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Battery over 3 years?</label><select id="age" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
-            } else if (type === 'starter') {
-                formTitle.innerHTML = '⚡ Starter Diagnostic';
-                questions = `<div class="mb-3"><label class="font-semibold">Clicking when turning key?</label><select id="click" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Engine cranks?</label><select id="crank" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Headlights work?</label><select id="lights" class="w-full p-2 border rounded"><option value="yes">Yes</option><option value="no">No</option></select></div>
-                    <div class="mb-3"><label class="font-semibold">Burning smell?</label><select id="smell" class="w-full p-2 border rounded"><option value="no">No</option><option value="yes">Yes</option></select></div>`;
-            }
-            questionsDiv.innerHTML = questions;
-            formPanel.classList.remove('hidden');
-            document.getElementById('resultsPanel').classList.add('hidden');
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId);
+            const arrow = document.getElementById(sectionId.replace('Section', 'Arrow'));
+            content.classList.toggle('active');
+            arrow.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
         }
 
-        async function runDiagnostic() {
+        async function runDiagnostic(type) {
             const symptoms = {};
-            document.querySelectorAll('#formQuestions select').forEach(input => { symptoms[input.id] = input.value; });
-            
-            document.getElementById('formPanel').classList.add('hidden');
-            document.getElementById('loading').classList.remove('hidden');
-            
+            const prefix = type + '_';
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(el => {
+                symptoms[el.id.replace(prefix, '')] = el.value;
+            });
+
+            document.getElementById('resultsPanel').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
             try {
-                const result = await apiCall(`/api/diagnose/${currentDiagnostic}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                const result = await apiCall(`/api/diagnose/${type}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ symptoms })
                 });
-                
+
                 currentResults = result;
-                const severityColor = { low: 'bg-green-100 text-green-800', medium: 'bg-yellow-100', high: 'bg-red-100 text-red-800', critical: 'bg-purple-100' };
-                let toolsHtml = result.tools?.length ? `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>🛠️ Tools:</strong><ul class="ml-4">${result.tools.map(t => `<li>${t}</li>`).join('')}</ul></div>` : '';
-                let actionHtml = result.action_plan?.length ? `<div class="mt-3 p-3 bg-gray-100 rounded"><strong>📋 Action Plan:</strong><ol class="ml-4">${result.action_plan.map(s => `<li>${s}</li>`).join('')}</ol></div>` : '';
-                
-                document.getElementById('resultsContent').innerHTML = `
-                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>⚠️ Severity:</strong> <span class="px-2 py-1 rounded ${severityColor[result.severity] || 'bg-gray-200'}">${result.severity?.toUpperCase() || 'MEDIUM'}</span></div>
-                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>🔍 Symptoms Found:</strong><ul class="ml-4 mt-1">${result.symptoms?.map(s => `<li>${s}</li>`).join('') || '<li>None recorded</li>'}</ul></div>
-                    <div class="p-3 bg-gray-100 rounded mb-3"><strong>📊 Analysis:</strong><p class="mt-1">${result.results || 'No issues found'}</p></div>
-                    ${toolsHtml}${actionHtml}`;
-                
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('resultsPanel').classList.remove('hidden');
+                displayResults(result);
                 showToast('Diagnostic completed!');
                 loadStats();
-            } catch(e) { showToast('Error running diagnostic'); document.getElementById('loading').classList.add('hidden'); document.getElementById('formPanel').classList.remove('hidden'); }
+            } catch(e) {
+                showToast('Error running diagnostic');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
         }
 
-        function generateReport() { showToast('📄 Report would be downloaded here'); }
+        function displayResults(result) {
+            const severityClass = `severity-${result.severity || 'medium'}`;
+            let toolsHtml = result.tools?.length ? `<div class="result-block neumorph-inset"><strong>🛠️ Tools Required</strong><ul style="margin-top: 10px; margin-left: 20px;">${result.tools.map(t => `<li>${t}</li>`).join('')}</ul></div>` : '';
+            let actionHtml = result.action_plan?.length ? `<div class="result-block neumorph-inset"><strong>📋 Action Plan</strong><ol style="margin-top: 10px; margin-left: 20px;">${result.action_plan.map(s => `<li>${s}</li>`).join('')}</ol></div>` : '';
+
+            document.getElementById('resultsContent').innerHTML = `
+                <div class="result-block neumorph-inset"><strong>⚠️ Severity</strong><br><span class="severity-badge ${severityClass}">${result.severity?.toUpperCase() || 'MEDIUM'}</span></div>
+                <div class="result-block neumorph-inset"><strong>🔍 Symptoms Found</strong><ul style="margin-top: 10px; margin-left: 20px;">${result.symptoms?.map(s => `<li>${s}</li>`).join('') || '<li>No symptoms recorded</li>'}</ul></div>
+                <div class="result-block neumorph-inset"><strong>📊 Analysis</strong><p style="margin-top: 10px;">${result.results || 'No issues found'}</p></div>
+                ${toolsHtml}${actionHtml}
+            `;
+            document.getElementById('resultsPanel').style.display = 'block';
+            document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateReport() { showToast('📄 Report generation coming soon'); }
         function sendEmail() { showToast('📧 Email feature coming soon'); }
         function sendSMS() { showToast('📱 SMS feature coming soon'); }
-        function generateQR() { showToast('🔲 QR code generated'); }
-        function closeForm() { document.getElementById('formPanel').classList.add('hidden'); }
-        function closeResults() { document.getElementById('resultsPanel').classList.add('hidden'); currentResults = null; }
-
-        async function showCustomers() {
-            document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
-            document.getElementById('customersModal').style.display = 'flex';
-            try {
-                const data = await apiCall('/api/vehicles');
-                const customers = [...new Map(data.vehicles?.map(v => [v.customer, v.customer])).keys()];
-                if (customers.length) document.getElementById('customersContent').innerHTML = customers.map(c => `<div class="p-2 border-b">👤 ${c}</div>`).join('');
-                else document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">No customers yet</div>';
-            } catch(e) { document.getElementById('customersContent').innerHTML = '<div class="text-center py-4">No data available</div>'; }
-        }
-
-        async function showVehicles() {
-            document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
-            document.getElementById('vehiclesModal').style.display = 'flex';
-            try {
-                const data = await apiCall('/api/vehicles');
-                if (data.vehicles?.length) document.getElementById('vehiclesContent').innerHTML = data.vehicles.map(v => `<div class="p-2 border-b">🚙 ${v.make} ${v.model} (${v.year}) - ${v.customer}</div>`).join('');
-                else document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">No vehicles yet</div>';
-            } catch(e) { document.getElementById('vehiclesContent').innerHTML = '<div class="text-center py-4">No data available</div>'; }
-        }
+        function generateQR() { showToast('🔲 QR code generation coming soon'); }
+        function closeResults() { document.getElementById('resultsPanel').style.display = 'none'; currentResults = null; }
 
         async function showAnalytics() {
-            document.getElementById('analyticsContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
+            document.getElementById('analyticsContent').innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
             document.getElementById('analyticsModal').style.display = 'flex';
             try {
                 const analytics = await apiCall('/api/analytics/dashboard');
                 document.getElementById('analyticsContent').innerHTML = `
-                    <div class="p-3 bg-blue-50 rounded mb-3"><strong>📈 Today</strong><br>Diagnostics: ${analytics.daily?.today_diagnostics || 0}<br>Revenue: $${analytics.daily?.today_revenue || 0}</div>
-                    <div class="p-3 bg-green-50 rounded mb-3"><strong>🔧 Common Issues</strong><br>${analytics.daily?.common_issues?.map(i => `${i.type}: ${i.count}`).join('<br>') || 'No data yet'}</div>
-                    <div class="p-3 bg-purple-50 rounded"><strong>👨‍🔧 Top Technician</strong><br>${analytics.technician_performance?.[0]?.technician || 'N/A'}: ${analytics.technician_performance?.[0]?.diagnostics || 0} jobs</div>`;
-            } catch(e) { document.getElementById('analyticsContent').innerHTML = '<div class="text-center py-4">Analytics coming soon</div>'; }
-        }
-
-        async function showHistory() {
-            document.getElementById('historyContent').innerHTML = '<div class="text-center py-4">Loading...</div>';
-            document.getElementById('historyModal').style.display = 'flex';
-            document.getElementById('historyContent').innerHTML = '<div class="text-center py-4">Run a diagnostic to see history here</div>';
+                    <div class="result-block neumorph-inset"><strong>📈 Today's Summary</strong><br>Diagnostics: ${analytics.daily?.today_diagnostics || 0}<br>Revenue: $${analytics.daily?.today_revenue || 0}</div>
+                    <div class="result-block neumorph-inset"><strong>🔧 Common Issues</strong><br>${analytics.daily?.common_issues?.map(i => `${i.type}: ${i.count}`).join('<br>') || 'No data yet'}</div>
+                    <div class="result-block neumorph-inset"><strong>👨‍🔧 Technician Performance</strong><br>${analytics.technician_performance?.map(t => `${t.technician}: ${t.diagnostics} jobs`).join('<br>') || 'No data yet'}</div>
+                `;
+            } catch(e) { document.getElementById('analyticsContent').innerHTML = '<div class="result-block neumorph-inset">Analytics data coming soon</div>'; }
         }
 
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function showToast(msg) { 
             const toast = document.getElementById('toast');
             toast.textContent = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
         }
+
+        // Add analytics button to header
+        document.querySelector('.stats-grid').insertAdjacentHTML('afterend', `
+            <div style="display: flex; gap: 12px; margin-bottom: 25px;">
+                <button class="neumorph-btn action-btn" onclick="showAnalytics()" style="flex:1">📊 Analytics</button>
+                <button class="neumorph-btn action-btn" onclick="location.reload()" style="flex:1">🔄 Refresh</button>
+            </div>
+        `);
 
         checkAuth();
         loadStats();
