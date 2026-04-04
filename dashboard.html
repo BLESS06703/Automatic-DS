@@ -6,85 +6,81 @@
     <title>Bless Auto Care - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         * { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-100">
-    <!-- Top Bar - BIG -->
-    <div class="bg-white border-b border-gray-200 px-8 py-6">
+    <!-- Top Bar -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4">
         <div class="flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="text-5xl">🚗</div>
+            <div class="flex items-center gap-3">
+                <div class="text-3xl">🚗</div>
                 <div>
-                    <h1 class="text-3xl font-bold text-[#003153]">Bless Auto Care</h1>
-                    <p class="text-base text-gray-500 mt-1">Industrial Diagnostic System</p>
+                    <h1 class="text-xl font-bold text-[#003153]">Bless Auto Care</h1>
+                    <p class="text-xs text-gray-500">Industrial Diagnostic System</p>
                 </div>
             </div>
-            <button onclick="logout()" class="bg-red-500 text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-red-600 transition">Logout</button>
+            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-8 py-10">
-        <!-- Stats - BIG Numbers -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+    <div class="max-w-6xl mx-auto px-6 py-6">
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div class="text-center">
-                <div class="text-5xl mb-3">👥</div>
-                <div class="text-5xl font-bold text-[#003153]" id="statCustomers">0</div>
-                <div class="text-base text-gray-500 mt-2">Customers</div>
+                <div class="text-3xl mb-1">👥</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statCustomers">0</div>
+                <div class="text-xs text-gray-500">Customers</div>
             </div>
             <div class="text-center">
-                <div class="text-5xl mb-3">🚙</div>
-                <div class="text-5xl font-bold text-[#003153]" id="statVehicles">0</div>
-                <div class="text-base text-gray-500 mt-2">Vehicles</div>
+                <div class="text-3xl mb-1">🚙</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statVehicles">0</div>
+                <div class="text-xs text-gray-500">Vehicles</div>
             </div>
             <div class="text-center">
-                <div class="text-5xl mb-3">🔧</div>
-                <div class="text-5xl font-bold text-[#003153]" id="statDiagnostics">0</div>
-                <div class="text-base text-gray-500 mt-2">Diagnostics</div>
+                <div class="text-3xl mb-1">🔧</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statDiagnostics">0</div>
+                <div class="text-xs text-gray-500">Diagnostics</div>
             </div>
             <div class="text-center">
-                <div class="text-5xl mb-3">💰</div>
-                <div class="text-5xl font-bold text-[#003153]" id="statRevenue">$0</div>
-                <div class="text-base text-gray-500 mt-2">Revenue</div>
+                <div class="text-3xl mb-1">💰</div>
+                <div class="text-2xl font-bold text-[#003153]" id="statRevenue">$0</div>
+                <div class="text-xs text-gray-500">Revenue</div>
             </div>
         </div>
 
-        <!-- Main Content - BIG Layout -->
-        <div class="grid lg:grid-cols-2 gap-10">
-            <!-- Controls Panel - BIG -->
-            <div class="bg-white rounded-3xl shadow-lg p-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8">Diagnostic Controls</h2>
-                <div class="space-y-6">
+        <!-- Main Content -->
+        <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Controls Panel -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Diagnostic Controls</h2>
+                <div class="space-y-4">
                     <div>
-                        <label class="block text-xl font-semibold text-gray-700 mb-3">Select System</label>
-                        <select id="systemSelect" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select System</label>
+                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
                             <option value="engine">🔧 Engine Diagnostic</option>
                             <option value="battery">🔋 Battery & Charging</option>
                             <option value="starter">⚡ Starter System</option>
                         </select>
                     </div>
-                    <div id="questionsPanel" class="space-y-6">
-                        <!-- Dynamic questions will appear here -->
+                    <div id="questionsPanel" class="space-y-4">
+                        <!-- Dynamic questions -->
                     </div>
-                    <div class="flex gap-4 pt-4">
-                        <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-5 rounded-xl font-bold text-xl hover:bg-[#1B4F72] transition">
-                            Start Diagnosis
-                        </button>
-                        <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-5 rounded-xl font-bold text-xl hover:bg-gray-300 transition">
-                            Cancel
-                        </button>
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg font-medium hover:bg-[#1B4F72] transition">Start Diagnosis</button>
+                        <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 transition">Cancel</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Results Panel - BIG -->
-            <div class="bg-white rounded-3xl shadow-lg p-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8">Analysis Results</h2>
-                <div id="resultsPanel" class="min-h-[400px]">
-                    <div class="text-center text-gray-400 py-16">
-                        <div class="text-7xl mb-5">🔍</div>
-                        <p class="text-xl">Select a system and run diagnosis</p>
+            <!-- Results Panel -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Analysis Results</h2>
+                <div id="resultsPanel" class="min-h-[350px]">
+                    <div class="text-center text-gray-400 py-12">
+                        <div class="text-5xl mb-3">🔍</div>
+                        <p class="text-sm">Select a system and run diagnosis</p>
                     </div>
                 </div>
             </div>
@@ -111,70 +107,61 @@
         function loadQuestions() {
             const questions = {
                 engine: `
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Engine overheating?</label>
-                    <select id="q_overheating" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Smoke from exhaust?</label>
-                    <select id="q_smoke" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Unusual engine noise?</label>
-                    <select id="q_noise" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Check engine light ON?</label>
-                    <select id="q_check_light" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine overheating?</label>
+                    <select id="q_overheating" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Smoke from exhaust?</label>
+                    <select id="q_smoke" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Unusual engine noise?</label>
+                    <select id="q_noise" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Check engine light ON?</label>
+                    <select id="q_check_light" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 battery: `
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Car fails to start?</label>
-                    <select id="q_start" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Dashboard lights dim?</label>
-                    <select id="q_lights" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Rapid clicking sound?</label>
-                    <select id="q_clicks" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Battery over 3 years old?</label>
-                    <select id="q_age" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Car fails to start?</label>
+                    <select id="q_start" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Dashboard lights dim?</label>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Rapid clicking?</label>
+                    <select id="q_clicks" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Battery over 3 years?</label>
+                    <select id="q_age" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 starter: `
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Clicking when turning key?</label>
-                    <select id="q_click" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Engine cranks at all?</label>
-                    <select id="q_crank" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Headlights work?</label>
-                    <select id="q_lights" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="yes">Yes</option><option value="no">No</option></select></div>
-                    <div><label class="block text-lg font-semibold text-gray-700 mb-2">Burning smell?</label>
-                    <select id="q_smell" class="w-full border-2 border-gray-300 rounded-xl px-6 py-4 text-lg"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Clicking when turning key?</label>
+                    <select id="q_click" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Engine cranks?</label>
+                    <select id="q_crank" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Headlights work?</label>
+                    <select id="q_lights" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Burning smell?</label>
+                    <select id="q_smell" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `
             };
             document.getElementById('questionsPanel').innerHTML = questions[currentSystem];
         }
 
         function cancelDiagnostic() {
-            if (isLoading) {
-                alert("Diagnostic is already running. Please wait.");
-                return;
-            }
-            const resultsPanel = document.getElementById('resultsPanel');
-            resultsPanel.innerHTML = `
-                <div class="text-center text-gray-400 py-16">
-                    <div class="text-7xl mb-5">🔍</div>
-                    <p class="text-xl">Diagnostic cancelled. Select a system and run diagnosis again.</p>
+            if (isLoading) return;
+            document.getElementById('resultsPanel').innerHTML = `
+                <div class="text-center text-gray-400 py-12">
+                    <div class="text-5xl mb-3">🔍</div>
+                    <p class="text-sm">Diagnostic cancelled. Select a system and run again.</p>
                 </div>
             `;
-            isLoading = false;
         }
 
         async function runDiagnostic() {
-            if (isLoading) {
-                alert("Diagnostic already running. Please wait.");
-                return;
-            }
+            if (isLoading) return;
 
             const symptoms = {};
-            const inputs = document.querySelectorAll('#questionsPanel select');
-            inputs.forEach(input => {
+            document.querySelectorAll('#questionsPanel select').forEach(input => {
                 const key = input.id.replace('q_', '');
                 symptoms[key] = input.value;
             });
 
             const resultsPanel = document.getElementById('resultsPanel');
             isLoading = true;
-            resultsPanel.innerHTML = '<div class="text-center py-16"><div class="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-[#003153]"></div><p class="mt-6 text-xl">Analyzing symptoms...</p><button onclick="cancelDiagnostic()" class="mt-6 text-red-500 text-lg">Cancel</button></div>';
+            resultsPanel.innerHTML = '<div class="text-center py-12"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#003153]"></div><p class="mt-3 text-sm">Analyzing...</p></div>';
 
             try {
                 const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
@@ -187,49 +174,26 @@
                 const severityColors = {
                     low: 'bg-green-100 text-green-800',
                     medium: 'bg-yellow-100 text-yellow-800',
-                    high: 'bg-red-100 text-red-800',
-                    critical: 'bg-purple-100 text-purple-800'
+                    high: 'bg-red-100 text-red-800'
                 };
 
-                let toolsHtml = '';
-                if (result.tools && result.tools.length > 0) {
-                    toolsHtml = `
-                        <div class="p-6 bg-gray-50 rounded-xl mt-4">
-                            <strong class="block text-lg mb-3">🛠️ Tools Required</strong>
-                            <div class="flex flex-wrap gap-2">${result.tools.map(t => `<span class="bg-white px-4 py-2 rounded-lg border text-base">${t}</span>`).join('')}</div>
-                        </div>`;
-                }
-
-                let actionHtml = '';
-                if (result.action_plan && result.action_plan.length > 0) {
-                    actionHtml = `
-                        <div class="p-6 bg-gray-50 rounded-xl mt-4">
-                            <strong class="block text-lg mb-3">📋 Action Plan</strong>
-                            <ol class="list-decimal list-inside space-y-2 text-base">${result.action_plan.slice(0, 5).map(s => `<li>${s}</li>`).join('')}</ol>
-                            ${result.action_plan.length > 5 ? `<p class="text-base text-gray-500 mt-3">+ ${result.action_plan.length - 5} more steps</p>` : ''}
-                        </div>`;
-                }
-
                 resultsPanel.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="p-6 rounded-xl ${severityColors[result.severity] || 'bg-gray-100'}">
-                            <strong class="block text-lg mb-2">⚠️ Severity</strong>
-                            <span class="text-2xl font-bold">${result.severity?.toUpperCase() || 'MEDIUM'}</span>
+                    <div class="space-y-3">
+                        <div class="p-3 rounded-lg ${severityColors[result.severity] || 'bg-gray-100'}">
+                            <strong class="text-sm">Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
                         </div>
-                        <div class="p-6 bg-gray-50 rounded-xl">
-                            <strong class="block text-lg mb-3">📊 Analysis</strong>
-                            <p class="text-base text-gray-700 leading-relaxed">${result.results || 'No issues found'}</p>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <strong class="text-sm">Analysis:</strong>
+                            <p class="text-sm mt-1">${result.results || 'No issues found'}</p>
                         </div>
-                        ${toolsHtml}
-                        ${actionHtml}
-                        <div class="flex gap-4 pt-4">
-                            <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1B4F72]">🔄 Run Again</button>
-                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-4 rounded-xl font-bold text-lg hover:bg-gray-300">🗑️ Clear Results</button>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg text-sm">Run Again</button>
+                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg text-sm">Clear</button>
                         </div>
                     </div>
                 `;
             } catch(e) {
-                resultsPanel.innerHTML = '<div class="text-center py-16 text-red-500 text-xl">Error running diagnostic. Please try again.</div>';
+                resultsPanel.innerHTML = '<div class="text-center py-12 text-red-500 text-sm">Error. Please try again.</div>';
             } finally {
                 isLoading = false;
             }
