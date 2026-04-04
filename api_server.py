@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, redirect
+from flask import Flask, request, jsonify, send_file, redirect, session
 from flask_cors import CORS
 from database import Database
 from diagnostic_engine import DiagnosticEngine
@@ -10,6 +10,108 @@ from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
+
+# ========== AUTHENTICATION SETUP ==========
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from auth import UserManager
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Please log in to access this page'
+
+user_manager = UserManager()
+
+@login_manager.user_loader
+def load_user(user_id):
+    return user_manager.get_user(int(user_id))
+
+
+# ========== AUTHENTICATION ENDPOINTS ==========
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    """Login endpoint"""
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    
+    user = user_manager.authenticate(username, password)
+    
+    if user:
+        login_user(user)
+        return jsonify({
+            'success': True,
+            'message': 'Login successful',
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'full_name': user.full_name,
+                'role': user.role
+            }
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'message': 'Invalid username or password'
+        }), 401
+
+@app.route('/api/logout', methods=['POST'])
+@login_required
+def logout():
+    """Logout endpoint"""
+    logout_user()
+    return jsonify({'success': True, 'message': 'Logged out successfully'})
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    """Register new user (admin only in production)"""
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    full_name = data.get('full_name')
+    role = data.get('role', 'technician')
+    
+    user_id = user_manager.create_user(username, password, full_name, role)
+    
+    if user_id:
+        return jsonify({
+            'success': True,
+            'message': 'User created successfully',
+            'user_id': user_id
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'message': 'Username already exists'
+        }), 400
+
+@app.route('/api/current-user', methods=['GET'])
+@login_required
+def current_user_info():
+    """Get current logged in user info"""
+    return jsonify({
+        'id': current_user.id,
+        'username': current_user.username,
+        'full_name': current_user.full_name,
+        'role': current_user.role,
+        'is_authenticated': True
+    })
+
+@app.route('/api/check-auth', methods=['GET'])
+def check_auth():
+    """Check if user is authenticated"""
+    if current_user.is_authenticated:
+        return jsonify({
+            'authenticated': True,
+            'user': {
+                'username': current_user.username,
+                'full_name': current_user.full_name,
+                'role': current_user.role
+            }
+        })
+    return jsonify({'authenticated': False})
+
 db = Database()
 engine = DiagnosticEngine()
 
