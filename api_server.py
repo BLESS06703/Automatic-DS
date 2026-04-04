@@ -137,3 +137,12 @@ def register():
         return jsonify({'success': True, 'message': 'User created successfully', 'user_id': user_id})
     else:
         return jsonify({'success': False, 'message': 'Username already exists'}), 400
+
+# ========== SERVE DASHBOARD ==========
+@app.route('/dashboard.html')
+def serve_dashboard():
+    """Serve the main dashboard"""
+    try:
+        return send_file('dashboard.html')
+    except Exception as e:
+        return f"Error loading dashboard: {e}", 404
