@@ -10,7 +10,7 @@ class Database:
         # Check if running on Render (cloud) or locally
         if os.environ.get('RENDER'):
             # On Render, use /tmp directory (writable)
-            self.db_path = '/tmp/workshop.db'
+            self.db_path = 'workshop.db'
             print(f"Render mode: Using database at {self.db_path}")
         else:
             # Local development - use data folder

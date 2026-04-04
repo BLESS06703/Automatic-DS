@@ -19,7 +19,7 @@ def hash_password(password):
     return f"{salt}:{hashlib.sha256((password + salt).encode()).hexdigest()}"
 
 try:
-    conn = sqlite3.connect('/tmp/workshop.db')
+    conn = sqlite3.connect('workshop.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
