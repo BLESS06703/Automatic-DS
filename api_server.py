@@ -325,3 +325,39 @@ def generate_report(diagnostic_id):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
+# ========== TEMPORARY SETUP ENDPOINT ==========
+@app.route('/api/setup', methods=['GET'])
+def setup_admin():
+    """Create admin user (remove after first use)"""
+    try:
+        from auth import UserManager
+        um = UserManager()
+        
+        # Connect directly to database
+        import sqlite3
+        conn = sqlite3.connect('/tmp/workshop.db')
+        cursor = conn.cursor()
+        
+        # Delete existing admin
+        cursor.execute("DELETE FROM users WHERE username = 'admin'")
+        conn.commit()
+        
+        # Create new admin using UserManager
+        user_id = um.create_user('admin', 'admin123', 'System Administrator', 'admin')
+        
+        if user_id:
+            # Verify user was created
+            cursor.execute("SELECT username, role FROM users WHERE username = 'admin'")
+            user = cursor.fetchone()
+            conn.close()
+            return {
+                "success": True, 
+                "message": f"Admin user created: admin/admin123",
+                "user": {"username": user[0], "role": user[1]} if user else None
+            }
+        else:
+            conn.close()
+            return {"success": False, "message": "Failed to create admin user"}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
