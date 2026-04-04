@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bless Auto Care - Industrial Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(0, 49, 83, 0.05);
+            border-left-color: #003153;
+        }
+        .dark .sidebar-item:hover, .dark .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark .scrollbar-thin::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body id="app" class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col transition-all duration-300">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-3">
+                    <div class="text-3xl">🚗</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-[#003153]">Bless Auto Care</h1>
+                        <p class="text-xs text-gray-500">Industrial Diagnostic System</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 py-6">
+                <div class="px-4 mb-2">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">Main</p>
+                </div>
+                <a href="#" onclick="switchTab('diagnostic')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700 active" data-tab="diagnostic">
+                    <span class="mdi mdi-car-wrench text-xl"></span>
+                    <span>Diagnostic Machine</span>
+                </a>
+                <a href="#" onclick="switchTab('scanner')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700" data-tab="scanner">
+                    <span class="mdi mdi-scan-helper text-xl"></span>
+                    <span>Car Scanner Tools</span>
+                </a>
+                <a href="#" onclick="switchTab('history')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700" data-tab="history">
+                    <span class="mdi mdi-history text-xl"></span>
+                    <span>Diagnostic History</span>
+                </a>
+                <a href="#" onclick="switchTab('analytics')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700" data-tab="analytics">
+                    <span class="mdi mdi-chart-line text-xl"></span>
+                    <span>Industrial Analytics</span>
+                </a>
+                
+                <div class="px-4 mt-6 mb-2">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3">System</p>
+                </div>
+                <a href="#" onclick="switchTab('settings')" class="sidebar-item flex items-center gap-3 px-6 py-3 text-gray-700" data-tab="settings">
+                    <span class="mdi mdi-cog text-xl"></span>
+                    <span>Settings</span>
+                </a>
+                <a href="#" onclick="logout()" class="sidebar-item flex items-center gap-3 px-6 py-3 text-red-600 mt-auto">
+                    <span class="mdi mdi-logout text-xl"></span>
+                    <span>Disconnect</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- TOP BAR -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                <div>
+                    <h2 id="pageTitle" class="text-xl font-semibold text-gray-800">Diagnostic Machine</h2>
+                    <p id="pageSubtitle" class="text-sm text-gray-500">Run real-time vehicle diagnostics</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDarkMode()" class="p-2 hover:bg-gray-100 rounded-lg transition">
+                        <span id="themeIcon" class="mdi mdi-weather-night text-xl text-gray-600"></span>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p id="userName" class="text-sm font-semibold text-gray-800">Technician</p>
+                            <p class="text-xs text-gray-500">Online</p>
+                        </div>
+                        <div class="w-10 h-10 bg-[#003153] rounded-full flex items-center justify-center text-white font-bold">
+                            T
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORKSPACE -->
+            <div class="flex-1 overflow-y-auto p-6 scrollbar-thin">
+                <!-- Diagnostic Tab -->
+                <div id="diagnosticTab" class="tab-content">
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <!-- Controls Panel -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <span class="mdi mdi-console-line"></span> Diagnostic Controls
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">System Selection</label>
+                                    <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#003153] focus:border-transparent">
+                                        <option value="engine">🔧 Engine Diagnostic</option>
+                                        <option value="battery">🔋 Battery & Charging</option>
+                                        <option value="starter">⚡ Starter System</option>
+                                    </select>
+                                </div>
+                                <div id="dynamicQuestions" class="space-y-4">
+                                    <!-- Questions load dynamically -->
+                                </div>
+                                <button onclick="runDiagnostic()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">
+                                    <span class="mdi mdi-play-circle"></span> Start Diagnosis
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Results Panel -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <span class="mdi mdi-chart-box"></span> Analysis Results
+                            </h3>
+                            <div id="resultsArea" class="min-h-[400px]">
+                                <div class="text-center text-gray-400 py-12">
+                                    <span class="mdi mdi-robot-industrial text-6xl"></span>
+                                    <p class="mt-4">Awaiting diagnostic input...</p>
+                                    <p class="text-sm">Select a system and run diagnosis</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scanner Tab -->
+                <div id="scannerTab" class="tab-content hidden">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-800 mb-4">🔍 OBD2 Scanner Tools</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="font-medium">Live Data Stream</span>
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                                    </div>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between"><span>Engine RPM:</span><span class="font-mono">2,450 rpm</span></div>
+                                        <div class="flex justify-between"><span>Vehicle Speed:</span><span class="font-mono">65 km/h</span></div>
+                                        <div class="flex justify-between"><span>Coolant Temp:</span><span class="font-mono">92°C</span></div>
+                                        <div class="flex justify-between"><span>Fuel Trim:</span><span class="font-mono">+3.2%</span></div>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="font-medium">DTC Codes</span>
+                                        <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">2 Active</span>
+                                    </div>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-red-50 rounded"><span class="font-mono">P0300</span> - Random Misfire</div>
+                                        <div class="p-2 bg-yellow-50 rounded"><span class="font-mono">P0420</span> - Catalyst Efficiency</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <span class="font-medium mb-3 block">Diagnostic Commands</span>
+                                <div class="space-y-2">
+                                    <button class="w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50 transition">📊 Read Live Data</button>
+                                    <button class="w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50 transition">🔍 Scan for Codes</button>
+                                    <button class="w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50 transition">🗑️ Clear DTCs</button>
+                                    <button class="w-full text-left px-4 py-2 bg-white rounded border hover:bg-gray-50 transition">📋 Freeze Frame Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div id="historyTab" class="tab-content hidden">
+                    <div class="bg-white rounded-xl border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-800 mb-4">📜 Diagnostic History Logs</h3>
+                        <div id="historyLogs" class="space-y-3">
+                            <div class="text-center text-gray-400 py-8">No diagnostic history yet. Run a diagnosis to see logs.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Tab -->
+                <div id="analyticsTab" class="tab-content hidden">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4">📊 Performance Metrics</h3>
+                            <div class="space-y-4">
+                                <div><div class="flex justify-between mb-1"><span>Diagnostic Success Rate</span><span>94%</span></div><div class="h-2 bg-gray-200 rounded"><div class="h-2 bg-[#003153] rounded" style="width:94%"></div></div></div>
+                                <div><div class="flex justify-between mb-1"><span>Average Response Time</span><span>2.3s</span></div><div class="h-2 bg-gray-200 rounded"><div class="h-2 bg-[#003153] rounded" style="width:77%"></div></div></div>
+                                <div><div class="flex justify-between mb-1"><span>System Uptime</span><span>99.9%</span></div><div class="h-2 bg-gray-200 rounded"><div class="h-2 bg-[#003153] rounded" style="width:99.9%"></div></div></div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4">🏆 Top Issues Detected</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded"><span>🔧 Engine Overheating</span><span class="font-semibold">45%</span></div>
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded"><span>🔋 Battery Drain</span><span class="font-semibold">30%</span></div>
+                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded"><span>⚡ Starter Failure</span><span class="font-semibold">25%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settingsTab" class="tab-content hidden">
+                    <div class="max-w-2xl mx-auto space-y-6">
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4">🎨 Appearance</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center py-3 border-b">
+                                    <div><span class="font-medium">Dark Mode</span><p class="text-sm text-gray-500">Toggle dark theme for the dashboard</p></div>
+                                    <button onclick="toggleDarkMode()" class="px-4 py-2 bg-gray-100 rounded-lg">Toggle</button>
+                                </div>
+                                <div class="flex justify-between items-center py-3 border-b">
+                                    <div><span class="font-medium">Theme Color</span><p class="text-sm text-gray-500">Prussian Blue (Default)</p></div>
+                                    <div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-[#003153] ring-2 ring-offset-2 ring-[#003153]"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-800 mb-4">🔐 Account Settings</h3>
+                            <div class="space-y-3">
+                                <button class="w-full text-left px-4 py-2 bg-gray-50 rounded hover:bg-gray-100">Change Password</button>
+                                <button class="w-full text-left px-4 py-2 bg-gray-50 rounded hover:bg-gray-100">Email Notifications</button>
+                                <button class="w-full text-left px-4 py-2 bg-gray-50 rounded hover:bg-gray-100">Export Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

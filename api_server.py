@@ -117,3 +117,23 @@ def analytics():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
+# ========== REGISTRATION ENDPOINT ==========
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    full_name = data.get('full_name')
+    email = data.get('email')
+    role = data.get('role', 'technician')
+    
+    from auth import UserManager
+    um = UserManager()
+    
+    user_id = um.create_user(username, password, full_name, role)
+    
+    if user_id:
+        return jsonify({'success': True, 'message': 'User created successfully', 'user_id': user_id})
+    else:
+        return jsonify({'success': False, 'message': 'Username already exists'}), 400
