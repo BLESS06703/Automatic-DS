@@ -2,113 +2,364 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bless Auto Care - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Inter', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e0e5ec;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Neumorphism Classes */
+        .neumorph {
+            background: #e0e5ec;
+            box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1);
+            border-radius: 40px;
+        }
+
+        .neumorph-inset {
+            background: #e0e5ec;
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 30px;
+        }
+
+        .neumorph-btn {
+            background: #e0e5ec;
+            box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .neumorph-btn:active {
+            transform: scale(0.97);
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .logo p {
+            color: #7e8c9e;
+            font-size: 12px;
+        }
+
+        .logout-btn {
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #dc2626;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+
+        .stat-label {
+            color: #7e8c9e;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 8px;
+            background: #e0e5ec;
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 60px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            color: #7e8c9e;
+        }
+
+        .tab.active {
+            background: #e0e5ec;
+            box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1);
+            color: #2c3e50;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .panel {
+            padding: 30px;
+        }
+
+        .panel h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #7e8c9e;
+            margin-bottom: 8px;
+        }
+
+        select, .question-select {
+            width: 100%;
+            padding: 14px 18px;
+            border: none;
+            background: #e0e5ec;
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            font-size: 14px;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+
+        .question-item {
+            margin-bottom: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn-primary, .btn-secondary {
+            flex: 1;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #e0e5ec;
+            color: #2c3e50;
+        }
+
+        .btn-secondary {
+            background: #e0e5ec;
+            color: #7e8c9e;
+        }
+
+        .results-area {
+            min-height: 350px;
+        }
+
+        .result-card {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 25px;
+        }
+
+        .severity-low { background: #d4edda; color: #155724; }
+        .severity-medium { background: #fff3cd; color: #856404; }
+        .severity-high { background: #f8d7da; color: #721c24; }
+
+        .history-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 25px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #7e8c9e;
+        }
+
+        .empty-state .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        /* Hide tabs content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: wrap; }
+            .tab { flex: auto; }
+        }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <div class="border-b border-gray-200 bg-white px-6 py-4">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-semibold text-gray-800">Bless Auto Care</h1>
-                <p class="text-xs text-gray-500">Professional Diagnostic System</p>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header neumorph">
+            <div class="logo">
+                <h2>🚗 Bless Auto Care</h2>
+                <p>Professional Diagnostic System</p>
             </div>
-            <button onclick="logout()" class="text-red-500 text-sm hover:text-red-600">Logout</button>
+            <button onclick="logout()" class="logout-btn neumorph-btn">Logout</button>
         </div>
-    </div>
 
-    <div class="max-w-5xl mx-auto px-6 py-8">
-        <!-- Stats Row - Clean numbers -->
-        <div class="grid grid-cols-4 gap-8 mb-10 text-center">
-            <div>
-                <div class="text-3xl font-bold text-gray-800" id="statCustomers">0</div>
-                <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">CUSTOMERS</div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card neumorph">
+                <div class="stat-value" id="statCustomers">0</div>
+                <div class="stat-label">CUSTOMERS</div>
             </div>
-            <div>
-                <div class="text-3xl font-bold text-gray-800" id="statVehicles">0</div>
-                <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">VEHICLES</div>
+            <div class="stat-card neumorph">
+                <div class="stat-value" id="statVehicles">0</div>
+                <div class="stat-label">VEHICLES</div>
             </div>
-            <div>
-                <div class="text-3xl font-bold text-gray-800" id="statDiagnostics">0</div>
-                <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">DIAGNOSTICS</div>
+            <div class="stat-card neumorph">
+                <div class="stat-value" id="statDiagnostics">0</div>
+                <div class="stat-label">DIAGNOSTICS</div>
             </div>
-            <div>
-                <div class="text-3xl font-bold text-gray-800" id="statRevenue">MK 0</div>
-                <div class="text-xs text-gray-400 uppercase tracking-wide mt-1">REVENUE</div>
+            <div class="stat-card neumorph">
+                <div class="stat-value" id="statRevenue">MK 0</div>
+                <div class="stat-label">REVENUE</div>
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="flex gap-1 mb-8 border-b border-gray-200">
-            <button onclick="switchTab('diagnostic')" id="tabDiagnostic" class="px-6 py-2 text-sm font-medium text-[#003153] border-b-2 border-[#003153]">Diagnostic</button>
-            <button onclick="switchTab('vehicles')" id="tabVehicles" class="px-6 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">Vehicles</button>
-            <button onclick="switchTab('history')" id="tabHistory" class="px-6 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">History</button>
-            <button onclick="switchTab('analytics')" id="tabAnalytics" class="px-6 py-2 text-sm font-medium text-gray-500 hover:text-gray-700">Analytics</button>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('diagnostic')">🔧 Diagnostic</button>
+            <button class="tab" onclick="switchTab('vehicles')">🚙 Vehicles</button>
+            <button class="tab" onclick="switchTab('history')">📜 History</button>
+            <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
         </div>
 
-        <!-- Diagnostic Tab Content -->
-        <div id="diagnosticContent" class="grid md:grid-cols-2 gap-6">
-            <!-- Left Panel -->
-            <div>
-                <h2 class="text-md font-semibold text-gray-800 mb-4">Diagnostic Controls</h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Select System</label>
-                        <select id="systemSelect" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm">
-                            <option value="engine">Engine Diagnostic</option>
-                            <option value="battery">Battery & Charging</option>
-                            <option value="starter">Starter System</option>
+        <!-- Diagnostic Tab -->
+        <div id="diagnosticTab" class="tab-content active">
+            <div class="content-grid">
+                <div class="panel neumorph">
+                    <h3>Diagnostic Controls</h3>
+                    <div class="form-group">
+                        <label>SELECT SYSTEM</label>
+                        <select id="systemSelect">
+                            <option value="engine">🔧 Engine Diagnostic</option>
+                            <option value="battery">🔋 Battery & Charging</option>
+                            <option value="starter">⚡ Starter System</option>
                         </select>
                     </div>
-                    <div id="questionsPanel" class="space-y-3"></div>
-                    <div class="flex gap-3 pt-2">
-                        <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg text-sm font-medium">Start Diagnosis</button>
-                        <button onclick="cancelDiagnostic()" class="flex-1 border border-gray-200 text-gray-600 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Cancel</button>
+                    <div id="questionsPanel"></div>
+                    <div class="btn-group">
+                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn">Start Diagnosis</button>
+                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn">Cancel</button>
+                    </div>
+                </div>
+
+                <div class="panel neumorph">
+                    <h3>Analysis Results</h3>
+                    <div id="resultsPanel" class="results-area">
+                        <div class="empty-state">
+                            <div class="icon">🔍</div>
+                            <p>Select a system and run diagnosis</p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Panel - Results -->
-            <div>
-                <h2 class="text-md font-semibold text-gray-800 mb-4">Analysis Results</h2>
-                <div id="resultsPanel" class="min-h-[300px] bg-gray-50 rounded-lg p-6">
-                    <div class="text-center text-gray-400">
-                        <div class="text-4xl mb-2">🔍</div>
-                        <p class="text-sm">Select a system and run diagnosis</p>
+        <!-- Vehicles Tab -->
+        <div id="vehiclesTab" class="tab-content">
+            <div class="panel neumorph">
+                <div class="empty-state">
+                    <div class="icon">🚙</div>
+                    <p>No vehicles added yet</p>
+                    <button class="btn-primary neumorph-btn" style="margin-top: 20px; padding: 12px 30px;">+ Add Vehicle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="historyTab" class="tab-content">
+            <div class="panel neumorph">
+                <div id="historyList" class="results-area">
+                    <div class="empty-state">
+                        <div class="icon">📜</div>
+                        <p>No diagnostic history yet</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Vehicles Tab Content -->
-        <div id="vehiclesContent" class="hidden">
-            <div class="bg-gray-50 rounded-lg p-8 text-center">
-                <div class="text-4xl mb-3">🚙</div>
-                <p class="text-gray-500">No vehicles added yet</p>
-                <button class="mt-4 bg-[#003153] text-white px-4 py-2 rounded-lg text-sm">+ Add Vehicle</button>
-            </div>
-        </div>
-
-        <!-- History Tab Content -->
-        <div id="historyContent" class="hidden">
-            <div id="historyList" class="space-y-3">
-                <div class="bg-gray-50 rounded-lg p-8 text-center">
-                    <div class="text-4xl mb-3">📜</div>
-                    <p class="text-gray-500">No diagnostic history yet</p>
+        <!-- Analytics Tab -->
+        <div id="analyticsTab" class="tab-content">
+            <div class="panel neumorph">
+                <div class="empty-state">
+                    <div class="icon">📊</div>
+                    <p>Analytics coming soon</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Analytics Tab Content -->
-        <div id="analyticsContent" class="hidden">
-            <div class="bg-gray-50 rounded-lg p-8 text-center">
-                <div class="text-4xl mb-3">📊</div>
-                <p class="text-gray-500">Analytics coming soon</p>
             </div>
         </div>
     </div>
@@ -127,61 +378,37 @@
             } catch(e) { window.location.href = '/login.html'; }
         }
 
-        function switchTab(tab) {
-            // Hide all contents
-            document.getElementById('diagnosticContent').classList.add('hidden');
-            document.getElementById('vehiclesContent').classList.add('hidden');
-            document.getElementById('historyContent').classList.add('hidden');
-            document.getElementById('analyticsContent').classList.add('hidden');
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
             
-            // Show selected content
-            document.getElementById(`${tab}Content`).classList.remove('hidden');
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabName}Tab`).classList.add('active');
             
-            // Update tab styles
-            const tabs = ['diagnostic', 'vehicles', 'history', 'analytics'];
-            tabs.forEach(t => {
-                const btn = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
-                if (t === tab) {
-                    btn.className = 'px-6 py-2 text-sm font-medium text-[#003153] border-b-2 border-[#003153]';
-                } else {
-                    btn.className = 'px-6 py-2 text-sm font-medium text-gray-500 hover:text-gray-700';
-                }
-            });
-            
-            if (tab === 'history') loadHistory();
+            if (tabName === 'history') loadHistory();
         }
 
         function loadQuestions() {
             const questions = {
                 engine: `
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Engine overheating?</label>
-                    <select id="q_overheating" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Smoke from exhaust?</label>
-                    <select id="q_smoke" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Unusual engine noise?</label>
-                    <select id="q_noise" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Check engine light ON?</label>
-                    <select id="q_check_light" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Engine overheating?</label><select id="q_overheating" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Smoke from exhaust?</label><select id="q_smoke" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Unusual engine noise?</label><select id="q_noise" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Check engine light ON?</label><select id="q_check_light" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 battery: `
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Car fails to start?</label>
-                    <select id="q_start" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Dashboard lights dim?</label>
-                    <select id="q_lights" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Rapid clicking?</label>
-                    <select id="q_clicks" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Battery over 3 years?</label>
-                    <select id="q_age" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Car fails to start?</label><select id="q_start" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Dashboard lights dim?</label><select id="q_lights" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Rapid clicking?</label><select id="q_clicks" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Battery over 3 years?</label><select id="q_age" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 starter: `
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Clicking when turning key?</label>
-                    <select id="q_click" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Engine cranks?</label>
-                    <select id="q_crank" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Headlights work?</label>
-                    <select id="q_lights" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="yes">Yes</option><option value="no">No</option></select></div>
-                    <div><label class="block text-xs font-medium text-gray-500 mb-1">Burning smell?</label>
-                    <select id="q_smell" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Clicking when turning key?</label><select id="q_click" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Engine cranks?</label><select id="q_crank" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label>Headlights work?</label><select id="q_lights" class="question-select"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <div class="question-item"><label>Burning smell?</label><select id="q_smell" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `
             };
             document.getElementById('questionsPanel').innerHTML = questions[currentSystem];
@@ -190,9 +417,9 @@
         function cancelDiagnostic() {
             if (isLoading) return;
             document.getElementById('resultsPanel').innerHTML = `
-                <div class="text-center text-gray-400">
-                    <div class="text-4xl mb-2">🔍</div>
-                    <p class="text-sm">Select a system and run diagnosis</p>
+                <div class="empty-state">
+                    <div class="icon">🔍</div>
+                    <p>Select a system and run diagnosis</p>
                 </div>
             `;
         }
@@ -208,7 +435,7 @@
 
             const resultsPanel = document.getElementById('resultsPanel');
             isLoading = true;
-            resultsPanel.innerHTML = '<div class="text-center py-8"><div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-[#003153]"></div><p class="mt-2 text-sm">Analyzing...</p></div>';
+            resultsPanel.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Analyzing...</p></div>';
 
             try {
                 const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
@@ -218,11 +445,7 @@
                 });
                 const result = await res.json();
 
-                const severityColors = {
-                    low: 'bg-green-100 text-green-800',
-                    medium: 'bg-yellow-100 text-yellow-800',
-                    high: 'bg-red-100 text-red-800'
-                };
+                const severityClass = `severity-${result.severity || 'medium'}`;
 
                 // Save to history
                 const historyItem = {
@@ -236,23 +459,20 @@
                 localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
 
                 resultsPanel.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="p-3 rounded-lg ${severityColors[result.severity] || 'bg-gray-100'}">
-                            <span class="text-xs font-medium">Severity:</span>
-                            <span class="text-sm font-semibold ml-1">${result.severity?.toUpperCase() || 'MEDIUM'}</span>
-                        </div>
-                        <div class="p-3 bg-gray-50 rounded-lg">
-                            <p class="text-sm text-gray-700">${result.results || 'No issues found'}</p>
-                        </div>
-                        <div class="flex gap-2 pt-2">
-                            <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-1.5 rounded text-xs">Run Again</button>
-                            <button onclick="cancelDiagnostic()" class="flex-1 border border-gray-200 text-gray-600 py-1.5 rounded text-xs">Clear</button>
-                        </div>
+                    <div class="result-card ${severityClass}">
+                        <strong>Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
+                    </div>
+                    <div class="result-card neumorph-inset" style="padding: 15px;">
+                        <p>${result.results || 'No issues found'}</p>
+                    </div>
+                    <div class="btn-group" style="margin-top: 15px;">
+                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn" style="padding: 10px;">Run Again</button>
+                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn" style="padding: 10px;">Clear</button>
                     </div>
                 `;
                 loadStats();
             } catch(e) {
-                resultsPanel.innerHTML = '<div class="text-center py-8 text-red-500 text-sm">Error. Please try again.</div>';
+                resultsPanel.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>Error. Please try again.</p></div>';
             } finally {
                 isLoading = false;
             }
@@ -264,18 +484,18 @@
             
             const historyDiv = document.getElementById('historyList');
             if (diagnosticHistory.length === 0) {
-                historyDiv.innerHTML = '<div class="bg-gray-50 rounded-lg p-8 text-center"><div class="text-4xl mb-3">📜</div><p class="text-gray-500">No diagnostic history yet</p></div>';
+                historyDiv.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>No diagnostic history yet</p></div>';
                 return;
             }
             
             historyDiv.innerHTML = diagnosticHistory.map(h => `
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-medium text-sm">${h.type.toUpperCase()} Diagnostic</span>
-                        <span class="text-xs text-gray-400">${h.date}</span>
+                <div class="history-item neumorph-inset">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <strong>${h.type.toUpperCase()}</strong>
+                        <span style="font-size: 11px; color: #7e8c9e;">${h.date}</span>
                     </div>
-                    <p class="text-sm text-gray-600">${h.results.substring(0, 100)}...</p>
-                    <span class="inline-block mt-2 px-2 py-0.5 text-xs rounded ${h.severity === 'high' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">${h.severity}</span>
+                    <p style="font-size: 13px; margin-bottom: 8px;">${h.results.substring(0, 100)}...</p>
+                    <span class="severity-${h.severity}" style="padding: 4px 12px; border-radius: 20px; font-size: 11px;">${h.severity}</span>
                 </div>
             `).join('');
         }

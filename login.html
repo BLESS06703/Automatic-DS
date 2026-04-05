@@ -2,57 +2,194 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bless Auto Care - Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-        .bottom-line-input {
-            border: none;
-            border-bottom: 2px solid #e2e8f0;
-            transition: all 0.3s ease;
-            background: transparent;
-            font-size: 16px;
-            padding: 12px 4px;
-            width: 100%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .bottom-line-input:focus {
+
+        body {
+            min-height: 100vh;
+            background: #e0e5ec;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Neumorphism Effect */
+        .neumorph {
+            background: #e0e5ec;
+            box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1);
+            border-radius: 50px;
+        }
+
+        .neumorph-inset {
+            background: #e0e5ec;
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 30px;
+        }
+
+        .neumorph-btn {
+            background: #e0e5ec;
+            box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .neumorph-btn:active {
+            transform: scale(0.97);
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 50px 40px;
+        }
+
+        .logo-icon {
+            font-size: 70px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7e8c9e;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 16px;
+            border: none;
+            background: #e0e5ec;
+            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
+            border-radius: 40px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .input-field:focus {
             outline: none;
-            border-bottom-color: #003153;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 40px;
+            margin-top: 10px;
+            background: #e0e5ec;
+            color: #2c3e50;
+        }
+
+        .demo-badge {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+        }
+
+        .demo-badge p {
+            color: #7e8c9e;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .demo-credentials {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .demo-chip {
+            padding: 8px 20px;
+            background: #e0e5ec;
+            box-shadow: -3px -3px 6px rgba(255,255,255,0.8), 3px 3px 6px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container {
+            animation: fadeIn 0.6s ease-out;
         }
     </style>
 </head>
-<body style="background: #003153;" class="flex items-center justify-center p-4">
-    <div class="max-w-md w-full">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="p-8">
-                <div class="mb-8 text-center">
-                    <div class="text-5xl mb-3">🚗</div>
-                    <h2 class="text-2xl font-bold text-[#003153]">Bless Auto Care</h2>
-                    <p class="text-gray-500 text-sm mt-1">Professional Diagnostic System</p>
-                </div>
-                <div class="space-y-6">
-                    <div>
-                        <input type="text" id="loginUsername" placeholder="Username" class="bottom-line-input">
-                    </div>
-                    <div>
-                        <input type="password" id="loginPassword" placeholder="Password" class="bottom-line-input">
-                    </div>
-                    <button onclick="handleLogin()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">Sign In</button>
-                </div>
-                <div class="mt-6 pt-4 border-t border-gray-200 text-center">
-                    <p class="text-xs text-gray-500">Demo: <strong class="text-[#003153]">admin</strong> / <strong class="text-[#003153]">admin123</strong></p>
-                </div>
+<body>
+    <div class="login-container neumorph">
+        <div class="logo-icon">🚗</div>
+        <h1>Bless Auto Care</h1>
+        <div class="subtitle">Professional Diagnostic System</div>
+
+        <div id="errorMsg" class="error-message"></div>
+
+        <div class="input-group">
+            <input type="text" id="loginUsername" class="input-field" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <input type="password" id="loginPassword" class="input-field" placeholder="Password">
+        </div>
+
+        <button onclick="handleLogin()" class="login-btn neumorph-btn">Sign In</button>
+
+        <div class="demo-badge neumorph">
+            <p>Demo Credentials</p>
+            <div class="demo-credentials">
+                <span class="demo-chip">admin</span>
+                <span class="demo-chip">admin123</span>
             </div>
         </div>
     </div>
 
     <script>
         const API_BASE = window.location.origin;
+
         async function handleLogin() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('errorMsg');
+            
+            errorDiv.style.display = 'none';
+            
             try {
                 const res = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
@@ -60,9 +197,16 @@
                     body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
-                if (data.success) window.location.href = '/dashboard.html';
-                else alert('Invalid credentials');
-            } catch(e) { alert('Login failed'); }
+                if (data.success) {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    errorDiv.textContent = 'Invalid username or password';
+                    errorDiv.style.display = 'block';
+                }
+            } catch(e) {
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.style.display = 'block';
+            }
         }
     </script>
 </body>
