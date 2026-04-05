@@ -10,77 +10,125 @@
         * { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body style="background: #f0f4f8;">
-    <!-- Top Bar - Prussian Blue -->
+<body style="background: #f5f7fa;">
+    <!-- Top Bar -->
     <div style="background: #003153;" class="px-6 py-4">
         <div class="flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="text-3xl">🚗</div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">Bless Auto Care</h1>
-                    <p class="text-xs text-blue-200">Industrial Diagnostic System</p>
-                </div>
+            <div>
+                <h1 class="text-xl font-bold text-white">Bless Auto Care</h1>
+                <p class="text-xs text-blue-200">Professional Diagnostic System</p>
             </div>
             <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Logout</button>
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-6 py-6">
-        <!-- Stats - Clean numbers, no cards, just text -->
+    <div class="max-w-6xl mx-auto px-6 py-8">
+        <!-- Stats Row - Clean grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-            <div class="text-center border-b-2 border-gray-200 pb-3">
-                <div class="text-3xl mb-1">👥</div>
-                <div class="text-3xl font-bold" style="color: #003153;" id="statCustomers">0</div>
-                <div class="text-xs text-gray-500 mt-1">Customers</div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">👥</div>
+                <div class="text-3xl font-bold text-[#003153]" id="statCustomers">0</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide mt-1">Customers</div>
             </div>
-            <div class="text-center border-b-2 border-gray-200 pb-3">
-                <div class="text-3xl mb-1">🚙</div>
-                <div class="text-3xl font-bold" style="color: #003153;" id="statVehicles">0</div>
-                <div class="text-xs text-gray-500 mt-1">Vehicles</div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">🚙</div>
+                <div class="text-3xl font-bold text-[#003153]" id="statVehicles">0</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide mt-1">Vehicles</div>
             </div>
-            <div class="text-center border-b-2 border-gray-200 pb-3">
-                <div class="text-3xl mb-1">🔧</div>
-                <div class="text-3xl font-bold" style="color: #003153;" id="statDiagnostics">0</div>
-                <div class="text-xs text-gray-500 mt-1">Diagnostics</div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">🔧</div>
+                <div class="text-3xl font-bold text-[#003153]" id="statDiagnostics">0</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide mt-1">Diagnostics</div>
             </div>
-            <div class="text-center border-b-2 border-gray-200 pb-3">
-                <div class="text-3xl mb-1">💰</div>
-                <div class="text-3xl font-bold" style="color: #003153;" id="statRevenue">$0</div>
-                <div class="text-xs text-gray-500 mt-1">Revenue</div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">💰</div>
+                <div class="text-3xl font-bold text-[#003153]" id="statRevenue">MK 0</div>
+                <div class="text-xs text-gray-500 uppercase tracking-wide mt-1">Revenue</div>
             </div>
         </div>
 
-        <!-- Main Content - Flat sections with borders, no cards -->
-        <div class="grid lg:grid-cols-2 gap-8">
-            <!-- Controls Section -->
-            <div class="border border-gray-200 rounded-xl p-6" style="background: white;">
-                <h2 class="text-lg font-semibold mb-5 pb-2 border-b border-gray-200" style="color: #003153;">Diagnostic Controls</h2>
+        <!-- Action Buttons Row -->
+        <div class="flex gap-4 mb-8">
+            <button onclick="showSection('diagnostic')" id="btnDiagnostic" class="flex-1 py-3 rounded-lg font-medium transition" style="background: #003153; color: white;">🔧 Diagnostic</button>
+            <button onclick="showSection('vehicles')" id="btnVehicles" class="flex-1 py-3 rounded-lg font-medium transition bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">🚙 Vehicles</button>
+            <button onclick="showSection('history')" id="btnHistory" class="flex-1 py-3 rounded-lg font-medium transition bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">📜 History</button>
+            <button onclick="showSection('analytics')" id="btnAnalytics" class="flex-1 py-3 rounded-lg font-medium transition bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">📊 Analytics</button>
+        </div>
+
+        <!-- Diagnostic Section -->
+        <div id="diagnosticSection" class="grid lg:grid-cols-2 gap-6">
+            <!-- Controls -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Diagnostic Controls</h2>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Select System</label>
-                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-[#003153] focus:border-transparent">
+                        <select id="systemSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm">
                             <option value="engine">🔧 Engine Diagnostic</option>
                             <option value="battery">🔋 Battery & Charging</option>
                             <option value="starter">⚡ Starter System</option>
                         </select>
                     </div>
-                    <div id="questionsPanel" class="space-y-4">
-                        <!-- Dynamic questions -->
-                    </div>
-                    <div class="flex gap-3 pt-3">
-                        <button onclick="runDiagnostic()" class="flex-1 text-white py-2 rounded-lg font-medium transition" style="background: #003153;">Start Diagnosis</button>
+                    <div id="questionsPanel" class="space-y-4"></div>
+                    <div class="flex gap-3 pt-2">
+                        <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg font-medium hover:bg-[#1B4F72] transition">Start Diagnosis</button>
                         <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-200 transition">Cancel</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Results Section -->
-            <div class="border border-gray-200 rounded-xl p-6" style="background: white;">
-                <h2 class="text-lg font-semibold mb-5 pb-2 border-b border-gray-200" style="color: #003153;">Analysis Results</h2>
+            <!-- Results -->
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Analysis Results</h2>
                 <div id="resultsPanel" class="min-h-[350px]">
                     <div class="text-center text-gray-400 py-12">
                         <div class="text-5xl mb-3">🔍</div>
                         <p class="text-sm">Select a system and run diagnosis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicles Section (Hidden by default) -->
+        <div id="vehiclesSection" class="hidden">
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800">Your Vehicles</h2>
+                    <button onclick="addVehicle()" class="bg-[#003153] text-white px-4 py-2 rounded-lg text-sm">+ Add Vehicle</button>
+                </div>
+                <div id="vehiclesList" class="space-y-3">
+                    <div class="text-center text-gray-400 py-8">
+                        <p>No vehicles added yet. Click "Add Vehicle" to get started.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section (Hidden by default) -->
+        <div id="historySection" class="hidden">
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Diagnostic History</h2>
+                <div id="historyList" class="space-y-3">
+                    <div class="text-center text-gray-400 py-8">
+                        <p>No diagnostic history yet. Run a diagnosis to see it here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section (Hidden by default) -->
+        <div id="analyticsSection" class="hidden">
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">Analytics Dashboard</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-medium mb-3">📈 Today's Summary</h3>
+                        <p>Diagnostics: <span id="todayDiagnostics">0</span></p>
+                        <p>Revenue: <span id="todayRevenue">MK 0</span></p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-medium mb-3">🔧 Common Issues</h3>
+                        <div id="commonIssues">No data yet</div>
                     </div>
                 </div>
             </div>
@@ -91,17 +139,45 @@
         const API_BASE = window.location.origin;
         let currentSystem = 'engine';
         let isLoading = false;
+        let diagnosticHistory = [];
 
         async function checkAuth() {
             try {
                 const res = await fetch(`${API_BASE}/api/check-auth`);
                 const data = await res.json();
-                if (!data.authenticated) {
-                    window.location.href = '/login.html';
+                if (!data.authenticated) window.location.href = '/login.html';
+            } catch(e) { window.location.href = '/login.html'; }
+        }
+
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('diagnosticSection').classList.add('hidden');
+            document.getElementById('vehiclesSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            document.getElementById('analyticsSection').classList.add('hidden');
+            
+            // Show selected section
+            document.getElementById(`${section}Section`).classList.remove('hidden');
+            
+            // Update button styles
+            const buttons = ['diagnostic', 'vehicles', 'history', 'analytics'];
+            buttons.forEach(btn => {
+                const btnEl = document.getElementById(`btn${btn.charAt(0).toUpperCase() + btn.slice(1)}`);
+                if (btn === section) {
+                    btnEl.style.background = '#003153';
+                    btnEl.style.color = 'white';
+                    btnEl.style.border = 'none';
+                } else {
+                    btnEl.style.background = 'white';
+                    btnEl.style.color = '#6b7280';
+                    btnEl.style.border = '1px solid #d1d5db';
                 }
-            } catch(e) {
-                window.location.href = '/login.html';
-            }
+            });
+            
+            // Load data if needed
+            if (section === 'history') loadHistory();
+            if (section === 'vehicles') loadVehicles();
+            if (section === 'analytics') loadAnalytics();
         }
 
         function loadQuestions() {
@@ -177,6 +253,18 @@
                     high: 'bg-red-100 text-red-800'
                 };
 
+                // Save to history
+                const historyItem = {
+                    id: Date.now(),
+                    type: currentSystem,
+                    date: new Date().toLocaleString(),
+                    severity: result.severity,
+                    results: result.results,
+                    symptoms: symptoms
+                };
+                diagnosticHistory.unshift(historyItem);
+                localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+
                 resultsPanel.innerHTML = `
                     <div class="space-y-4">
                         <div class="p-3 rounded-lg ${severityColors[result.severity] || 'bg-gray-100'}">
@@ -187,8 +275,8 @@
                             <p class="text-sm mt-1">${result.results || 'No issues found'}</p>
                         </div>
                         <div class="flex gap-3 pt-3">
-                            <button onclick="runDiagnostic()" class="flex-1 text-white py-2 rounded-lg text-sm" style="background: #003153;">Run Again</button>
-                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm border border-gray-300 hover:bg-gray-200">Clear</button>
+                            <button onclick="runDiagnostic()" class="flex-1 bg-[#003153] text-white py-2 rounded-lg text-sm">Run Again</button>
+                            <button onclick="cancelDiagnostic()" class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm border border-gray-300">Clear</button>
                         </div>
                     </div>
                 `;
@@ -199,6 +287,48 @@
             }
         }
 
+        function loadHistory() {
+            const saved = localStorage.getItem('diagnosticHistory');
+            if (saved) diagnosticHistory = JSON.parse(saved);
+            
+            const historyDiv = document.getElementById('historyList');
+            if (diagnosticHistory.length === 0) {
+                historyDiv.innerHTML = '<div class="text-center text-gray-400 py-8">No diagnostic history yet. Run a diagnosis to see it here.</div>';
+                return;
+            }
+            
+            historyDiv.innerHTML = diagnosticHistory.map(h => `
+                <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-semibold">${h.type.toUpperCase()} Diagnostic</span>
+                        <span class="text-xs text-gray-500">${h.date}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">${h.results.substring(0, 100)}...</p>
+                    <span class="inline-block mt-2 px-2 py-1 text-xs rounded ${h.severity === 'high' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${h.severity}</span>
+                </div>
+            `).join('');
+        }
+
+        function loadVehicles() {
+            // Placeholder for vehicle management
+            document.getElementById('vehiclesList').innerHTML = `
+                <div class="text-center text-gray-400 py-8">
+                    <p>Vehicle management coming soon!</p>
+                </div>
+            `;
+        }
+
+        function loadAnalytics() {
+            // Placeholder for analytics
+            document.getElementById('todayDiagnostics').textContent = diagnosticHistory.length;
+            document.getElementById('todayRevenue').textContent = `MK ${diagnosticHistory.length * 5000}`;
+            document.getElementById('commonIssues').innerHTML = '<div class="text-sm">No data yet</div>';
+        }
+
+        function addVehicle() {
+            alert('Vehicle management coming in the next update!');
+        }
+
         async function loadStats() {
             try {
                 const res = await fetch(`${API_BASE}/api/statistics`);
@@ -206,7 +336,7 @@
                 document.getElementById('statCustomers').textContent = stats.total_customers || 0;
                 document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
                 document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
-                document.getElementById('statRevenue').textContent = `$${stats.total_revenue || 0}`;
+                document.getElementById('statRevenue').textContent = `MK ${stats.total_revenue || 0}`;
             } catch(e) {}
         }
 

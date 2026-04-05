@@ -26,18 +26,11 @@
 <body style="background: #003153;" class="flex items-center justify-center p-4">
     <div class="max-w-md w-full">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-200">
-                <button id="loginTab" class="flex-1 py-4 text-center font-semibold text-base transition-all border-b-2 border-[#003153] text-[#003153]">Sign In</button>
-                <button id="registerTab" class="flex-1 py-4 text-center font-semibold text-base transition-all text-gray-500">Create Account</button>
-            </div>
-
-            <!-- Login Form -->
-            <div id="loginForm" class="p-8">
+            <div class="p-8">
                 <div class="mb-8 text-center">
                     <div class="text-5xl mb-3">🚗</div>
-                    <h2 class="text-2xl font-bold text-[#003153]">Welcome Back</h2>
-                    <p class="text-gray-500 text-sm mt-1">Sign in to continue</p>
+                    <h2 class="text-2xl font-bold text-[#003153]">Bless Auto Care</h2>
+                    <p class="text-gray-500 text-sm mt-1">Professional Diagnostic System</p>
                 </div>
                 <div class="space-y-6">
                     <div>
@@ -46,37 +39,10 @@
                     <div>
                         <input type="password" id="loginPassword" placeholder="Password" class="bottom-line-input">
                     </div>
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center gap-2 text-sm text-gray-600">
-                            <input type="checkbox" class="rounded border-gray-300"> Remember me
-                        </label>
-                        <a href="#" class="text-sm text-[#003153] hover:underline">Forgot password?</a>
-                    </div>
                     <button onclick="handleLogin()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">Sign In</button>
                 </div>
                 <div class="mt-6 pt-4 border-t border-gray-200 text-center">
                     <p class="text-xs text-gray-500">Demo: <strong class="text-[#003153]">admin</strong> / <strong class="text-[#003153]">admin123</strong></p>
-                </div>
-            </div>
-
-            <!-- Register Form -->
-            <div id="registerForm" class="p-8 hidden">
-                <div class="mb-6 text-center">
-                    <div class="text-4xl mb-2">✨</div>
-                    <h2 class="text-xl font-bold text-[#003153]">Create Account</h2>
-                    <p class="text-gray-500 text-xs mt-1">Join Bless Auto Care</p>
-                </div>
-                <div class="space-y-4">
-                    <div><input type="text" id="regFullname" placeholder="Full name" class="bottom-line-input text-sm"></div>
-                    <div><input type="text" id="regUsername" placeholder="Username" class="bottom-line-input text-sm"></div>
-                    <div><input type="email" id="regEmail" placeholder="Email address" class="bottom-line-input text-sm"></div>
-                    <div><input type="password" id="regPassword" placeholder="Password" class="bottom-line-input text-sm"></div>
-                    <div><input type="password" id="regConfirm" placeholder="Confirm password" class="bottom-line-input text-sm"></div>
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" id="termsCheck" class="rounded border-gray-300">
-                        <label class="text-xs text-gray-600">I agree to Terms & Conditions</label>
-                    </div>
-                    <button onclick="handleRegister()" class="w-full bg-[#003153] text-white py-3 rounded-lg font-semibold hover:bg-[#1B4F72] transition">Create Account</button>
                 </div>
             </div>
         </div>
@@ -84,25 +50,9 @@
 
     <script>
         const API_BASE = window.location.origin;
-        
-        document.getElementById('loginTab').onclick = () => {
-            document.getElementById('loginTab').className = 'flex-1 py-4 text-center font-semibold text-base transition-all border-b-2 border-[#003153] text-[#003153]';
-            document.getElementById('registerTab').className = 'flex-1 py-4 text-center font-semibold text-base transition-all text-gray-500';
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
-        };
-        
-        document.getElementById('registerTab').onclick = () => {
-            document.getElementById('registerTab').className = 'flex-1 py-4 text-center font-semibold text-base transition-all border-b-2 border-[#003153] text-[#003153]';
-            document.getElementById('loginTab').className = 'flex-1 py-4 text-center font-semibold text-base transition-all text-gray-500';
-            document.getElementById('registerForm').classList.remove('hidden');
-            document.getElementById('loginForm').classList.add('hidden');
-        };
-
         async function handleLogin() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            
             try {
                 const res = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
@@ -110,48 +60,9 @@
                     body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
-                if (data.success) {
-                    window.location.href = '/dashboard.html';
-                } else {
-                    alert('Invalid credentials');
-                }
-            } catch(e) {
-                alert('Login failed');
-            }
-        }
-
-        async function handleRegister() {
-            const fullname = document.getElementById('regFullname').value;
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            
-            if (password !== confirm) {
-                alert('Passwords do not match');
-                return;
-            }
-            if (!document.getElementById('termsCheck').checked) {
-                alert('Please accept terms');
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${API_BASE}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ full_name: fullname, username, email, password, role: 'technician' })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    alert('Account created! Please login.');
-                    document.getElementById('loginTab').click();
-                } else {
-                    alert(data.message);
-                }
-            } catch(e) {
-                alert('Registration failed');
-            }
+                if (data.success) window.location.href = '/dashboard.html';
+                else alert('Invalid credentials');
+            } catch(e) { alert('Login failed'); }
         }
     </script>
 </body>
