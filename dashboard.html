@@ -400,6 +400,27 @@ async function runDiagnostic() {
         diagnosticHistory.unshift(historyItem);
         localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
         
+        // Save to database if vehicle selected
+        const vehicleIdDB = document.getElementById("vehicleSelect").value;
+        if (vehicleIdDB && vehicleIdDB !== "") {
+            try {
+                await fetch(`${API_BASE}/api/diagnostic/save`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        vehicle_id: parseInt(vehicleIdDB),
+                        diagnostic_type: currentSystem,
+                        results: result.results,
+                        severity: result.severity
+                    })
+                });
+                console.log("✅ Diagnostic saved to database");
+            } catch(e) {
+                console.log("Database save skipped");
+            }
+        }
+
+        
         let toolsHtml = '';
         if (result.tools && result.tools.length) {
             toolsHtml = `<div style="padding:15px;background:#f0f2f5;border-radius:20px;margin-top:15px;"><strong>Tools Required:</strong><br>${result.tools.join(', ')}</div>`;
@@ -481,6 +502,48 @@ function showAddVehicleModal() {
     }).then(() => { 
         loadVehicles(); 
         loadStats(); 
+        
+        // Save to database if vehicle selected
+        const vehicleIdDB2 = document.getElementById("vehicleSelect").value;
+        if (vehicleIdDB2 && vehicleIdDB2 !== "") {
+            try {
+                await fetch(`${API_BASE}/api/diagnostic/save`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+        
+        // Save to database if vehicle selected
+        const vehicleIdDB3 = document.getElementById("vehicleSelect").value;
+        if (vehicleIdDB3 && vehicleIdDB3 !== "") {
+            try {
+                await fetch(`${API_BASE}/api/diagnostic/save`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        vehicle_id: parseInt(vehicleIdDB3),
+                        diagnostic_type: currentSystem,
+                        results: result.results,
+                        severity: result.severity
+                    })
+                });
+                console.log("✅ Diagnostic saved to database");
+            } catch(e) {
+                console.log("Database save skipped");
+            }
+        }
+
+                        vehicle_id: parseInt(vehicleIdDB2),
+                        diagnostic_type: currentSystem,
+                        results: result.results,
+                        severity: result.severity
+                    })
+                });
+                console.log("✅ Diagnostic saved to database");
+            } catch(e) {
+                console.log("Database save skipped");
+            }
+        }
+
         loadVehiclesForSelector(); 
     }).catch(e => alert('Error adding vehicle'));
 }

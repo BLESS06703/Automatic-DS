@@ -336,8 +336,8 @@ def get_diagnostics():
 def get_statistics():
     conn = get_db()
     total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
+    total_customers = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
     total_diagnostics = conn.execute('SELECT COUNT(*) FROM diagnostics').fetchone()[0]
-    total_customers = conn.execute('SELECT COUNT(DISTINCT customer_name) FROM vehicles').fetchone()[0]
     
     # Calculate revenue based on diagnostic severity
     high_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'high'").fetchone()[0]
@@ -367,6 +367,30 @@ def serve_dashboard():
 @app.route('/login.html')
 def serve_login():
     return send_file('login.html')
+
+
+# ========== SAVE DIAGNOSTIC ENDPOINT ==========
+@app.route("/api/diagnostic/save", methods=["POST"])
+def save_diagnostic():
+    data = request.json
+    vehicle_id = data.get("vehicle_id")
+    diagnostic_type = data.get("diagnostic_type")
+    results = data.get("results")
+    severity = data.get("severity")
+    
+    if not vehicle_id:
+        return jsonify({"success": False, "message": "No vehicle selected"}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO diagnostics (vehicle_id, diagnostic_type, results, severity)
+        VALUES (?, ?, ?, ?)
+    """, (vehicle_id, diagnostic_type, results, severity))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({"success": True, "message": "Diagnostic saved"})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
