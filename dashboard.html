@@ -73,7 +73,6 @@
             border-radius: 50px;
             color: #7e8c9e;
             font-weight: 500;
-            transition: all 0.2s;
         }
         .tab i { margin-right: 8px; }
         .tab.active {
@@ -97,6 +96,13 @@
             font-size: 14px;
             cursor: pointer;
         }
+        .vehicle-selector {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f2f5;
+            border-radius: 20px;
+        }
+        .vehicle-selector label { display: block; font-size: 12px; color: #7e8c9e; margin-bottom: 8px; }
         .question-item { margin-bottom: 15px; }
         .question-item label { display: block; font-size: 13px; color: #4a5568; margin-bottom: 6px; }
         .btn-group { display: flex; gap: 15px; margin-top: 25px; }
@@ -107,7 +113,6 @@
             border: none;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
         }
         .btn-primary { background: #e0e5ec; color: #003153; }
         .btn-primary i { margin-right: 6px; }
@@ -171,6 +176,12 @@
         <div class="content-grid">
             <div class="panel neumorph">
                 <h3><i class="fas fa-sliders-h"></i> Diagnostic Controls</h3>
+                <div class="vehicle-selector">
+                    <label><i class="fas fa-car"></i> SELECT VEHICLE</label>
+                    <select id="vehicleSelect" style="width:100%; padding:12px; border-radius:30px;">
+                        <option value="">-- Select a vehicle (optional) --</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>SELECT SYSTEM</label>
                     <select id="systemSelect">
@@ -187,7 +198,7 @@
             </div>
             <div class="panel neumorph">
                 <h3><i class="fas fa-clipboard-list"></i> Analysis Results</h3>
-                <div id="resultsPanel"><div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a system and run a diagnostic</p></div></div>
+                <div id="resultsPanel"><div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and system, then run a diagnostic</p></div></div>
             </div>
         </div>
     </div>
@@ -212,6 +223,20 @@
 const API_BASE = window.location.origin;
 let currentSystem = 'engine';
 let diagnosticHistory = [];
+let vehicles = [];
+
+async function loadVehiclesForSelector() {
+    try {
+        const res = await fetch(`${API_BASE}/api/vehicles`);
+        const data = await res.json();
+        vehicles = data.vehicles || [];
+        const select = document.getElementById('vehicleSelect');
+        select.innerHTML = '<option value="">-- Select a vehicle (optional) --</option>';
+        vehicles.forEach(v => {
+            select.innerHTML += `<option value="${v.id}">${v.make} ${v.model} (${v.year}) - ${v.license_plate || 'no plate'}</option>`;
+        });
+    } catch(e) { console.log('Error loading vehicles'); }
+}
 
 function switchTab(tabName) {
     document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
@@ -255,6 +280,9 @@ async function runDiagnostic() {
         symptoms[key] = input.value;
     });
     
+    const vehicleSelect = document.getElementById('vehicleSelect');
+    const vehicleId = vehicleSelect.value ? parseInt(vehicleSelect.value) : null;
+    
     const resultsPanel = document.getElementById('resultsPanel');
     resultsPanel.innerHTML = '<div class="empty-state"><div style="width:40px;height:40px;border:3px solid #003153;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div><h4>Analyzing...</h4></div>';
     
@@ -262,14 +290,14 @@ async function runDiagnostic() {
         const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ symptoms })
+            body: JSON.stringify({ symptoms, vehicle_id: vehicleId })
         });
         const result = await res.json();
         
         const severityColor = result.severity === 'high' ? '#f8d7da' : result.severity === 'medium' ? '#fff3cd' : '#d4edda';
         const severityIcon = result.severity === 'high' ? 'fa-exclamation-circle' : result.severity === 'medium' ? 'fa-clock' : 'fa-check-circle';
         
-        // Save to history
+        // Save to localStorage history
         diagnosticHistory.unshift({
             id: Date.now(),
             type: currentSystem,
@@ -310,7 +338,7 @@ async function runDiagnostic() {
 }
 
 function cancelDiagnostic() {
-    document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a system and run a diagnostic</p></div>';
+    document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and system, then run a diagnostic</p></div>';
 }
 
 async function loadVehicles() {
@@ -339,6 +367,7 @@ async function deleteVehicle(id) {
         await fetch(`${API_BASE}/api/vehicle/${id}`, { method: 'DELETE' });
         loadVehicles();
         loadStats();
+        loadVehiclesForSelector();
     }
 }
 
@@ -355,7 +384,7 @@ function showAddVehicleModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ make, model, year: parseInt(year), license_plate: license || '', customer_name: customer || 'Walk-in Customer' })
-    }).then(() => { loadVehicles(); loadStats(); }).catch(e => alert('Error adding vehicle'));
+    }).then(() => { loadVehicles(); loadStats(); loadVehiclesForSelector(); }).catch(e => alert('Error adding vehicle'));
 }
 
 function loadHistory() {
@@ -390,7 +419,6 @@ async function loadStats() {
 }
 
 async function logout() {
-    await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
     window.location.href = '/login.html';
 }
 
@@ -403,6 +431,7 @@ document.getElementById('systemSelect').addEventListener('change', (e) => {
 // Initialize
 loadQuestions();
 loadStats();
+loadVehiclesForSelector();
 setInterval(loadStats, 30000);
 </script>
 </body>

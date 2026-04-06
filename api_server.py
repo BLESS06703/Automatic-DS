@@ -13,7 +13,6 @@ CORS(app)
 
 # Database setup
 def get_db():
-    # Use persistent path for Render
     db_path = '/tmp/workshop.db'
     if not os.environ.get('RENDER'):
         os.makedirs('data', exist_ok=True)
@@ -75,16 +74,15 @@ def init_db():
             INSERT INTO users (username, password, full_name, role)
             VALUES (?, ?, ?, ?)
         ''', ('admin', f"{salt}:{hashed}", 'System Administrator', 'admin'))
-        print("✅ Admin user created")
+        print("Admin user created")
     
     conn.commit()
     conn.close()
-    print("✅ Database initialized")
+    print("Database initialized")
 
 # Initialize database on startup
 init_db()
 
-# Helper function for password verification
 def verify_password(password, stored):
     try:
         salt, hash_val = stored.split(':')
@@ -125,6 +123,7 @@ def diagnose_engine():
     severity = 'low'
     tools = []
     action_plan = []
+    symptom_list = []
     
     if symptoms.get('overheating') == 'yes':
         results.append('Engine overheating detected - Check coolant, radiator, or water pump')
@@ -132,26 +131,32 @@ def diagnose_engine():
         tools.extend(['Coolant Pressure Tester', 'Infrared Thermometer'])
         action_plan.append('Perform cooling system pressure test')
         action_plan.append('Check coolant level and condition')
+        symptom_list.append('Overheating')
     if symptoms.get('smoke') == 'yes':
         results.append('Smoke from exhaust - Possible oil burning or head gasket issue')
         severity = 'high'
         tools.extend(['Compression Tester', 'Leak Down Tester'])
         action_plan.append('Run compression test on all cylinders')
+        symptom_list.append('Smoke from exhaust')
     if symptoms.get('noise') == 'yes':
         results.append('Unusual engine noise - Check belts, pulleys, or internal components')
         severity = 'medium'
         tools.append('Mechanic Stethoscope')
         action_plan.append('Inspect belts and pulleys')
+        symptom_list.append('Unusual noise')
     if symptoms.get('check_light') == 'yes':
         results.append('Check engine light on - OBD2 scan required for error codes')
         severity = 'medium'
         tools.append('OBD2 Scanner')
         action_plan.append('Connect OBD2 scanner and read codes')
+        symptom_list.append('Check engine light')
     
     if not results:
         results.append('No immediate issues detected. Engine appears healthy')
         action_plan.append('Schedule routine maintenance')
         action_plan.append('Monitor vehicle performance')
+    
+    final_results = ' '.join(results)
     
     # Save to database if vehicle_id provided
     diagnostic_id = None
@@ -161,15 +166,15 @@ def diagnose_engine():
         cursor.execute('''
             INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'engine', json.dumps(symptoms), ' '.join(results), severity, json.dumps(tools), json.dumps(action_plan)))
+        ''', (vehicle_id, 'engine', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
         conn.commit()
         diagnostic_id = cursor.lastrowid
         conn.close()
     
     return jsonify({
         'severity': severity,
-        'results': ' '.join(results),
-        'symptoms': [k for k, v in symptoms.items() if v == 'yes'],
+        'results': final_results,
+        'symptoms': symptom_list,
         'tools': tools,
         'action_plan': action_plan,
         'diagnostic_id': diagnostic_id
@@ -185,25 +190,32 @@ def diagnose_battery():
     severity = 'low'
     tools = ['Multimeter', 'Battery Load Tester']
     action_plan = ['Test battery voltage', 'Check alternator output', 'Clean battery terminals']
+    symptom_list = []
     
     if symptoms.get('start') == 'yes':
         results.append('Car has trouble starting - Battery may be weak')
         severity = 'medium'
+        symptom_list.append('Hard to start')
     if symptoms.get('lights') == 'yes':
         results.append('Dim dashboard lights - Charging system issue')
         severity = 'high'
         action_plan.append('Test alternator output (should be 13.7-14.7V)')
+        symptom_list.append('Dim lights')
     if symptoms.get('clicks') == 'yes':
         results.append('Rapid clicking - Battery charge is very low')
         severity = 'high'
         action_plan.append('Jump start vehicle')
+        symptom_list.append('Clicking sound')
     if symptoms.get('age') == 'yes':
         results.append('Battery over 3 years old - Consider replacement soon')
         action_plan.append('Test battery CCA (Cold Cranking Amps)')
+        symptom_list.append('Old battery')
     
     if not results:
         results.append('Battery and charging system appear healthy')
         severity = 'low'
+    
+    final_results = ' '.join(results)
     
     if vehicle_id:
         conn = get_db()
@@ -211,14 +223,14 @@ def diagnose_battery():
         cursor.execute('''
             INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'battery', json.dumps(symptoms), ' '.join(results), severity, json.dumps(tools), json.dumps(action_plan)))
+        ''', (vehicle_id, 'battery', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
         conn.commit()
         conn.close()
     
     return jsonify({
         'severity': severity,
-        'results': ' '.join(results),
-        'symptoms': [k for k, v in symptoms.items() if v == 'yes'],
+        'results': final_results,
+        'symptoms': symptom_list,
         'tools': tools,
         'action_plan': action_plan
     })
@@ -233,22 +245,28 @@ def diagnose_starter():
     severity = 'low'
     tools = ['Test Light', 'Multimeter', 'Remote Starter Switch']
     action_plan = ['Check battery voltage', 'Test starter relay', 'Inspect starter connections']
+    symptom_list = []
     
     if symptoms.get('click') == 'yes' and symptoms.get('crank') == 'no':
         results.append('Clicking but no crank - Weak battery or bad starter')
         severity = 'high'
         action_plan.append('Perform voltage drop test')
+        symptom_list.append('Clicking no crank')
     elif symptoms.get('click') == 'no' and symptoms.get('crank') == 'no':
         results.append('No sound, no crank - Ignition switch or wiring issue')
         severity = 'high'
         action_plan.append('Check ignition switch signal')
+        symptom_list.append('No response')
     if symptoms.get('smell') == 'yes':
         results.append('Burning smell - Starter motor may be failing')
         severity = 'critical'
         action_plan.append('Do not continue cranking - Seek professional help')
+        symptom_list.append('Burning smell')
     
     if not results:
         results.append('Starter system appears operational')
+    
+    final_results = ' '.join(results)
     
     if vehicle_id:
         conn = get_db()
@@ -256,14 +274,14 @@ def diagnose_starter():
         cursor.execute('''
             INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'starter', json.dumps(symptoms), ' '.join(results), severity, json.dumps(tools), json.dumps(action_plan)))
+        ''', (vehicle_id, 'starter', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
         conn.commit()
         conn.close()
     
     return jsonify({
         'severity': severity,
-        'results': ' '.join(results),
-        'symptoms': [k for k, v in symptoms.items() if v == 'yes'],
+        'results': final_results,
+        'symptoms': symptom_list,
         'tools': tools,
         'action_plan': action_plan
     })
@@ -317,12 +335,21 @@ def get_statistics():
     total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
     total_diagnostics = conn.execute('SELECT COUNT(*) FROM diagnostics').fetchone()[0]
     total_customers = conn.execute('SELECT COUNT(DISTINCT customer_name) FROM vehicles').fetchone()[0]
+    
+    # Calculate revenue based on diagnostic severity
+    high_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'high'").fetchone()[0]
+    medium_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'medium'").fetchone()[0]
+    low_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'low'").fetchone()[0]
+    
+    # Revenue calculation: High = MK 15,000, Medium = MK 8,000, Low = MK 3,000
+    revenue = (high_count * 15000) + (medium_count * 8000) + (low_count * 3000)
+    
     conn.close()
     return jsonify({
         'total_customers': total_customers,
         'total_vehicles': total_vehicles,
         'total_diagnostics': total_diagnostics,
-        'total_revenue': total_diagnostics * 5000
+        'total_revenue': revenue
     })
 
 # ========== STATIC FILES ==========
