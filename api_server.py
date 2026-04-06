@@ -74,11 +74,11 @@ def init_db():
             INSERT INTO users (username, password, full_name, role)
             VALUES (?, ?, ?, ?)
         ''', ('admin', f"{salt}:{hashed}", 'System Administrator', 'admin'))
-        print("Admin user created")
+        print("✅ Admin user created")
     
     conn.commit()
     conn.close()
-    print("Database initialized")
+    print("✅ Database initialized")
 
 # Initialize database on startup
 init_db()
@@ -170,6 +170,7 @@ def diagnose_engine():
         conn.commit()
         diagnostic_id = cursor.lastrowid
         conn.close()
+        print(f"✅ Diagnostic saved to database with ID: {diagnostic_id}")
     
     return jsonify({
         'severity': severity,
@@ -226,6 +227,7 @@ def diagnose_battery():
         ''', (vehicle_id, 'battery', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
         conn.commit()
         conn.close()
+        print(f"✅ Battery diagnostic saved to database")
     
     return jsonify({
         'severity': severity,
@@ -277,6 +279,7 @@ def diagnose_starter():
         ''', (vehicle_id, 'starter', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
         conn.commit()
         conn.close()
+        print(f"✅ Starter diagnostic saved to database")
     
     return jsonify({
         'severity': severity,
