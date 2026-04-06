@@ -142,6 +142,72 @@
             font-size: 18px;
             padding: 5px 10px;
         }
+        /* History item styles */
+        .history-item {
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #f0f2f5;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .history-item:hover { background: #e8eaf0; }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .history-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .history-title strong { color: #003153; }
+        .history-date {
+            color: #7e8c9e;
+            font-size: 11px;
+        }
+        .history-preview {
+            font-size: 13px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .history-full {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #d1d5db;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #374151;
+        }
+        .history-full.show { display: block; }
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .history-delete {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            width: auto;
+            flex: 0;
+        }
+        .history-delete:hover { background: #fee2e2; }
+        .expand-icon {
+            font-size: 12px;
+            color: #003153;
+            transition: transform 0.2s;
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -185,9 +251,9 @@
                 <div class="form-group">
                     <label>SELECT SYSTEM</label>
                     <select id="systemSelect">
-                        <option value="engine"><i class="fas fa-car"></i> Engine Diagnostic</option>
-                        <option value="battery"><i class="fas fa-car-battery"></i> Battery & Charging</option>
-                        <option value="starter"><i class="fas fa-bolt"></i> Starter System</option>
+                        <option value="engine">Engine Diagnostic</option>
+                        <option value="battery">Battery & Charging</option>
+                        <option value="starter">Starter System</option>
                     </select>
                 </div>
                 <div id="questionsPanel"></div>
@@ -214,6 +280,9 @@
 
     <div id="historyTab" class="tab-content">
         <div class="panel neumorph">
+            <div style="margin-bottom: 20px; text-align: right;">
+                <button class="btn-secondary" onclick="clearAllHistory()" style="padding: 8px 16px; width: auto;"><i class="fas fa-trash-alt"></i> Clear All History</button>
+            </div>
             <div id="historyList"></div>
         </div>
     </div>
@@ -298,13 +367,17 @@ async function runDiagnostic() {
         const severityIcon = result.severity === 'high' ? 'fa-exclamation-circle' : result.severity === 'medium' ? 'fa-clock' : 'fa-check-circle';
         
         // Save to localStorage history
-        diagnosticHistory.unshift({
+        const historyItem = {
             id: Date.now(),
             type: currentSystem,
             date: new Date().toLocaleString(),
             results: result.results,
-            severity: result.severity
-        });
+            severity: result.severity,
+            fullResults: result.results,
+            tools: result.tools || [],
+            actionPlan: result.action_plan || []
+        };
+        diagnosticHistory.unshift(historyItem);
         localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
         
         let toolsHtml = '';
@@ -339,6 +412,67 @@ async function runDiagnostic() {
 
 function cancelDiagnostic() {
     document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and system, then run a diagnostic</p></div>';
+}
+
+function toggleHistoryItem(id) {
+    const fullDiv = document.getElementById(`history-full-${id}`);
+    const icon = document.getElementById(`expand-icon-${id}`);
+    if (fullDiv.classList.contains('show')) {
+        fullDiv.classList.remove('show');
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        fullDiv.classList.add('show');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+function deleteHistoryItem(id) {
+    diagnosticHistory = diagnosticHistory.filter(item => item.id !== id);
+    localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+    loadHistory();
+    loadStats();
+}
+
+function clearAllHistory() {
+    if (confirm('Delete all diagnostic history? This cannot be undone.')) {
+        diagnosticHistory = [];
+        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+        loadHistory();
+        loadStats();
+    }
+}
+
+function loadHistory() {
+    const saved = localStorage.getItem('diagnosticHistory');
+    if (saved) diagnosticHistory = JSON.parse(saved);
+    const historyDiv = document.getElementById('historyList');
+    if (diagnosticHistory.length === 0) {
+        historyDiv.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h4>No History</h4><p>Run diagnostics to see them here</p></div>';
+    } else {
+        historyDiv.innerHTML = diagnosticHistory.map(h => `
+            <div class="history-item" onclick="toggleHistoryItem(${h.id})">
+                <div class="history-header">
+                    <div class="history-title">
+                        <i class="fas ${h.type === 'engine' ? 'fa-car' : h.type === 'battery' ? 'fa-car-battery' : 'fa-bolt'}"></i>
+                        <strong>${h.type.toUpperCase()}</strong>
+                        <i class="fas fa-chevron-down expand-icon" id="expand-icon-${h.id}" style="font-size: 12px;"></i>
+                    </div>
+                    <div class="history-date"><i class="far fa-calendar-alt"></i> ${h.date}</div>
+                </div>
+                <div class="history-preview">${h.results.substring(0, 100)}...</div>
+                <div class="history-full" id="history-full-${h.id}">
+                    <p style="margin-bottom: 10px;">${h.fullResults || h.results}</p>
+                    ${h.tools && h.tools.length ? `<p><strong>Tools:</strong> ${h.tools.join(', ')}</p>` : ''}
+                    ${h.actionPlan && h.actionPlan.length ? `<p><strong>Action Plan:</strong> ${h.actionPlan.slice(0,3).join(', ')}</p>` : ''}
+                    <div class="history-actions">
+                        <button class="history-delete" onclick="event.stopPropagation(); deleteHistoryItem(${h.id})">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
 async function loadVehicles() {
@@ -385,26 +519,6 @@ function showAddVehicleModal() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ make, model, year: parseInt(year), license_plate: license || '', customer_name: customer || 'Walk-in Customer' })
     }).then(() => { loadVehicles(); loadStats(); loadVehiclesForSelector(); }).catch(e => alert('Error adding vehicle'));
-}
-
-function loadHistory() {
-    const saved = localStorage.getItem('diagnosticHistory');
-    if (saved) diagnosticHistory = JSON.parse(saved);
-    const historyDiv = document.getElementById('historyList');
-    if (diagnosticHistory.length === 0) {
-        historyDiv.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h4>No History</h4><p>Run diagnostics to see them here</p></div>';
-    } else {
-        historyDiv.innerHTML = diagnosticHistory.map(h => `
-            <div style="padding:15px;margin-bottom:10px;background:#f0f2f5;border-radius:20px;">
-                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                    <strong><i class="fas ${h.type === 'engine' ? 'fa-car' : h.type === 'battery' ? 'fa-car-battery' : 'fa-bolt'}"></i> ${h.type.toUpperCase()}</strong>
-                    <small style="color:#7e8c9e;"><i class="far fa-calendar-alt"></i> ${h.date}</small>
-                </div>
-                <p style="font-size:13px;margin-bottom:8px;">${h.results.substring(0,120)}...</p>
-                <span style="padding:4px 12px;border-radius:20px;font-size:11px;background:${h.severity === 'high' ? '#f8d7da' : '#d4edda'}">${h.severity}</span>
-            </div>
-        `).join('');
-    }
 }
 
 async function loadStats() {
