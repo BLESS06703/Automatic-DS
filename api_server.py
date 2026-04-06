@@ -102,14 +102,20 @@ def login():
     conn.close()
     
     if user and verify_password(password, user['password']):
-        return jsonify({
+            except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
+    return jsonify({
             'success': True,
             'user': {'username': user['username'], 'full_name': user['full_name']}
         })
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
 
 @app.route('/api/check-auth', methods=['GET'])
 def check_auth():
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'authenticated': True})
 
 # ========== DIAGNOSTIC ENDPOINTS ==========
@@ -172,6 +178,8 @@ def diagnose_engine():
         conn.close()
         print(f"✅ Diagnostic saved to database with ID: {diagnostic_id}")
     
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({
         'severity': severity,
         'results': final_results,
@@ -229,6 +237,8 @@ def diagnose_battery():
         conn.close()
         print(f"✅ Battery diagnostic saved to database")
     
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({
         'severity': severity,
         'results': final_results,
@@ -281,6 +291,8 @@ def diagnose_starter():
         conn.close()
         print(f"✅ Starter diagnostic saved to database")
     
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({
         'severity': severity,
         'results': final_results,
@@ -295,6 +307,8 @@ def get_vehicles():
     conn = get_db()
     vehicles = conn.execute('SELECT * FROM vehicles ORDER BY id DESC').fetchall()
     conn.close()
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'vehicles': [dict(v) for v in vehicles]})
 
 @app.route('/api/vehicle/add', methods=['POST'])
@@ -309,6 +323,8 @@ def add_vehicle():
     conn.commit()
     vehicle_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
     conn.close()
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'success': True, 'vehicle_id': vehicle_id})
 
 @app.route('/api/vehicle/<int:vehicle_id>', methods=['DELETE'])
@@ -317,6 +333,8 @@ def delete_vehicle(vehicle_id):
     conn.execute('DELETE FROM vehicles WHERE id = ?', (vehicle_id,))
     conn.commit()
     conn.close()
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'success': True})
 
 # ========== DIAGNOSTIC HISTORY ==========
@@ -329,11 +347,15 @@ def get_diagnostics():
     else:
         diagnostics = conn.execute('SELECT * FROM diagnostics ORDER BY created_at DESC LIMIT 50').fetchall()
     conn.close()
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'diagnostics': [dict(d) for d in diagnostics]})
 
 # ========== STATISTICS ==========
 @app.route('/api/statistics', methods=['GET'])
 def get_statistics():
+    import traceback
+    try:
     conn = get_db()
     total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
     total_customers = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
@@ -348,6 +370,8 @@ def get_statistics():
     revenue = (high_count * 15000) + (medium_count * 8000) + (low_count * 3000)
     
     conn.close()
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({
         'total_customers': total_customers,
         'total_vehicles': total_vehicles,
@@ -379,7 +403,9 @@ def save_diagnostic():
     severity = data.get("severity")
     
     if not vehicle_id:
-        return jsonify({"success": False, "message": "No vehicle selected"}), 400
+            except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
+    return jsonify({"success": False, "message": "No vehicle selected"}), 400
     
     conn = get_db()
     cursor = conn.cursor()
@@ -390,6 +416,8 @@ def save_diagnostic():
     conn.commit()
     conn.close()
     
+        except Exception as e:
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({"success": True, "message": "Diagnostic saved"})
 
 if __name__ == '__main__':
