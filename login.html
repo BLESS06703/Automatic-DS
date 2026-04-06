@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* Neumorphism Effect */
         .neumorph {
             background: #e0e5ec;
             box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1);
@@ -53,7 +52,7 @@
             padding: 50px 40px;
         }
 
-        .logo-icon {
+        .welcome-emoji {
             font-size: 70px;
             text-align: center;
             margin-bottom: 20px;
@@ -72,10 +71,6 @@
             color: #7e8c9e;
             font-size: 14px;
             margin-bottom: 40px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
         }
 
         .input-field {
@@ -101,23 +96,21 @@
             font-weight: 600;
             border-radius: 40px;
             margin-top: 10px;
-            background: #e0e5ec;
-            color: #2c3e50;
+        }
+
+        .demo-card {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .demo-card p {
+            color: #7e8c9e;
+            font-size: 12px;
+            margin-bottom: 12px;
         }
 
         .demo-badge {
-            text-align: center;
-            margin-top: 30px;
-            padding: 15px;
-        }
-
-        .demo-badge p {
-            color: #7e8c9e;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-
-        .demo-credentials {
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -128,7 +121,7 @@
             background: #e0e5ec;
             box-shadow: -3px -3px 6px rgba(255,255,255,0.8), 3px 3px 6px rgba(0,0,0,0.1);
             border-radius: 30px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
             color: #2c3e50;
         }
@@ -156,24 +149,24 @@
 </head>
 <body>
     <div class="login-container neumorph">
-        <div class="logo-icon">🚗</div>
-        <h1>Bless Auto Care</h1>
-        <div class="subtitle">Professional Diagnostic System</div>
+        <div class="welcome-emoji">👋🚗</div>
+        <h1>Welcome Back!</h1>
+        <div class="subtitle">Let's get your vehicle diagnosed</div>
 
         <div id="errorMsg" class="error-message"></div>
 
-        <div class="input-group">
+        <div style="margin-bottom: 20px;">
             <input type="text" id="loginUsername" class="input-field" placeholder="Username" autocomplete="off">
         </div>
-        <div class="input-group">
+        <div style="margin-bottom: 25px;">
             <input type="password" id="loginPassword" class="input-field" placeholder="Password">
         </div>
 
-        <button onclick="handleLogin()" class="login-btn neumorph-btn">Sign In</button>
+        <button onclick="handleLogin()" class="login-btn neumorph-btn">🔐 Sign In</button>
 
-        <div class="demo-badge neumorph">
-            <p>Demo Credentials</p>
-            <div class="demo-credentials">
+        <div class="demo-card neumorph-inset">
+            <p>✨ Try it out with demo credentials ✨</p>
+            <div class="demo-badge">
                 <span class="demo-chip">admin</span>
                 <span class="demo-chip">admin123</span>
             </div>
@@ -190,6 +183,12 @@
             
             errorDiv.style.display = 'none';
             
+            if (!username || !password) {
+                errorDiv.textContent = 'Please enter both username and password 🙏';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
             try {
                 const res = await fetch(`${API_BASE}/api/login`, {
                     method: 'POST',
@@ -200,11 +199,11 @@
                 if (data.success) {
                     window.location.href = '/dashboard.html';
                 } else {
-                    errorDiv.textContent = 'Invalid username or password';
+                    errorDiv.textContent = 'Hmm... that username/password doesn\'t match. Try admin/admin123';
                     errorDiv.style.display = 'block';
                 }
             } catch(e) {
-                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.textContent = 'Connection issue. Please check your internet connection.';
                 errorDiv.style.display = 'block';
             }
         }
