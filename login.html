@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bless Auto Care - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -21,6 +22,7 @@
             padding: 20px;
         }
 
+        /* Neumorphism Effect */
         .neumorph {
             background: #e0e5ec;
             box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1);
@@ -52,17 +54,21 @@
             padding: 50px 40px;
         }
 
-        .welcome-emoji {
-            font-size: 70px;
+        .logo-icon {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .logo-icon i {
+            font-size: 70px;
+            color: #003153;
         }
 
         h1 {
             text-align: center;
             font-size: 28px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #003153;
             margin-bottom: 8px;
         }
 
@@ -73,9 +79,20 @@
             margin-bottom: 40px;
         }
 
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group i {
+            position: absolute;
+            margin: 18px 20px;
+            color: #003153;
+            font-size: 16px;
+        }
+
         .input-field {
             width: 100%;
-            padding: 18px 20px;
+            padding: 18px 20px 18px 50px;
             font-size: 16px;
             border: none;
             background: #e0e5ec;
@@ -96,6 +113,11 @@
             font-weight: 600;
             border-radius: 40px;
             margin-top: 10px;
+            color: #003153;
+        }
+
+        .login-btn i {
+            margin-right: 8px;
         }
 
         .demo-card {
@@ -123,7 +145,12 @@
             border-radius: 30px;
             font-size: 13px;
             font-weight: 500;
-            color: #2c3e50;
+            color: #003153;
+        }
+
+        .demo-chip i {
+            margin-right: 6px;
+            font-size: 12px;
         }
 
         .error-message {
@@ -149,26 +176,32 @@
 </head>
 <body>
     <div class="login-container neumorph">
-        <div class="welcome-emoji">👋🚗</div>
-        <h1>Welcome Back!</h1>
-        <div class="subtitle">Let's get your vehicle diagnosed</div>
+        <div class="logo-icon">
+            <i class="fas fa-car"></i>
+        </div>
+        <h1>Bless Auto Care</h1>
+        <div class="subtitle">Professional Diagnostic System</div>
 
         <div id="errorMsg" class="error-message"></div>
 
-        <div style="margin-bottom: 20px;">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
             <input type="text" id="loginUsername" class="input-field" placeholder="Username" autocomplete="off">
         </div>
-        <div style="margin-bottom: 25px;">
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
             <input type="password" id="loginPassword" class="input-field" placeholder="Password">
         </div>
 
-        <button onclick="handleLogin()" class="login-btn neumorph-btn">🔐 Sign In</button>
+        <button onclick="handleLogin()" class="login-btn neumorph-btn">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
 
         <div class="demo-card neumorph-inset">
-            <p>✨ Try it out with demo credentials ✨</p>
+            <p><i class="fas fa-flask"></i> Try it out with demo credentials</p>
             <div class="demo-badge">
-                <span class="demo-chip">admin</span>
-                <span class="demo-chip">admin123</span>
+                <span class="demo-chip"><i class="fas fa-user"></i> admin</span>
+                <span class="demo-chip"><i class="fas fa-key"></i> admin123</span>
             </div>
         </div>
     </div>
@@ -184,7 +217,7 @@
             errorDiv.style.display = 'none';
             
             if (!username || !password) {
-                errorDiv.textContent = 'Please enter both username and password 🙏';
+                errorDiv.textContent = 'Please enter both username and password';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -199,11 +232,11 @@
                 if (data.success) {
                     window.location.href = '/dashboard.html';
                 } else {
-                    errorDiv.textContent = 'Hmm... that username/password doesn\'t match. Try admin/admin123';
+                    errorDiv.textContent = 'Invalid username or password. Try admin/admin123';
                     errorDiv.style.display = 'block';
                 }
             } catch(e) {
-                errorDiv.textContent = 'Connection issue. Please check your internet connection.';
+                errorDiv.textContent = 'Connection error. Please try again.';
                 errorDiv.style.display = 'block';
             }
         }

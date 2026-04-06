@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Bless Auto Care - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -61,12 +62,18 @@
         .logo h2 {
             font-size: 24px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #003153;
+        }
+
+        .logo h2 i {
+            margin-right: 10px;
+            color: #003153;
         }
 
         .logo p {
             color: #7e8c9e;
             font-size: 12px;
+            margin-left: 34px;
         }
 
         .logout-btn {
@@ -74,6 +81,10 @@
             border-radius: 40px;
             font-weight: 500;
             color: #dc2626;
+        }
+
+        .logout-btn i {
+            margin-right: 8px;
         }
 
         /* Stats Grid */
@@ -95,15 +106,16 @@
             transform: translateY(-5px);
         }
 
-        .stat-emoji {
+        .stat-card i {
             font-size: 32px;
+            color: #003153;
             margin-bottom: 10px;
         }
 
         .stat-value {
             font-size: 32px;
             font-weight: 700;
-            color: #2c3e50;
+            color: #003153;
         }
 
         .stat-label {
@@ -140,10 +152,14 @@
             color: #7e8c9e;
         }
 
+        .tab i {
+            margin-right: 8px;
+        }
+
         .tab.active {
             background: #e0e5ec;
             box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1);
-            color: #2c3e50;
+            color: #003153;
         }
 
         /* Main Content Grid */
@@ -160,8 +176,12 @@
         .panel h3 {
             font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #003153;
             margin-bottom: 20px;
+        }
+
+        .panel h3 i {
+            margin-right: 10px;
         }
 
         .form-group {
@@ -174,6 +194,10 @@
             font-weight: 500;
             color: #7e8c9e;
             margin-bottom: 8px;
+        }
+
+        .form-group label i {
+            margin-right: 6px;
         }
 
         select, .question-select {
@@ -208,7 +232,11 @@
 
         .btn-primary {
             background: #e0e5ec;
-            color: #2c3e50;
+            color: #003153;
+        }
+
+        .btn-primary i, .btn-secondary i {
+            margin-right: 8px;
         }
 
         .btn-secondary {
@@ -236,21 +264,21 @@
             border-radius: 25px;
         }
 
-        /* Human-friendly empty states */
         .empty-state {
             text-align: center;
             padding: 50px 30px;
         }
 
-        .empty-illustration {
-            font-size: 70px;
+        .empty-state i {
+            font-size: 60px;
+            color: #003153;
+            opacity: 0.5;
             margin-bottom: 20px;
-            opacity: 0.7;
         }
 
         .empty-state h4 {
             font-size: 18px;
-            color: #2c3e50;
+            color: #003153;
             margin-bottom: 8px;
         }
 
@@ -260,7 +288,6 @@
             margin-bottom: 20px;
         }
 
-        /* Loading spinner */
         .spinner {
             width: 40px;
             height: 40px;
@@ -276,7 +303,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Human message */
         .human-message {
             background: #e0e5ec;
             padding: 12px 18px;
@@ -286,7 +312,11 @@
             align-items: center;
             gap: 10px;
             font-size: 13px;
-            color: #2c3e50;
+            color: #003153;
+        }
+
+        .human-message i {
+            font-size: 18px;
         }
 
         .tab-content {
@@ -319,77 +349,79 @@
         <!-- Header -->
         <div class="header neumorph">
             <div class="logo">
-                <h2>🚗 Bless Auto Care</h2>
-                <p>Your trusted diagnostic partner</p>
+                <h2><i class="fas fa-car"></i> Bless Auto Care</h2>
+                <p>Professional Diagnostic System</p>
             </div>
-            <button onclick="logout()" class="logout-btn neumorph-btn">👋 Logout</button>
+            <button onclick="logout()" class="logout-btn neumorph-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <!-- Human touch message -->
         <div class="human-message neumorph-inset fade-in">
-            <span>👋</span>
-            <span>Hey there! Ready to diagnose your vehicle today?</span>
+            <i class="fas fa-robot"></i>
+            <span>Ready to diagnose your vehicle? Select a system below to get started.</span>
         </div>
 
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card neumorph" onclick="switchTab('vehicles')">
-                <div class="stat-emoji">👥</div>
+                <i class="fas fa-users"></i>
                 <div class="stat-value" id="statCustomers">0</div>
-                <div class="stat-label">Happy Customers</div>
+                <div class="stat-label">Customers</div>
             </div>
             <div class="stat-card neumorph" onclick="switchTab('vehicles')">
-                <div class="stat-emoji">🚙</div>
+                <i class="fas fa-car"></i>
                 <div class="stat-value" id="statVehicles">0</div>
-                <div class="stat-label">Vehicles Serviced</div>
+                <div class="stat-label">Vehicles</div>
             </div>
             <div class="stat-card neumorph">
-                <div class="stat-emoji">🔧</div>
+                <i class="fas fa-stethoscope"></i>
                 <div class="stat-value" id="statDiagnostics">0</div>
-                <div class="stat-label">Diagnostics Run</div>
+                <div class="stat-label">Diagnostics</div>
             </div>
             <div class="stat-card neumorph">
-                <div class="stat-emoji">💰</div>
+                <i class="fas fa-chart-line"></i>
                 <div class="stat-value" id="statRevenue">MK 0</div>
-                <div class="stat-label">Savings Generated</div>
+                <div class="stat-label">Revenue</div>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('diagnostic')">🔧 Diagnose</button>
-            <button class="tab" onclick="switchTab('vehicles')">🚙 My Garage</button>
-            <button class="tab" onclick="switchTab('history')">📜 History</button>
-            <button class="tab" onclick="switchTab('analytics')">📊 Insights</button>
+            <button class="tab active" onclick="switchTab('diagnostic')"><i class="fas fa-stethoscope"></i> Diagnostic</button>
+            <button class="tab" onclick="switchTab('vehicles')"><i class="fas fa-garage"></i> Vehicles</button>
+            <button class="tab" onclick="switchTab('history')"><i class="fas fa-history"></i> History</button>
+            <button class="tab" onclick="switchTab('analytics')"><i class="fas fa-chart-pie"></i> Analytics</button>
         </div>
 
         <!-- Diagnostic Tab -->
         <div id="diagnosticTab" class="tab-content active fade-in">
             <div class="content-grid">
                 <div class="panel neumorph">
-                    <h3>🔧 What would you like to check?</h3>
+                    <h3><i class="fas fa-sliders-h"></i> Diagnostic Controls</h3>
                     <div class="form-group">
-                        <label>SELECT SYSTEM</label>
+                        <label><i class="fas fa-microchip"></i> SELECT SYSTEM</label>
                         <select id="systemSelect">
-                            <option value="engine">🔧 Engine Health</option>
-                            <option value="battery">🔋 Battery Status</option>
-                            <option value="starter">⚡ Starter System</option>
+                            <option value="engine"><i class="fas fa-engine"></i> Engine Diagnostic</option>
+                            <option value="battery"><i class="fas fa-car-battery"></i> Battery & Charging</option>
+                            <option value="starter"><i class="fas fa-bolt"></i> Starter System</option>
                         </select>
                     </div>
                     <div id="questionsPanel"></div>
                     <div class="btn-group">
-                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn">🔍 Start Diagnosis</button>
-                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn">❌ Cancel</button>
+                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn"><i class="fas fa-play"></i> Start Diagnosis</button>
+                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn"><i class="fas fa-ban"></i> Cancel</button>
                     </div>
                 </div>
 
                 <div class="panel neumorph">
-                    <h3>📋 Diagnosis Results</h3>
+                    <h3><i class="fas fa-clipboard-list"></i> Analysis Results</h3>
                     <div id="resultsPanel" class="results-area">
                         <div class="empty-state">
-                            <div class="empty-illustration">🔍👀</div>
-                            <h4>Ready when you are!</h4>
-                            <p>Select a system above and let's see what's going on with your vehicle.</p>
+                            <i class="fas fa-search"></i>
+                            <h4>Ready to Diagnose</h4>
+                            <p>Select a system above and run a diagnostic</p>
                         </div>
                     </div>
                 </div>
@@ -400,10 +432,12 @@
         <div id="vehiclesTab" class="tab-content fade-in">
             <div class="panel neumorph">
                 <div class="empty-state">
-                    <div class="empty-illustration">🚙✨</div>
-                    <h4>Your garage is empty</h4>
-                    <p>Add your vehicles to keep track of their service history</p>
-                    <button class="btn-primary neumorph-btn" style="padding: 12px 30px;" onclick="addVehicle()">➕ Add Your First Vehicle</button>
+                    <i class="fas fa-garage"></i>
+                    <h4>No Vehicles Added</h4>
+                    <p>Add your vehicles to track their service history</p>
+                    <button class="btn-primary neumorph-btn" style="padding: 12px 30px;" onclick="addVehicle()">
+                        <i class="fas fa-plus"></i> Add Vehicle
+                    </button>
                 </div>
             </div>
         </div>
@@ -413,9 +447,9 @@
             <div class="panel neumorph">
                 <div id="historyList" class="results-area">
                     <div class="empty-state">
-                        <div class="empty-illustration">📜💭</div>
-                        <h4>No diagnostic history yet</h4>
-                        <p>Run your first diagnosis and it will appear here</p>
+                        <i class="fas fa-history"></i>
+                        <h4>No Diagnostic History</h4>
+                        <p>Run your first diagnostic to see it here</p>
                     </div>
                 </div>
             </div>
@@ -425,9 +459,9 @@
         <div id="analyticsTab" class="tab-content fade-in">
             <div class="panel neumorph">
                 <div class="empty-state">
-                    <div class="empty-illustration">📊📈</div>
-                    <h4>Insights coming soon!</h4>
-                    <p>We're crunching numbers to give you valuable insights about your vehicle health</p>
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Analytics Dashboard</h4>
+                    <p>Coming soon! Track your vehicle health trends</p>
                 </div>
             </div>
         </div>
@@ -460,22 +494,22 @@
         function loadQuestions() {
             const questions = {
                 engine: `
-                    <div class="question-item"><label>🔧 Is your engine overheating?</label><select id="q_overheating" class="question-select"><option value="no">No, it's fine</option><option value="yes">Yes, it's getting hot</option></select></div>
-                    <div class="question-item"><label>💨 Seeing smoke from exhaust?</label><select id="q_smoke" class="question-select"><option value="no">No, clear exhaust</option><option value="yes">Yes, there's smoke</option></select></div>
-                    <div class="question-item"><label>🔊 Hearing unusual noises?</label><select id="q_noise" class="question-select"><option value="no">No, sounds normal</option><option value="yes">Yes, something sounds off</option></select></div>
-                    <div class="question-item"><label>⚠️ Is check engine light on?</label><select id="q_check_light" class="question-select"><option value="no">No, it's off</option><option value="yes">Yes, it's lit up</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-temperature-high"></i> Engine overheating?</label><select id="q_overheating" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-smog"></i> Smoke from exhaust?</label><select id="q_smoke" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-volume-up"></i> Unusual engine noise?</label><select id="q_noise" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-exclamation-triangle"></i> Check engine light ON?</label><select id="q_check_light" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 battery: `
-                    <div class="question-item"><label>🔋 Car having trouble starting?</label><select id="q_start" class="question-select"><option value="no">No, starts fine</option><option value="yes">Yes, struggling to start</option></select></div>
-                    <div class="question-item"><label>💡 Dashboard lights dim?</label><select id="q_lights" class="question-select"><option value="no">No, lights are bright</option><option value="yes">Yes, they look dim</option></select></div>
-                    <div class="question-item"><label>🔊 Hearing rapid clicking?</label><select id="q_clicks" class="question-select"><option value="no">No, normal sound</option><option value="yes">Yes, clicking sounds</option></select></div>
-                    <div class="question-item"><label>📅 Battery over 3 years old?</label><select id="q_age" class="question-select"><option value="no">No, newer battery</option><option value="yes">Yes, it's getting old</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-power-off"></i> Car fails to start?</label><select id="q_start" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-lightbulb"></i> Dashboard lights dim?</label><select id="q_lights" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-sync-alt"></i> Rapid clicking?</label><select id="q_clicks" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-calendar-alt"></i> Battery over 3 years?</label><select id="q_age" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `,
                 starter: `
-                    <div class="question-item"><label>🔊 Clicking when turning key?</label><select id="q_click" class="question-select"><option value="no">No, normal sound</option><option value="yes">Yes, clicking noise</option></select></div>
-                    <div class="question-item"><label>🔄 Engine cranks at all?</label><select id="q_crank" class="question-select"><option value="no">No, nothing happens</option><option value="yes">Yes, but won't start</option></select></div>
-                    <div class="question-item"><label>💡 Headlights working?</label><select id="q_lights" class="question-select"><option value="yes">Yes, lights work</option><option value="no">No, no lights</option></select></div>
-                    <div class="question-item"><label>🔥 Burning smell?</label><select id="q_smell" class="question-select"><option value="no">No, smells normal</option><option value="yes">Yes, something's burning</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-hand-pointer"></i> Clicking when turning key?</label><select id="q_click" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-cog"></i> Engine cranks?</label><select id="q_crank" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-car"></i> Headlights work?</label><select id="q_lights" class="question-select"><option value="yes">Yes</option><option value="no">No</option></select></div>
+                    <div class="question-item"><label><i class="fas fa-fire"></i> Burning smell?</label><select id="q_smell" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
                 `
             };
             document.getElementById('questionsPanel').innerHTML = questions[currentSystem];
@@ -485,9 +519,9 @@
             if (isLoading) return;
             document.getElementById('resultsPanel').innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-illustration">🔍👀</div>
-                    <h4>Ready when you are!</h4>
-                    <p>Select a system above and let's see what's going on with your vehicle.</p>
+                    <i class="fas fa-search"></i>
+                    <h4>Ready to Diagnose</h4>
+                    <p>Select a system above and run a diagnostic</p>
                 </div>
             `;
         }
@@ -503,7 +537,7 @@
 
             const resultsPanel = document.getElementById('resultsPanel');
             isLoading = true;
-            resultsPanel.innerHTML = '<div class="empty-state"><div class="spinner"></div><h4>🤔 Analyzing your symptoms...</h4><p>Our diagnostic engine is working on it!</p></div>';
+            resultsPanel.innerHTML = '<div class="empty-state"><div class="spinner"></div><h4>Analyzing...</h4><p>Our diagnostic engine is working on it</p></div>';
 
             try {
                 const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
@@ -514,7 +548,7 @@
                 const result = await res.json();
 
                 const severityClass = `severity-${result.severity || 'medium'}`;
-                const severityEmoji = result.severity === 'high' ? '🔴' : result.severity === 'medium' ? '🟡' : '🟢';
+                const severityIcon = result.severity === 'high' ? 'fa-exclamation-circle' : result.severity === 'medium' ? 'fa-clock' : 'fa-check-circle';
 
                 const historyItem = {
                     id: Date.now(),
@@ -528,20 +562,20 @@
 
                 resultsPanel.innerHTML = `
                     <div class="result-card ${severityClass}" style="margin-bottom: 15px;">
-                        <strong>${severityEmoji} Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
+                        <i class="fas ${severityIcon}"></i> <strong>Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
                     </div>
                     <div class="result-card neumorph-inset" style="padding: 20px;">
-                        <p style="line-height: 1.6;">${result.results || 'No issues found. Your vehicle looks healthy! 🎉'}</p>
+                        <p style="line-height: 1.6;">${result.results || 'No issues found. Your vehicle looks healthy!'}</p>
                     </div>
-                    ${result.tools ? `<div class="result-card neumorph-inset" style="margin-top: 15px;"><strong>🛠️ Tools needed:</strong><br>${result.tools.slice(0,3).join(', ')}</div>` : ''}
+                    ${result.tools ? `<div class="result-card neumorph-inset" style="margin-top: 15px;"><i class="fas fa-tools"></i> <strong>Tools needed:</strong><br>${result.tools.slice(0,3).join(', ')}</div>` : ''}
                     <div class="btn-group" style="margin-top: 20px;">
-                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn" style="padding: 12px;">🔄 Run Another Test</button>
-                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn" style="padding: 12px;">🗑️ Clear Results</button>
+                        <button onclick="runDiagnostic()" class="btn-primary neumorph-btn" style="padding: 12px;"><i class="fas fa-redo-alt"></i> Run Again</button>
+                        <button onclick="cancelDiagnostic()" class="btn-secondary neumorph-btn" style="padding: 12px;"><i class="fas fa-trash-alt"></i> Clear</button>
                     </div>
                 `;
                 loadStats();
             } catch(e) {
-                resultsPanel.innerHTML = '<div class="empty-state"><div class="empty-illustration">⚠️😅</div><h4>Oops! Something went wrong</h4><p>Please try again in a moment</p></div>';
+                resultsPanel.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h4>Oops! Something went wrong</h4><p>Please try again</p></div>';
             } finally {
                 isLoading = false;
             }
@@ -555,9 +589,9 @@
             if (diagnosticHistory.length === 0) {
                 historyDiv.innerHTML = `
                     <div class="empty-state">
-                        <div class="empty-illustration">📜💭</div>
-                        <h4>No diagnostic history yet</h4>
-                        <p>Run your first diagnosis and it will appear here</p>
+                        <i class="fas fa-history"></i>
+                        <h4>No Diagnostic History</h4>
+                        <p>Run your first diagnostic to see it here</p>
                     </div>
                 `;
                 return;
@@ -566,8 +600,8 @@
             historyDiv.innerHTML = diagnosticHistory.map(h => `
                 <div class="history-item neumorph-inset" style="padding: 18px; margin-bottom: 12px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <strong>${h.type === 'engine' ? '🔧' : h.type === 'battery' ? '🔋' : '⚡'} ${h.type.toUpperCase()}</strong>
-                        <span style="font-size: 11px; color: #7e8c9e;">📅 ${h.date}</span>
+                        <strong><i class="fas ${h.type === 'engine' ? 'fa-car' : h.type === 'battery' ? 'fa-car-battery' : 'fa-bolt'}"></i> ${h.type.toUpperCase()}</strong>
+                        <span style="font-size: 11px; color: #7e8c9e;"><i class="far fa-calendar-alt"></i> ${h.date}</span>
                     </div>
                     <p style="font-size: 13px; margin-bottom: 10px; line-height: 1.5;">${h.results.substring(0, 120)}${h.results.length > 120 ? '...' : ''}</p>
                     <span class="severity-${h.severity}" style="padding: 4px 14px; border-radius: 20px; font-size: 11px;">${h.severity || 'medium'}</span>
@@ -592,7 +626,7 @@
         }
 
         function addVehicle() {
-            alert("🚙 Vehicle management coming soon! We'll help you keep track of your whole fleet.");
+            alert("Vehicle management coming soon! 🚗");
         }
 
         document.getElementById('systemSelect').addEventListener('change', (e) => {
