@@ -263,3 +263,7 @@ def get_customers():
     customers = conn.execute('SELECT * FROM customers').fetchall()
     conn.close()
     return jsonify({'customers': [dict(c) for c in customers]})
+
+@app.route('/version')
+def version():
+    return {'version': 'latest', 'commit': '512987f', 'customers_endpoint': 'available'}
