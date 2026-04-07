@@ -213,3 +213,26 @@ def serve_login():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
+# ========== SAVE DIAGNOSTIC ENDPOINT ==========
+@app.route('/api/diagnostic/save', methods=['POST'])
+def save_diagnostic():
+    data = request.json
+    vehicle_id = data.get('vehicle_id')
+    diagnostic_type = data.get('diagnostic_type')
+    results = data.get('results')
+    severity = data.get('severity')
+    
+    if not vehicle_id:
+        return jsonify({'success': False, 'message': 'No vehicle selected'}), 400
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO diagnostics (vehicle_id, diagnostic_type, results, severity)
+        VALUES (?, ?, ?, ?)
+    ''', (vehicle_id, diagnostic_type, results, severity))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'message': 'Diagnostic saved'})

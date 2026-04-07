@@ -16,7 +16,7 @@
         .logo p { color: #7e8c9e; font-size: 12px; margin-left: 34px; }
         .logout-btn { padding: 10px 25px; border-radius: 40px; background: #e0e5ec; border: none; cursor: pointer; color: #dc2626; font-weight: 500; }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { padding: 25px; text-align: center; cursor: pointer; transition: transform 0.2s; }
+        .stat-card { padding: 25px; text-align: center; transition: transform 0.2s; background: #e0e5ec; border-radius: 40px; box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1); }
         .stat-card i { font-size: 32px; color: #003153; margin-bottom: 10px; }
         .stat-value { font-size: 32px; font-weight: 700; color: #003153; }
         .stat-label { color: #7e8c9e; font-size: 11px; text-transform: uppercase; margin-top: 5px; }
@@ -25,20 +25,34 @@
         .tab i { margin-right: 8px; }
         .tab.active { background: #e0e5ec; box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1); color: #003153; }
         .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .panel { padding: 30px; }
+        .panel { padding: 30px; background: #e0e5ec; border-radius: 40px; box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1); }
         .panel h3 { color: #003153; margin-bottom: 20px; }
-        select, .question-select { width: 100%; padding: 14px 18px; border: none; background: #e0e5ec; box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1); border-radius: 30px; }
+        select, .question-select { width: 100%; padding: 14px 18px; border: none; background: #e0e5ec; box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1); border-radius: 30px; cursor: pointer; }
         .vehicle-selector { margin-bottom: 20px; padding: 15px; background: #f0f2f5; border-radius: 20px; }
         .question-item { margin-bottom: 15px; }
         .btn-group { display: flex; gap: 15px; margin-top: 25px; }
-        .btn-primary, .btn-secondary { flex: 1; padding: 14px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; }
-        .btn-primary { background: #e0e5ec; color: #003153; }
-        .btn-secondary { background: #e0e5ec; color: #7e8c9e; }
+        .btn-primary, .btn-secondary { flex: 1; padding: 14px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; background: #e0e5ec; }
+        .btn-primary { color: #003153; box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1); }
+        .btn-secondary { color: #7e8c9e; box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1); }
         .empty-state { text-align: center; padding: 50px 30px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .vehicle-item { padding: 15px; margin-bottom: 10px; background: #f0f2f5; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
         .delete-btn { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 18px; }
+        .history-item { padding: 15px; margin-bottom: 12px; background: #f0f2f5; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+        .history-item:hover { background: #e8eaf0; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+        .history-title { display: flex; align-items: center; gap: 8px; }
+        .history-title strong { color: #003153; }
+        .history-date { color: #7e8c9e; font-size: 11px; }
+        .history-preview { font-size: 13px; color: #4a5568; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .history-full { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #d1d5db; font-size: 13px; line-height: 1.5; color: #374151; }
+        .history-full.show { display: block; }
+        .history-actions { display: flex; gap: 10px; margin-top: 10px; }
+        .history-delete { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 12px; padding: 4px 8px; border-radius: 20px; }
+        .history-delete:hover { background: #fee2e2; }
+        .expand-icon { font-size: 12px; color: #003153; transition: transform 0.2s; margin-left: 5px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .content-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -50,10 +64,10 @@
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card neumorph"><i class="fas fa-users"></i><div class="stat-value" id="statCustomers">0</div><div class="stat-label">Customers</div></div>
-        <div class="stat-card neumorph"><i class="fas fa-car"></i><div class="stat-value" id="statVehicles">0</div><div class="stat-label">Vehicles</div></div>
-        <div class="stat-card neumorph"><i class="fas fa-stethoscope"></i><div class="stat-value" id="statDiagnostics">0</div><div class="stat-label">Diagnostics</div></div>
-        <div class="stat-card neumorph"><i class="fas fa-chart-line"></i><div class="stat-value" id="statRevenue">MK 0</div><div class="stat-label">Revenue</div></div>
+        <div class="stat-card"><i class="fas fa-users"></i><div class="stat-value" id="statCustomers">0</div><div class="stat-label">Customers</div></div>
+        <div class="stat-card"><i class="fas fa-car"></i><div class="stat-value" id="statVehicles">0</div><div class="stat-label">Vehicles</div></div>
+        <div class="stat-card"><i class="fas fa-stethoscope"></i><div class="stat-value" id="statDiagnostics">0</div><div class="stat-label">Diagnostics</div></div>
+        <div class="stat-card"><i class="fas fa-chart-line"></i><div class="stat-value" id="statRevenue">MK 0</div><div class="stat-label">Revenue</div></div>
     </div>
 
     <div class="tabs">
@@ -64,7 +78,7 @@
 
     <div id="diagnosticTab" class="tab-content active">
         <div class="content-grid">
-            <div class="panel neumorph">
+            <div class="panel">
                 <h3><i class="fas fa-sliders-h"></i> Diagnostic Controls</h3>
                 <div class="vehicle-selector">
                     <label><i class="fas fa-car"></i> SELECT VEHICLE</label>
@@ -80,11 +94,11 @@
                 </div>
                 <div id="questionsPanel"></div>
                 <div class="btn-group">
-                    <button class="btn-primary" onclick="runDiagnostic()">Start Diagnosis</button>
-                    <button class="btn-secondary" onclick="cancelDiagnostic()">Cancel</button>
+                    <button class="btn-primary" onclick="runDiagnostic()"><i class="fas fa-play"></i> Start Diagnosis</button>
+                    <button class="btn-secondary" onclick="cancelDiagnostic()"><i class="fas fa-ban"></i> Cancel</button>
                 </div>
             </div>
-            <div class="panel neumorph">
+            <div class="panel">
                 <h3><i class="fas fa-clipboard-list"></i> Analysis Results</h3>
                 <div id="resultsPanel"><div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and run a diagnostic</p></div></div>
             </div>
@@ -92,15 +106,15 @@
     </div>
 
     <div id="vehiclesTab" class="tab-content">
-        <div class="panel neumorph">
+        <div class="panel">
             <div style="margin-bottom:20px;text-align:right"><button class="btn-primary" onclick="showAddVehicleModal()"><i class="fas fa-plus"></i> Add Vehicle</button></div>
             <div id="vehiclesList"></div>
         </div>
     </div>
 
     <div id="historyTab" class="tab-content">
-        <div class="panel neumorph">
-            <div style="margin-bottom:20px;text-align:right"><button class="btn-secondary" onclick="clearAllHistory()">Clear All History</button></div>
+        <div class="panel">
+            <div style="margin-bottom:20px;text-align:right"><button class="btn-secondary" onclick="clearAllHistory()"><i class="fas fa-trash-alt"></i> Clear All History</button></div>
             <div id="historyList"></div>
         </div>
     </div>
@@ -111,16 +125,22 @@ const API_BASE = window.location.origin;
 let currentSystem = 'engine';
 let diagnosticHistory = [];
 
+// Load vehicles for dropdown
 async function loadVehiclesForSelector() {
-    const res = await fetch(`${API_BASE}/api/vehicles`);
-    const data = await res.json();
-    const select = document.getElementById('vehicleSelect');
-    select.innerHTML = '<option value="">-- Select a vehicle --</option>';
-    if (data.vehicles) {
-        data.vehicles.forEach(v => { select.innerHTML += `<option value="${v.id}">${v.make} ${v.model} (${v.year})</option>`; });
-    }
+    try {
+        const res = await fetch(`${API_BASE}/api/vehicles`);
+        const data = await res.json();
+        const select = document.getElementById('vehicleSelect');
+        select.innerHTML = '<option value="">-- Select a vehicle --</option>';
+        if (data.vehicles) {
+            data.vehicles.forEach(v => {
+                select.innerHTML += `<option value="${v.id}">${v.make} ${v.model} (${v.year}) - ${v.license_plate || 'no plate'}</option>`;
+            });
+        }
+    } catch(e) { console.log('Error loading vehicles'); }
 }
 
+// Switch tabs
 function switchTab(tabName) {
     document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
@@ -130,6 +150,7 @@ function switchTab(tabName) {
     if (tabName === 'history') loadHistory();
 }
 
+// Load diagnostic questions
 function loadQuestions() {
     if (currentSystem === 'engine') {
         document.getElementById('questionsPanel').innerHTML = `
@@ -155,53 +176,95 @@ function loadQuestions() {
     }
 }
 
+function cancelDiagnostic() {
+    document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and run a diagnostic</p></div>';
+}
+
+// Run diagnostic
 async function runDiagnostic() {
     const symptoms = {};
     document.querySelectorAll('#questionsPanel select').forEach(input => {
         symptoms[input.id.replace('q_', '')] = input.value;
     });
+    
     const vehicleId = document.getElementById('vehicleSelect').value;
     const resultsPanel = document.getElementById('resultsPanel');
     resultsPanel.innerHTML = '<div class="empty-state"><div style="width:40px;height:40px;border:3px solid #003153;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div><h4>Analyzing...</h4></div>';
     
-    const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ symptoms, vehicle_id: vehicleId ? parseInt(vehicleId) : null })
-    });
-    const result = await res.json();
-    
-    const severityColor = result.severity === 'high' ? '#f8d7da' : result.severity === 'medium' ? '#fff3cd' : '#d4edda';
-    
-    // Save to history
-    diagnosticHistory.unshift({ id: Date.now(), type: currentSystem, date: new Date().toLocaleString(), results: result.results, severity: result.severity });
-    localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-    
-    resultsPanel.innerHTML = `
-        <div style="padding:15px;border-radius:25px;background:${severityColor};margin-bottom:15px;"><strong>Severity:</strong> ${result.severity}</div>
-        <div style="padding:20px;background:#f0f2f5;border-radius:25px;"><p>${result.results}</p></div>
-        <div class="btn-group" style="margin-top:20px;"><button class="btn-primary" onclick="runDiagnostic()">Run Again</button><button class="btn-secondary" onclick="cancelDiagnostic()">Clear</button></div>
-    `;
-    loadStats();
-}
-
-function cancelDiagnostic() {
-    document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and run a diagnostic</p></div>';
-}
-
-async function loadVehicles() {
-    const res = await fetch(`${API_BASE}/api/vehicles`);
-    const data = await res.json();
-    const vehiclesList = document.getElementById('vehiclesList');
-    if (!data.vehicles || data.vehicles.length === 0) {
-        vehiclesList.innerHTML = '<div class="empty-state"><i class="fas fa-garage"></i><h4>No Vehicles</h4><p>Add your first vehicle</p></div>';
-    } else {
-        vehiclesList.innerHTML = data.vehicles.map(v => `
-            <div class="vehicle-item"><div><strong>${v.make} ${v.model} (${v.year})</strong><br><small>${v.license_plate || 'No plate'} | ${v.customer_name || 'Walk-in'}</small></div>
-            <button class="delete-btn" onclick="deleteVehicle(${v.id})"><i class="fas fa-trash-alt"></i></button></div>
-        `).join('');
+    try {
+        const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ symptoms, vehicle_id: vehicleId ? parseInt(vehicleId) : null })
+        });
+        const result = await res.json();
+        
+        const severityColor = result.severity === 'high' ? '#f8d7da' : result.severity === 'medium' ? '#fff3cd' : '#d4edda';
+        
+        // Save to localStorage history with full details
+        const historyItem = {
+            id: Date.now(),
+            type: currentSystem,
+            date: new Date().toLocaleString(),
+            results: result.results,
+            severity: result.severity,
+            fullResults: result.results,
+            tools: result.tools || [],
+            actionPlan: result.action_plan || []
+        };
+        diagnosticHistory.unshift(historyItem);
+        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+        
+        // Also save to database if vehicle selected
+        if (vehicleId && vehicleId !== "") {
+            try {
+                await fetch(`${API_BASE}/api/diagnostic/save`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        vehicle_id: parseInt(vehicleId),
+                        diagnostic_type: currentSystem,
+                        results: result.results,
+                        severity: result.severity
+                    })
+                });
+            } catch(e) { console.log("DB save skipped"); }
+        }
+        
+        resultsPanel.innerHTML = `
+            <div style="padding:15px;border-radius:25px;background:${severityColor};margin-bottom:15px;"><strong>Severity:</strong> ${result.severity}</div>
+            <div style="padding:20px;background:#f0f2f5;border-radius:25px;"><p>${result.results}</p></div>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="btn-primary" onclick="runDiagnostic()"><i class="fas fa-redo-alt"></i> Run Again</button>
+                <button class="btn-secondary" onclick="cancelDiagnostic()"><i class="fas fa-trash-alt"></i> Clear</button>
+            </div>
+        `;
+        loadStats();
+    } catch(e) {
+        resultsPanel.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h4>Error</h4><p>Please try again</p></div>';
     }
 }
 
+// Load vehicles list
+async function loadVehicles() {
+    try {
+        const res = await fetch(`${API_BASE}/api/vehicles`);
+        const data = await res.json();
+        const vehiclesList = document.getElementById('vehiclesList');
+        if (!data.vehicles || data.vehicles.length === 0) {
+            vehiclesList.innerHTML = '<div class="empty-state"><i class="fas fa-garage"></i><h4>No Vehicles</h4><p>Add your first vehicle</p></div>';
+        } else {
+            vehiclesList.innerHTML = data.vehicles.map(v => `
+                <div class="vehicle-item">
+                    <div><strong>${v.make} ${v.model} (${v.year})</strong><br><small>${v.license_plate || 'No plate'} | ${v.customer_name || 'Walk-in'}</small></div>
+                    <button class="delete-btn" onclick="deleteVehicle(${v.id})"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+        }
+    } catch(e) { console.log('Error loading vehicles'); }
+}
+
+// Delete vehicle
 async function deleteVehicle(id) {
     if (confirm('Remove this vehicle?')) {
         await fetch(`${API_BASE}/api/vehicle/${id}`, { method: 'DELETE' });
@@ -211,19 +274,57 @@ async function deleteVehicle(id) {
     }
 }
 
+// Add vehicle modal
 function showAddVehicleModal() {
-    const make = prompt('Enter vehicle make:');
+    const make = prompt('Enter vehicle make (Toyota, BMW, etc.):');
     if (!make) return;
     const model = prompt('Enter vehicle model:');
+    if (!model) return;
     const year = prompt('Enter year:');
     const license = prompt('License plate (optional):');
     const customer = prompt('Customer name (optional):');
+    
     fetch(`${API_BASE}/api/vehicle/add`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ make, model, year: parseInt(year), license_plate: license || '', customer_name: customer || 'Walk-in Customer' })
-    }).then(() => { loadVehicles(); loadVehiclesForSelector(); loadStats(); });
+    }).then(() => { loadVehicles(); loadVehiclesForSelector(); loadStats(); }).catch(e => alert('Error adding vehicle'));
 }
 
+// Expand/collapse history item
+function toggleHistoryItem(id) {
+    const fullDiv = document.getElementById(`history-full-${id}`);
+    const icon = document.getElementById(`expand-icon-${id}`);
+    if (fullDiv.classList.contains('show')) {
+        fullDiv.classList.remove('show');
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        fullDiv.classList.add('show');
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Delete single history item
+function deleteHistoryItem(id) {
+    if (confirm('Delete this diagnostic record?')) {
+        diagnosticHistory = diagnosticHistory.filter(item => item.id !== id);
+        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+        loadHistory();
+        loadStats();
+    }
+}
+
+// Clear all history
+function clearAllHistory() {
+    if (confirm('Delete ALL diagnostic history? This cannot be undone.')) {
+        diagnosticHistory = [];
+        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+        loadHistory();
+        loadStats();
+    }
+}
+
+// Load history with expandable items
 function loadHistory() {
     const saved = localStorage.getItem('diagnosticHistory');
     if (saved) diagnosticHistory = JSON.parse(saved);
@@ -232,44 +333,56 @@ function loadHistory() {
         historyDiv.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h4>No History</h4><p>Run diagnostics to see them here</p></div>';
     } else {
         historyDiv.innerHTML = diagnosticHistory.map(h => `
-            <div style="padding:15px;margin-bottom:10px;background:#f0f2f5;border-radius:20px;">
-                <div><strong>${h.type.toUpperCase()}</strong> - ${h.date}</div>
-                <p>${h.results.substring(0,100)}...</p>
-                <button onclick="deleteHistoryItem(${h.id})" style="background:none;border:none;color:#dc2626;margin-top:8px;">Delete</button>
+            <div class="history-item" onclick="toggleHistoryItem(${h.id})">
+                <div class="history-header">
+                    <div class="history-title">
+                        <i class="fas ${h.type === 'engine' ? 'fa-car' : h.type === 'battery' ? 'fa-car-battery' : 'fa-bolt'}"></i>
+                        <strong>${h.type.toUpperCase()}</strong>
+                        <i class="fas fa-chevron-down expand-icon" id="expand-icon-${h.id}"></i>
+                    </div>
+                    <div class="history-date"><i class="far fa-calendar-alt"></i> ${h.date}</div>
+                </div>
+                <div class="history-preview">${h.results.substring(0, 100)}...</div>
+                <div class="history-full" id="history-full-${h.id}">
+                    <p style="margin-bottom: 10px;">${h.fullResults || h.results}</p>
+                    ${h.tools && h.tools.length ? `<p><strong>Tools:</strong> ${h.tools.join(', ')}</p>` : ''}
+                    ${h.actionPlan && h.actionPlan.length ? `<p><strong>Action Plan:</strong> ${h.actionPlan.slice(0, 3).join(', ')}</p>` : ''}
+                    <div class="history-actions">
+                        <button class="history-delete" onclick="event.stopPropagation(); deleteHistoryItem(${h.id})">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                </div>
             </div>
         `).join('');
     }
 }
 
-function deleteHistoryItem(id) {
-    diagnosticHistory = diagnosticHistory.filter(item => item.id !== id);
-    localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-    loadHistory();
-    loadStats();
-}
-
-function clearAllHistory() {
-    if (confirm('Delete all history?')) {
-        diagnosticHistory = [];
-        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-        loadHistory();
-        loadStats();
-    }
-}
-
+// Load statistics
 async function loadStats() {
-    const res = await fetch(`${API_BASE}/api/statistics`);
-    const stats = await res.json();
-    document.getElementById('statCustomers').textContent = stats.total_customers || 0;
-    document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
-    document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
-    document.getElementById('statRevenue').textContent = `MK ${stats.total_revenue || 0}`;
+    try {
+        const res = await fetch(`${API_BASE}/api/statistics`);
+        const stats = await res.json();
+        document.getElementById('statCustomers').textContent = stats.total_customers || 0;
+        document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
+        document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
+        document.getElementById('statRevenue').textContent = `MK ${stats.total_revenue || 0}`;
+    } catch(e) { console.log('Stats error'); }
 }
 
-async function logout() { window.location.href = '/login.html'; }
+// Logout
+async function logout() {
+    window.location.href = '/login.html';
+}
 
-document.getElementById('systemSelect').addEventListener('change', (e) => { currentSystem = e.target.value; loadQuestions(); });
+// Event listener for system select
+document.getElementById('systemSelect').addEventListener('change', (e) => {
+    currentSystem = e.target.value;
+    loadQuestions();
+    cancelDiagnostic();
+});
 
+// Initialize
 loadVehiclesForSelector();
 loadQuestions();
 loadStats();
