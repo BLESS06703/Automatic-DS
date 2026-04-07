@@ -236,3 +236,30 @@ def save_diagnostic():
     conn.close()
     
     return jsonify({'success': True, 'message': 'Diagnostic saved'})
+
+# ========== CUSTOMER ENDPOINTS ==========
+@app.route('/api/customer/add', methods=['POST'])
+def add_customer():
+    data = request.json
+    name = data.get('name')
+    phone = data.get('phone', '')
+    email = data.get('email', '')
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO customers (name, phone, email)
+        VALUES (?, ?, ?)
+    ''', (name, phone, email))
+    conn.commit()
+    customer_id = cursor.lastrowid
+    conn.close()
+    
+    return jsonify({'success': True, 'customer_id': customer_id})
+
+@app.route('/api/customers', methods=['GET'])
+def get_customers():
+    conn = get_db()
+    customers = conn.execute('SELECT * FROM customers').fetchall()
+    conn.close()
+    return jsonify({'customers': [dict(c) for c in customers]})
