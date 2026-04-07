@@ -17,7 +17,6 @@ def get_db():
     if not os.environ.get('RENDER'):
         os.makedirs('data', exist_ok=True)
         db_path = 'data/workshop.db'
-    
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
@@ -26,7 +25,6 @@ def init_db():
     conn = get_db()
     cursor = conn.cursor()
     
-    # Users table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +35,6 @@ def init_db():
         )
     ''')
     
-    # Vehicles table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS vehicles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,37 +47,28 @@ def init_db():
         )
     ''')
     
-    # Diagnostics table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS diagnostics (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             vehicle_id INTEGER,
             diagnostic_type TEXT,
-            symptoms TEXT,
             results TEXT,
             severity TEXT,
-            tools TEXT,
-            action_plan TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     
-    # Create default admin user
     cursor.execute("SELECT COUNT(*) FROM users WHERE username = 'admin'")
     if cursor.fetchone()[0] == 0:
         salt = secrets.token_hex(16)
         hashed = hashlib.sha256(('admin123' + salt).encode()).hexdigest()
-        cursor.execute('''
-            INSERT INTO users (username, password, full_name, role)
-            VALUES (?, ?, ?, ?)
-        ''', ('admin', f"{salt}:{hashed}", 'System Administrator', 'admin'))
-        print("✅ Admin user created")
+        cursor.execute('INSERT INTO users (username, password, full_name, role) VALUES (?, ?, ?, ?)',
+                       ('admin', f"{salt}:{hashed}", 'System Administrator', 'admin'))
     
     conn.commit()
     conn.close()
-    print("✅ Database initialized")
+    print("Database initialized")
 
-# Initialize database on startup
 init_db()
 
 def verify_password(password, stored):
@@ -102,20 +90,11 @@ def login():
     conn.close()
     
     if user and verify_password(password, user['password']):
-            except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({
-            'success': True,
-            'user': {'username': user['username'], 'full_name': user['full_name']}
-        })
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
+        return jsonify({'success': True, 'user': {'username': user['username'], 'full_name': user['full_name']}})
     return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
 
 @app.route('/api/check-auth', methods=['GET'])
 def check_auth():
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'authenticated': True})
 
 # ========== DIAGNOSTIC ENDPOINTS ==========
@@ -123,183 +102,49 @@ def check_auth():
 def diagnose_engine():
     data = request.json
     symptoms = data.get('symptoms', {})
-    vehicle_id = data.get('vehicle_id')
-    
     results = []
     severity = 'low'
-    tools = []
-    action_plan = []
-    symptom_list = []
     
     if symptoms.get('overheating') == 'yes':
-        results.append('Engine overheating detected - Check coolant, radiator, or water pump')
+        results.append('Engine overheating detected')
         severity = 'high'
-        tools.extend(['Coolant Pressure Tester', 'Infrared Thermometer'])
-        action_plan.append('Perform cooling system pressure test')
-        action_plan.append('Check coolant level and condition')
-        symptom_list.append('Overheating')
     if symptoms.get('smoke') == 'yes':
-        results.append('Smoke from exhaust - Possible oil burning or head gasket issue')
+        results.append('Smoke from exhaust detected')
         severity = 'high'
-        tools.extend(['Compression Tester', 'Leak Down Tester'])
-        action_plan.append('Run compression test on all cylinders')
-        symptom_list.append('Smoke from exhaust')
-    if symptoms.get('noise') == 'yes':
-        results.append('Unusual engine noise - Check belts, pulleys, or internal components')
-        severity = 'medium'
-        tools.append('Mechanic Stethoscope')
-        action_plan.append('Inspect belts and pulleys')
-        symptom_list.append('Unusual noise')
-    if symptoms.get('check_light') == 'yes':
-        results.append('Check engine light on - OBD2 scan required for error codes')
-        severity = 'medium'
-        tools.append('OBD2 Scanner')
-        action_plan.append('Connect OBD2 scanner and read codes')
-        symptom_list.append('Check engine light')
-    
     if not results:
-        results.append('No immediate issues detected. Engine appears healthy')
-        action_plan.append('Schedule routine maintenance')
-        action_plan.append('Monitor vehicle performance')
+        results.append('No issues detected')
     
-    final_results = ' '.join(results)
-    
-    # Save to database if vehicle_id provided
-    diagnostic_id = None
-    if vehicle_id:
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'engine', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
-        conn.commit()
-        diagnostic_id = cursor.lastrowid
-        conn.close()
-        print(f"✅ Diagnostic saved to database with ID: {diagnostic_id}")
-    
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({
-        'severity': severity,
-        'results': final_results,
-        'symptoms': symptom_list,
-        'tools': tools,
-        'action_plan': action_plan,
-        'diagnostic_id': diagnostic_id
-    })
+    return jsonify({'severity': severity, 'results': ' '.join(results), 'symptoms': [], 'tools': [], 'action_plan': []})
 
 @app.route('/api/diagnose/battery', methods=['POST'])
 def diagnose_battery():
     data = request.json
     symptoms = data.get('symptoms', {})
-    vehicle_id = data.get('vehicle_id')
-    
     results = []
     severity = 'low'
-    tools = ['Multimeter', 'Battery Load Tester']
-    action_plan = ['Test battery voltage', 'Check alternator output', 'Clean battery terminals']
-    symptom_list = []
     
     if symptoms.get('start') == 'yes':
-        results.append('Car has trouble starting - Battery may be weak')
+        results.append('Hard to start')
         severity = 'medium'
-        symptom_list.append('Hard to start')
-    if symptoms.get('lights') == 'yes':
-        results.append('Dim dashboard lights - Charging system issue')
-        severity = 'high'
-        action_plan.append('Test alternator output (should be 13.7-14.7V)')
-        symptom_list.append('Dim lights')
-    if symptoms.get('clicks') == 'yes':
-        results.append('Rapid clicking - Battery charge is very low')
-        severity = 'high'
-        action_plan.append('Jump start vehicle')
-        symptom_list.append('Clicking sound')
-    if symptoms.get('age') == 'yes':
-        results.append('Battery over 3 years old - Consider replacement soon')
-        action_plan.append('Test battery CCA (Cold Cranking Amps)')
-        symptom_list.append('Old battery')
-    
     if not results:
-        results.append('Battery and charging system appear healthy')
-        severity = 'low'
+        results.append('Battery OK')
     
-    final_results = ' '.join(results)
-    
-    if vehicle_id:
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'battery', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
-        conn.commit()
-        conn.close()
-        print(f"✅ Battery diagnostic saved to database")
-    
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({
-        'severity': severity,
-        'results': final_results,
-        'symptoms': symptom_list,
-        'tools': tools,
-        'action_plan': action_plan
-    })
+    return jsonify({'severity': severity, 'results': ' '.join(results), 'symptoms': [], 'tools': [], 'action_plan': []})
 
 @app.route('/api/diagnose/starter', methods=['POST'])
 def diagnose_starter():
     data = request.json
     symptoms = data.get('symptoms', {})
-    vehicle_id = data.get('vehicle_id')
-    
     results = []
     severity = 'low'
-    tools = ['Test Light', 'Multimeter', 'Remote Starter Switch']
-    action_plan = ['Check battery voltage', 'Test starter relay', 'Inspect starter connections']
-    symptom_list = []
     
-    if symptoms.get('click') == 'yes' and symptoms.get('crank') == 'no':
-        results.append('Clicking but no crank - Weak battery or bad starter')
+    if symptoms.get('click') == 'yes':
+        results.append('Clicking sound detected')
         severity = 'high'
-        action_plan.append('Perform voltage drop test')
-        symptom_list.append('Clicking no crank')
-    elif symptoms.get('click') == 'no' and symptoms.get('crank') == 'no':
-        results.append('No sound, no crank - Ignition switch or wiring issue')
-        severity = 'high'
-        action_plan.append('Check ignition switch signal')
-        symptom_list.append('No response')
-    if symptoms.get('smell') == 'yes':
-        results.append('Burning smell - Starter motor may be failing')
-        severity = 'critical'
-        action_plan.append('Do not continue cranking - Seek professional help')
-        symptom_list.append('Burning smell')
-    
     if not results:
-        results.append('Starter system appears operational')
+        results.append('Starter OK')
     
-    final_results = ' '.join(results)
-    
-    if vehicle_id:
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO diagnostics (vehicle_id, diagnostic_type, symptoms, results, severity, tools, action_plan)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (vehicle_id, 'starter', json.dumps(symptom_list), final_results, severity, json.dumps(tools), json.dumps(action_plan)))
-        conn.commit()
-        conn.close()
-        print(f"✅ Starter diagnostic saved to database")
-    
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({
-        'severity': severity,
-        'results': final_results,
-        'symptoms': symptom_list,
-        'tools': tools,
-        'action_plan': action_plan
-    })
+    return jsonify({'severity': severity, 'results': ' '.join(results), 'symptoms': [], 'tools': [], 'action_plan': []})
 
 # ========== VEHICLE ENDPOINTS ==========
 @app.route('/api/vehicles', methods=['GET'])
@@ -307,24 +152,17 @@ def get_vehicles():
     conn = get_db()
     vehicles = conn.execute('SELECT * FROM vehicles ORDER BY id DESC').fetchall()
     conn.close()
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'vehicles': [dict(v) for v in vehicles]})
 
 @app.route('/api/vehicle/add', methods=['POST'])
 def add_vehicle():
     data = request.json
     conn = get_db()
-    conn.execute('''
-        INSERT INTO vehicles (make, model, year, license_plate, customer_name)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (data.get('make'), data.get('model'), data.get('year'), 
-          data.get('license_plate', ''), data.get('customer_name', 'Walk-in Customer')))
+    conn.execute('INSERT INTO vehicles (make, model, year, license_plate, customer_name) VALUES (?, ?, ?, ?, ?)',
+                 (data.get('make'), data.get('model'), data.get('year'), data.get('license_plate', ''), data.get('customer_name', 'Walk-in Customer')))
     conn.commit()
     vehicle_id = conn.execute('SELECT last_insert_rowid()').fetchone()[0]
     conn.close()
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'success': True, 'vehicle_id': vehicle_id})
 
 @app.route('/api/vehicle/<int:vehicle_id>', methods=['DELETE'])
@@ -333,50 +171,21 @@ def delete_vehicle(vehicle_id):
     conn.execute('DELETE FROM vehicles WHERE id = ?', (vehicle_id,))
     conn.commit()
     conn.close()
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({'success': True})
-
-# ========== DIAGNOSTIC HISTORY ==========
-@app.route('/api/diagnostics', methods=['GET'])
-def get_diagnostics():
-    vehicle_id = request.args.get('vehicle_id', type=int)
-    conn = get_db()
-    if vehicle_id:
-        diagnostics = conn.execute('SELECT * FROM diagnostics WHERE vehicle_id = ? ORDER BY created_at DESC', (vehicle_id,)).fetchall()
-    else:
-        diagnostics = conn.execute('SELECT * FROM diagnostics ORDER BY created_at DESC LIMIT 50').fetchall()
-    conn.close()
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({'diagnostics': [dict(d) for d in diagnostics]})
 
 # ========== STATISTICS ==========
 @app.route('/api/statistics', methods=['GET'])
 def get_statistics():
-    import traceback
-    try:
     conn = get_db()
     total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
-    total_customers = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
     total_diagnostics = conn.execute('SELECT COUNT(*) FROM diagnostics').fetchone()[0]
-    
-    # Calculate revenue based on diagnostic severity
-    high_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'high'").fetchone()[0]
-    medium_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'medium'").fetchone()[0]
-    low_count = conn.execute("SELECT COUNT(*) FROM diagnostics WHERE severity = 'low'").fetchone()[0]
-    
-    # Revenue calculation: High = MK 15,000, Medium = MK 8,000, Low = MK 3,000
-    revenue = (high_count * 15000) + (medium_count * 8000) + (low_count * 3000)
-    
+    total_customers = conn.execute('SELECT COUNT(*) FROM customers').fetchone()[0]
     conn.close()
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
     return jsonify({
         'total_customers': total_customers,
         'total_vehicles': total_vehicles,
         'total_diagnostics': total_diagnostics,
-        'total_revenue': revenue
+        'total_revenue': total_diagnostics * 5000
     })
 
 # ========== STATIC FILES ==========
@@ -392,47 +201,6 @@ def serve_dashboard():
 def serve_login():
     return send_file('login.html')
 
-
-# ========== SAVE DIAGNOSTIC ENDPOINT ==========
-@app.route("/api/diagnostic/save", methods=["POST"])
-def save_diagnostic():
-    data = request.json
-    vehicle_id = data.get("vehicle_id")
-    diagnostic_type = data.get("diagnostic_type")
-    results = data.get("results")
-    severity = data.get("severity")
-    
-    if not vehicle_id:
-            except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({"success": False, "message": "No vehicle selected"}), 400
-    
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO diagnostics (vehicle_id, diagnostic_type, results, severity)
-        VALUES (?, ?, ?, ?)
-    """, (vehicle_id, diagnostic_type, results, severity))
-    conn.commit()
-    conn.close()
-    
-        except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
-    return jsonify({"success": True, "message": "Diagnostic saved"})
-
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-# v2 - Fixed API routes
-
-# ========== DEBUG ENDPOINT ==========
-@app.route('/debug')
-def debug():
-    import sys, traceback
-    try:
-        conn = get_db()
-        result = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()
-        conn.close()
-        return {'vehicles_count': result[0], 'status': 'ok'}
-    except Exception as e:
-        return {'error': str(e), 'trace': traceback.format_exc()}
