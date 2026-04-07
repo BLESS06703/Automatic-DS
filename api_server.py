@@ -177,9 +177,18 @@ def delete_vehicle(vehicle_id):
 @app.route('/api/statistics', methods=['GET'])
 def get_statistics():
     conn = get_db()
-    total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
-    total_diagnostics = conn.execute('SELECT COUNT(*) FROM diagnostics').fetchone()[0]
-    total_customers = conn.execute('SELECT COUNT(*) FROM customers').fetchone()[0]
+    try:
+        total_vehicles = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()[0]
+    except:
+        total_vehicles = 0
+    try:
+        total_diagnostics = conn.execute('SELECT COUNT(*) FROM diagnostics').fetchone()[0]
+    except:
+        total_diagnostics = 0
+    try:
+        total_customers = conn.execute('SELECT COUNT(*) FROM customers').fetchone()[0]
+    except:
+        total_customers = 0
     conn.close()
     return jsonify({
         'total_customers': total_customers,
