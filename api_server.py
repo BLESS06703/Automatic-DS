@@ -424,3 +424,15 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
 # v2 - Fixed API routes
+
+# ========== DEBUG ENDPOINT ==========
+@app.route('/debug')
+def debug():
+    import sys, traceback
+    try:
+        conn = get_db()
+        result = conn.execute('SELECT COUNT(*) FROM vehicles').fetchone()
+        conn.close()
+        return {'vehicles_count': result[0], 'status': 'ok'}
+    except Exception as e:
+        return {'error': str(e), 'trace': traceback.format_exc()}
