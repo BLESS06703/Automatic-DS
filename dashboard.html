@@ -7,289 +7,100 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #e0e5ec;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 20px;
-        }
-        .neumorph {
-            background: #e0e5ec;
-            box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1);
-            border-radius: 40px;
-        }
+        body { background: #e0e5ec; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; }
+        .neumorph { background: #e0e5ec; box-shadow: -10px -10px 20px rgba(255,255,255,0.8), 10px 10px 20px rgba(0,0,0,0.1); border-radius: 40px; }
         .container { max-width: 1200px; margin: 0 auto; }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; margin-bottom: 30px; }
         .logo h2 { font-size: 24px; color: #003153; }
         .logo h2 i { margin-right: 10px; }
         .logo p { color: #7e8c9e; font-size: 12px; margin-left: 34px; }
-        .logout-btn {
-            padding: 10px 25px;
-            border-radius: 40px;
-            background: #e0e5ec;
-            border: none;
-            cursor: pointer;
-            color: #dc2626;
-            font-weight: 500;
-        }
-        .logout-btn i { margin-right: 6px; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            padding: 25px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-5px); }
+        .logout-btn { padding: 10px 25px; border-radius: 40px; background: #e0e5ec; border: none; cursor: pointer; color: #dc2626; font-weight: 500; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { padding: 25px; text-align: center; cursor: pointer; transition: transform 0.2s; }
         .stat-card i { font-size: 32px; color: #003153; margin-bottom: 10px; }
         .stat-value { font-size: 32px; font-weight: 700; color: #003153; }
-        .stat-label { color: #7e8c9e; font-size: 11px; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            padding: 8px;
-            background: #e0e5ec;
-            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
-            border-radius: 60px;
-        }
-        .tab {
-            flex: 1;
-            padding: 14px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-radius: 50px;
-            color: #7e8c9e;
-            font-weight: 500;
-        }
+        .stat-label { color: #7e8c9e; font-size: 11px; text-transform: uppercase; margin-top: 5px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; padding: 8px; background: #e0e5ec; box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1); border-radius: 60px; }
+        .tab { flex: 1; padding: 14px; text-align: center; border: none; background: transparent; cursor: pointer; border-radius: 50px; color: #7e8c9e; font-weight: 500; }
         .tab i { margin-right: 8px; }
-        .tab.active {
-            background: #e0e5ec;
-            box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1);
-            color: #003153;
-        }
+        .tab.active { background: #e0e5ec; box-shadow: -5px -5px 10px rgba(255,255,255,0.8), 5px 5px 10px rgba(0,0,0,0.1); color: #003153; }
         .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .panel { padding: 30px; }
-        .panel h3 { color: #003153; margin-bottom: 20px; font-size: 18px; }
-        .panel h3 i { margin-right: 10px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 12px; color: #7e8c9e; margin-bottom: 8px; letter-spacing: 1px; }
-        select, .question-select {
-            width: 100%;
-            padding: 14px 18px;
-            border: none;
-            background: #e0e5ec;
-            box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1);
-            border-radius: 30px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .vehicle-selector {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f0f2f5;
-            border-radius: 20px;
-        }
-        .vehicle-selector label { display: block; font-size: 12px; color: #7e8c9e; margin-bottom: 8px; }
+        .panel h3 { color: #003153; margin-bottom: 20px; }
+        select, .question-select { width: 100%; padding: 14px 18px; border: none; background: #e0e5ec; box-shadow: inset -5px -5px 10px rgba(255,255,255,0.8), inset 5px 5px 10px rgba(0,0,0,0.1); border-radius: 30px; }
+        .vehicle-selector { margin-bottom: 20px; padding: 15px; background: #f0f2f5; border-radius: 20px; }
         .question-item { margin-bottom: 15px; }
-        .question-item label { display: block; font-size: 13px; color: #4a5568; margin-bottom: 6px; }
         .btn-group { display: flex; gap: 15px; margin-top: 25px; }
-        button {
-            flex: 1;
-            padding: 14px;
-            border-radius: 40px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
+        .btn-primary, .btn-secondary { flex: 1; padding: 14px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; }
         .btn-primary { background: #e0e5ec; color: #003153; }
-        .btn-primary i { margin-right: 6px; }
         .btn-secondary { background: #e0e5ec; color: #7e8c9e; }
-        .btn-secondary i { margin-right: 6px; }
         .empty-state { text-align: center; padding: 50px 30px; }
-        .empty-state i { font-size: 60px; color: #003153; opacity: 0.4; margin-bottom: 20px; }
-        .empty-state h4 { color: #2c3e50; margin-bottom: 8px; }
-        .empty-state p { color: #7e8c9e; font-size: 14px; margin-bottom: 20px; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .vehicle-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            background: #f0f2f5;
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .vehicle-info strong { color: #003153; }
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #dc2626;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 5px 10px;
-        }
-        .history-item {
-            padding: 15px;
-            margin-bottom: 12px;
-            background: #f0f2f5;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .history-item:hover { background: #e8eaf0; }
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .history-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .history-title strong { color: #003153; }
-        .history-date { color: #7e8c9e; font-size: 11px; }
-        .history-preview { font-size: 13px; color: #4a5568; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .history-full { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #d1d5db; font-size: 13px; line-height: 1.5; color: #374151; }
-        .history-full.show { display: block; }
-        .history-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .history-delete {
-            background: none;
-            border: none;
-            color: #dc2626;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 20px;
-            width: auto;
-            flex: 0;
-        }
-        .history-delete:hover { background: #fee2e2; }
-        .expand-icon { font-size: 12px; color: #003153; transition: transform 0.2s; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .content-grid { grid-template-columns: 1fr; }
-            .history-header { flex-direction: column; align-items: flex-start; }
-        }
+        .vehicle-item { padding: 15px; margin-bottom: 10px; background: #f0f2f5; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .delete-btn { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 18px; }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .content-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header neumorph">
-        <div class="logo">
-            <h2><i class="fas fa-car"></i> Bless Auto Care</h2>
-            <p>Professional Diagnostic System</p>
-        </div>
+        <div class="logo"><h2><i class="fas fa-car"></i> Bless Auto Care</h2><p>Professional Diagnostic System</p></div>
         <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
 
-    <!-- Statistics Dashboard -->
     <div class="stats-grid">
-        <div class="stat-card neumorph">
-            <i class="fas fa-users"></i>
-            <div class="stat-value" id="statCustomers">0</div>
-            <div class="stat-label">Customers</div>
-        </div>
-        <div class="stat-card neumorph">
-            <i class="fas fa-car"></i>
-            <div class="stat-value" id="statVehicles">0</div>
-            <div class="stat-label">Vehicles</div>
-        </div>
-        <div class="stat-card neumorph">
-            <i class="fas fa-stethoscope"></i>
-            <div class="stat-value" id="statDiagnostics">0</div>
-            <div class="stat-label">Diagnostics</div>
-        </div>
-        <div class="stat-card neumorph">
-            <i class="fas fa-chart-line"></i>
-            <div class="stat-value" id="statRevenue">MK 0</div>
-            <div class="stat-label">Revenue</div>
-        </div>
+        <div class="stat-card neumorph"><i class="fas fa-users"></i><div class="stat-value" id="statCustomers">0</div><div class="stat-label">Customers</div></div>
+        <div class="stat-card neumorph"><i class="fas fa-car"></i><div class="stat-value" id="statVehicles">0</div><div class="stat-label">Vehicles</div></div>
+        <div class="stat-card neumorph"><i class="fas fa-stethoscope"></i><div class="stat-value" id="statDiagnostics">0</div><div class="stat-label">Diagnostics</div></div>
+        <div class="stat-card neumorph"><i class="fas fa-chart-line"></i><div class="stat-value" id="statRevenue">MK 0</div><div class="stat-label">Revenue</div></div>
     </div>
 
-    <!-- Navigation Tabs -->
     <div class="tabs">
         <button class="tab active" onclick="switchTab('diagnostic')"><i class="fas fa-stethoscope"></i> Diagnostic</button>
         <button class="tab" onclick="switchTab('vehicles')"><i class="fas fa-garage"></i> Vehicles</button>
         <button class="tab" onclick="switchTab('history')"><i class="fas fa-history"></i> History</button>
     </div>
 
-    <!-- Diagnostic Tab -->
     <div id="diagnosticTab" class="tab-content active">
         <div class="content-grid">
             <div class="panel neumorph">
                 <h3><i class="fas fa-sliders-h"></i> Diagnostic Controls</h3>
                 <div class="vehicle-selector">
                     <label><i class="fas fa-car"></i> SELECT VEHICLE</label>
-                    <select id="vehicleSelect">
-                        <option value="">-- Select a vehicle (optional) --</option>
-                    </select>
+                    <select id="vehicleSelect"><option value="">-- Select a vehicle --</option></select>
                 </div>
                 <div class="form-group">
                     <label>SELECT SYSTEM</label>
                     <select id="systemSelect">
-                        <option value="engine"><i class="fas fa-car"></i> Engine Diagnostic</option>
-                        <option value="battery"><i class="fas fa-car-battery"></i> Battery & Charging</option>
-                        <option value="starter"><i class="fas fa-bolt"></i> Starter System</option>
+                        <option value="engine">Engine Diagnostic</option>
+                        <option value="battery">Battery & Charging</option>
+                        <option value="starter">Starter System</option>
                     </select>
                 </div>
                 <div id="questionsPanel"></div>
                 <div class="btn-group">
-                    <button class="btn-primary" onclick="runDiagnostic()"><i class="fas fa-play"></i> Start Diagnosis</button>
-                    <button class="btn-secondary" onclick="cancelDiagnostic()"><i class="fas fa-ban"></i> Cancel</button>
+                    <button class="btn-primary" onclick="runDiagnostic()">Start Diagnosis</button>
+                    <button class="btn-secondary" onclick="cancelDiagnostic()">Cancel</button>
                 </div>
             </div>
             <div class="panel neumorph">
                 <h3><i class="fas fa-clipboard-list"></i> Analysis Results</h3>
-                <div id="resultsPanel">
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h4>Ready to Diagnose</h4>
-                        <p>Select a vehicle and system, then run a diagnostic</p>
-                    </div>
-                </div>
+                <div id="resultsPanel"><div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and run a diagnostic</p></div></div>
             </div>
         </div>
     </div>
 
-    <!-- Vehicles Tab -->
     <div id="vehiclesTab" class="tab-content">
         <div class="panel neumorph">
-            <div style="margin-bottom: 20px; text-align: right;">
-                <button class="btn-primary" onclick="showAddVehicleModal()" style="padding: 10px 20px; width: auto;">
-                    <i class="fas fa-plus"></i> Add Vehicle
-                </button>
-            </div>
+            <div style="margin-bottom:20px;text-align:right"><button class="btn-primary" onclick="showAddVehicleModal()"><i class="fas fa-plus"></i> Add Vehicle</button></div>
             <div id="vehiclesList"></div>
         </div>
     </div>
 
-    <!-- History Tab -->
     <div id="historyTab" class="tab-content">
         <div class="panel neumorph">
-            <div style="margin-bottom: 20px; text-align: right;">
-                <button class="btn-secondary" onclick="clearAllHistory()" style="padding: 8px 16px; width: auto;">
-                    <i class="fas fa-trash-alt"></i> Clear All History
-                </button>
-            </div>
+            <div style="margin-bottom:20px;text-align:right"><button class="btn-secondary" onclick="clearAllHistory()">Clear All History</button></div>
             <div id="historyList"></div>
         </div>
     </div>
@@ -299,284 +110,118 @@
 const API_BASE = window.location.origin;
 let currentSystem = 'engine';
 let diagnosticHistory = [];
-let vehicles = [];
 
-// ========== HELPER FUNCTIONS ==========
 async function loadVehiclesForSelector() {
-    try {
-        const res = await fetch(`${API_BASE}/api/vehicles`);
-        const data = await res.json();
-        vehicles = data.vehicles || [];
-        const select = document.getElementById('vehicleSelect');
-        select.innerHTML = '<option value="">-- Select a vehicle (optional) --</option>';
-        vehicles.forEach(v => {
-            select.innerHTML += `<option value="${v.id}">${v.make} ${v.model} (${v.year}) - ${v.license_plate || 'no plate'}</option>`;
-        });
-    } catch(e) { console.log('Error loading vehicles'); }
+    const res = await fetch(`${API_BASE}/api/vehicles`);
+    const data = await res.json();
+    const select = document.getElementById('vehicleSelect');
+    select.innerHTML = '<option value="">-- Select a vehicle --</option>';
+    if (data.vehicles) {
+        data.vehicles.forEach(v => { select.innerHTML += `<option value="${v.id}">${v.make} ${v.model} (${v.year})</option>`; });
+    }
 }
 
 function switchTab(tabName) {
     document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.getElementById(`${tabName}Tab`).classList.add('active');
     if (tabName === 'vehicles') loadVehicles();
     if (tabName === 'history') loadHistory();
 }
 
-// ========== DIAGNOSTIC QUESTIONS ==========
 function loadQuestions() {
     if (currentSystem === 'engine') {
         document.getElementById('questionsPanel').innerHTML = `
-            <div class="question-item"><label>Engine overheating?</label><select id="q_overheating" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Smoke from exhaust?</label><select id="q_smoke" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Unusual engine noise?</label><select id="q_noise" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Check engine light on?</label><select id="q_check_light" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Engine overheating?</label><select id="q_overheating"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Smoke from exhaust?</label><select id="q_smoke"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Unusual engine noise?</label><select id="q_noise"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Check engine light on?</label><select id="q_check_light"><option value="no">No</option><option value="yes">Yes</option></select></div>
         `;
     } else if (currentSystem === 'battery') {
         document.getElementById('questionsPanel').innerHTML = `
-            <div class="question-item"><label>Car fails to start?</label><select id="q_start" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Dashboard lights dim?</label><select id="q_lights" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Rapid clicking sound?</label><select id="q_clicks" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Battery over 3 years old?</label><select id="q_age" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Car fails to start?</label><select id="q_start"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Dashboard lights dim?</label><select id="q_lights"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Rapid clicking?</label><select id="q_clicks"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Battery over 3 years?</label><select id="q_age"><option value="no">No</option><option value="yes">Yes</option></select></div>
         `;
     } else if (currentSystem === 'starter') {
         document.getElementById('questionsPanel').innerHTML = `
-            <div class="question-item"><label>Clicking when turning key?</label><select id="q_click" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Engine cranks?</label><select id="q_crank" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
-            <div class="question-item"><label>Headlights work?</label><select id="q_lights" class="question-select"><option value="yes">Yes</option><option value="no">No</option></select></div>
-            <div class="question-item"><label>Burning smell?</label><select id="q_smell" class="question-select"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Clicking when turning key?</label><select id="q_click"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Engine cranks?</label><select id="q_crank"><option value="no">No</option><option value="yes">Yes</option></select></div>
+            <div class="question-item"><label>Headlights work?</label><select id="q_lights"><option value="yes">Yes</option><option value="no">No</option></select></div>
+            <div class="question-item"><label>Burning smell?</label><select id="q_smell"><option value="no">No</option><option value="yes">Yes</option></select></div>
         `;
     }
 }
 
-function cancelDiagnostic() {
-    document.getElementById('resultsPanel').innerHTML = `
-        <div class="empty-state">
-            <i class="fas fa-search"></i>
-            <h4>Ready to Diagnose</h4>
-            <p>Select a vehicle and system, then run a diagnostic</p>
-        </div>
-    `;
-}
-
-// ========== RUN DIAGNOSTIC ==========
 async function runDiagnostic() {
     const symptoms = {};
-    const inputs = document.querySelectorAll('#questionsPanel select');
-    inputs.forEach(input => {
-        const key = input.id.replace('q_', '');
-        symptoms[key] = input.value;
+    document.querySelectorAll('#questionsPanel select').forEach(input => {
+        symptoms[input.id.replace('q_', '')] = input.value;
     });
-    
-    const vehicleSelect = document.getElementById('vehicleSelect');
-    const vehicleId = vehicleSelect.value ? parseInt(vehicleSelect.value) : null;
-    
+    const vehicleId = document.getElementById('vehicleSelect').value;
     const resultsPanel = document.getElementById('resultsPanel');
     resultsPanel.innerHTML = '<div class="empty-state"><div style="width:40px;height:40px;border:3px solid #003153;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div><h4>Analyzing...</h4></div>';
     
-    try {
-        const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ symptoms, vehicle_id: vehicleId })
-        });
-        const result = await res.json();
-        
-        const severityColor = result.severity === 'high' ? '#f8d7da' : result.severity === 'medium' ? '#fff3cd' : '#d4edda';
-        const severityIcon = result.severity === 'high' ? 'fa-exclamation-circle' : result.severity === 'medium' ? 'fa-clock' : 'fa-check-circle';
-        
-        // Save to localStorage history
-        const historyItem = {
-            id: Date.now(),
-            type: currentSystem,
-            date: new Date().toLocaleString(),
-            results: result.results,
-            severity: result.severity,
-            fullResults: result.results,
-            tools: result.tools || [],
-            actionPlan: result.action_plan || []
-        };
-        diagnosticHistory.unshift(historyItem);
-        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-        
-        // Save to database if vehicle selected
-        const vehicleIdDB = document.getElementById("vehicleSelect").value;
-        if (vehicleIdDB && vehicleIdDB !== "") {
-            try {
-                await fetch(`${API_BASE}/api/diagnostic/save`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        vehicle_id: parseInt(vehicleIdDB),
-                        diagnostic_type: currentSystem,
-                        results: result.results,
-                        severity: result.severity
-                    })
-                });
-                console.log("✅ Diagnostic saved to database");
-            } catch(e) {
-                console.log("Database save skipped");
-            }
-        }
-
-        
-        let toolsHtml = '';
-        if (result.tools && result.tools.length) {
-            toolsHtml = `<div style="padding:15px;background:#f0f2f5;border-radius:20px;margin-top:15px;"><strong>Tools Required:</strong><br>${result.tools.join(', ')}</div>`;
-        }
-        
-        let actionHtml = '';
-        if (result.action_plan && result.action_plan.length) {
-            actionHtml = `<div style="padding:15px;background:#f0f2f5;border-radius:20px;margin-top:15px;"><strong>Action Plan:</strong><ol style="margin-left:20px;margin-top:8px;">${result.action_plan.map(a => `<li>${a}</li>`).join('')}</ol></div>`;
-        }
-        
-        resultsPanel.innerHTML = `
-            <div style="padding:15px;border-radius:25px;background:${severityColor};margin-bottom:15px;">
-                <i class="fas ${severityIcon}"></i> <strong>Severity:</strong> ${result.severity?.toUpperCase() || 'MEDIUM'}
-            </div>
-            <div style="padding:20px;background:#f0f2f5;border-radius:25px;">
-                <p>${result.results}</p>
-            </div>
-            ${toolsHtml}
-            ${actionHtml}
-            <div class="btn-group" style="margin-top:20px;">
-                <button class="btn-primary" onclick="runDiagnostic()"><i class="fas fa-redo-alt"></i> Run Again</button>
-                <button class="btn-secondary" onclick="cancelDiagnostic()"><i class="fas fa-trash-alt"></i> Clear</button>
-            </div>
-        `;
-        loadStats();
-    } catch(e) {
-        resultsPanel.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h4>Error</h4><p>Please try again</p></div>';
-    }
+    const res = await fetch(`${API_BASE}/api/diagnose/${currentSystem}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symptoms, vehicle_id: vehicleId ? parseInt(vehicleId) : null })
+    });
+    const result = await res.json();
+    
+    const severityColor = result.severity === 'high' ? '#f8d7da' : result.severity === 'medium' ? '#fff3cd' : '#d4edda';
+    
+    // Save to history
+    diagnosticHistory.unshift({ id: Date.now(), type: currentSystem, date: new Date().toLocaleString(), results: result.results, severity: result.severity });
+    localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+    
+    resultsPanel.innerHTML = `
+        <div style="padding:15px;border-radius:25px;background:${severityColor};margin-bottom:15px;"><strong>Severity:</strong> ${result.severity}</div>
+        <div style="padding:20px;background:#f0f2f5;border-radius:25px;"><p>${result.results}</p></div>
+        <div class="btn-group" style="margin-top:20px;"><button class="btn-primary" onclick="runDiagnostic()">Run Again</button><button class="btn-secondary" onclick="cancelDiagnostic()">Clear</button></div>
+    `;
+    loadStats();
 }
 
-// ========== VEHICLE MANAGEMENT ==========
+function cancelDiagnostic() {
+    document.getElementById('resultsPanel').innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h4>Ready to Diagnose</h4><p>Select a vehicle and run a diagnostic</p></div>';
+}
+
 async function loadVehicles() {
-    try {
-        const res = await fetch(`${API_BASE}/api/vehicles`);
-        const data = await res.json();
-        const vehiclesList = document.getElementById('vehiclesList');
-        if (data.vehicles && data.vehicles.length > 0) {
-            vehiclesList.innerHTML = data.vehicles.map(v => `
-                <div class="vehicle-item">
-                    <div class="vehicle-info">
-                        <strong>${v.make} ${v.model} (${v.year})</strong><br>
-                        <small><i class="fas fa-id-card"></i> ${v.license_plate || 'No plate'} | <i class="fas fa-user"></i> ${v.customer_name || 'Walk-in'}</small>
-                    </div>
-                    <button class="delete-btn" onclick="deleteVehicle(${v.id})"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `).join('');
-        } else {
-            vehiclesList.innerHTML = '<div class="empty-state"><i class="fas fa-garage"></i><h4>No Vehicles</h4><p>Add your first vehicle</p></div>';
-        }
-    } catch(e) { console.log('Error loading vehicles'); }
+    const res = await fetch(`${API_BASE}/api/vehicles`);
+    const data = await res.json();
+    const vehiclesList = document.getElementById('vehiclesList');
+    if (!data.vehicles || data.vehicles.length === 0) {
+        vehiclesList.innerHTML = '<div class="empty-state"><i class="fas fa-garage"></i><h4>No Vehicles</h4><p>Add your first vehicle</p></div>';
+    } else {
+        vehiclesList.innerHTML = data.vehicles.map(v => `
+            <div class="vehicle-item"><div><strong>${v.make} ${v.model} (${v.year})</strong><br><small>${v.license_plate || 'No plate'} | ${v.customer_name || 'Walk-in'}</small></div>
+            <button class="delete-btn" onclick="deleteVehicle(${v.id})"><i class="fas fa-trash-alt"></i></button></div>
+        `).join('');
+    }
 }
 
 async function deleteVehicle(id) {
     if (confirm('Remove this vehicle?')) {
         await fetch(`${API_BASE}/api/vehicle/${id}`, { method: 'DELETE' });
         loadVehicles();
-        loadStats();
         loadVehiclesForSelector();
+        loadStats();
     }
 }
 
 function showAddVehicleModal() {
-    const make = prompt('Enter vehicle make (Toyota, BMW, etc.):');
+    const make = prompt('Enter vehicle make:');
     if (!make) return;
     const model = prompt('Enter vehicle model:');
-    if (!model) return;
     const year = prompt('Enter year:');
     const license = prompt('License plate (optional):');
     const customer = prompt('Customer name (optional):');
-    
     fetch(`${API_BASE}/api/vehicle/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            make, model, year: parseInt(year), 
-            license_plate: license || '', 
-            customer_name: customer || 'Walk-in Customer' 
-        })
-    }).then(() => { 
-        loadVehicles(); 
-        loadStats(); 
-        
-        // Save to database if vehicle selected
-        const vehicleIdDB2 = document.getElementById("vehicleSelect").value;
-        if (vehicleIdDB2 && vehicleIdDB2 !== "") {
-            try {
-                await fetch(`${API_BASE}/api/diagnostic/save`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-        
-        // Save to database if vehicle selected
-        const vehicleIdDB3 = document.getElementById("vehicleSelect").value;
-        if (vehicleIdDB3 && vehicleIdDB3 !== "") {
-            try {
-                await fetch(`${API_BASE}/api/diagnostic/save`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        vehicle_id: parseInt(vehicleIdDB3),
-                        diagnostic_type: currentSystem,
-                        results: result.results,
-                        severity: result.severity
-                    })
-                });
-                console.log("✅ Diagnostic saved to database");
-            } catch(e) {
-                console.log("Database save skipped");
-            }
-        }
-
-                        vehicle_id: parseInt(vehicleIdDB2),
-                        diagnostic_type: currentSystem,
-                        results: result.results,
-                        severity: result.severity
-                    })
-                });
-                console.log("✅ Diagnostic saved to database");
-            } catch(e) {
-                console.log("Database save skipped");
-            }
-        }
-
-        loadVehiclesForSelector(); 
-    }).catch(e => alert('Error adding vehicle'));
-}
-
-// ========== HISTORY MANAGEMENT ==========
-function toggleHistoryItem(id) {
-    const fullDiv = document.getElementById(`history-full-${id}`);
-    const icon = document.getElementById(`expand-icon-${id}`);
-    if (fullDiv.classList.contains('show')) {
-        fullDiv.classList.remove('show');
-        icon.style.transform = 'rotate(0deg)';
-    } else {
-        fullDiv.classList.add('show');
-        icon.style.transform = 'rotate(180deg)';
-    }
-}
-
-function deleteHistoryItem(id) {
-    if (confirm('Delete this diagnostic record?')) {
-        diagnosticHistory = diagnosticHistory.filter(item => item.id !== id);
-        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-        loadHistory();
-        loadStats();
-    }
-}
-
-function clearAllHistory() {
-    if (confirm('Delete ALL diagnostic history? This cannot be undone.')) {
-        diagnosticHistory = [];
-        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
-        loadHistory();
-        loadStats();
-    }
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ make, model, year: parseInt(year), license_plate: license || '', customer_name: customer || 'Walk-in Customer' })
+    }).then(() => { loadVehicles(); loadVehiclesForSelector(); loadStats(); });
 }
 
 function loadHistory() {
@@ -587,58 +232,48 @@ function loadHistory() {
         historyDiv.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h4>No History</h4><p>Run diagnostics to see them here</p></div>';
     } else {
         historyDiv.innerHTML = diagnosticHistory.map(h => `
-            <div class="history-item" onclick="toggleHistoryItem(${h.id})">
-                <div class="history-header">
-                    <div class="history-title">
-                        <i class="fas ${h.type === 'engine' ? 'fa-car' : h.type === 'battery' ? 'fa-car-battery' : 'fa-bolt'}"></i>
-                        <strong>${h.type.toUpperCase()}</strong>
-                        <i class="fas fa-chevron-down expand-icon" id="expand-icon-${h.id}"></i>
-                    </div>
-                    <div class="history-date"><i class="far fa-calendar-alt"></i> ${h.date}</div>
-                </div>
-                <div class="history-preview">${h.results.substring(0, 100)}...</div>
-                <div class="history-full" id="history-full-${h.id}">
-                    <p style="margin-bottom: 10px;">${h.fullResults || h.results}</p>
-                    ${h.tools && h.tools.length ? `<p><strong>Tools:</strong> ${h.tools.join(', ')}</p>` : ''}
-                    ${h.actionPlan && h.actionPlan.length ? `<p><strong>Action Plan:</strong> ${h.actionPlan.slice(0, 3).join(', ')}</p>` : ''}
-                    <div class="history-actions">
-                        <button class="history-delete" onclick="event.stopPropagation(); deleteHistoryItem(${h.id})">
-                            <i class="fas fa-trash-alt"></i> Delete
-                        </button>
-                    </div>
-                </div>
+            <div style="padding:15px;margin-bottom:10px;background:#f0f2f5;border-radius:20px;">
+                <div><strong>${h.type.toUpperCase()}</strong> - ${h.date}</div>
+                <p>${h.results.substring(0,100)}...</p>
+                <button onclick="deleteHistoryItem(${h.id})" style="background:none;border:none;color:#dc2626;margin-top:8px;">Delete</button>
             </div>
         `).join('');
     }
 }
 
-// ========== STATISTICS ==========
+function deleteHistoryItem(id) {
+    diagnosticHistory = diagnosticHistory.filter(item => item.id !== id);
+    localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+    loadHistory();
+    loadStats();
+}
+
+function clearAllHistory() {
+    if (confirm('Delete all history?')) {
+        diagnosticHistory = [];
+        localStorage.setItem('diagnosticHistory', JSON.stringify(diagnosticHistory));
+        loadHistory();
+        loadStats();
+    }
+}
+
 async function loadStats() {
-    try {
-        const res = await fetch(`${API_BASE}/api/statistics`);
-        const stats = await res.json();
-        document.getElementById('statCustomers').textContent = stats.total_customers || 0;
-        document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
-        document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
-        document.getElementById('statRevenue').textContent = `MK ${stats.total_revenue || 0}`;
-    } catch(e) { console.log('Stats error'); }
+    const res = await fetch(`${API_BASE}/api/statistics`);
+    const stats = await res.json();
+    document.getElementById('statCustomers').textContent = stats.total_customers || 0;
+    document.getElementById('statVehicles').textContent = stats.total_vehicles || 0;
+    document.getElementById('statDiagnostics').textContent = stats.total_diagnostics || 0;
+    document.getElementById('statRevenue').textContent = `MK ${stats.total_revenue || 0}`;
 }
 
-async function logout() {
-    window.location.href = '/login.html';
-}
+async function logout() { window.location.href = '/login.html'; }
 
-// ========== EVENT LISTENERS ==========
-document.getElementById('systemSelect').addEventListener('change', (e) => {
-    currentSystem = e.target.value;
-    loadQuestions();
-    cancelDiagnostic();
-});
+document.getElementById('systemSelect').addEventListener('change', (e) => { currentSystem = e.target.value; loadQuestions(); });
 
-// ========== INITIALIZATION ==========
+loadVehiclesForSelector();
 loadQuestions();
 loadStats();
-loadVehiclesForSelector();
+loadHistory();
 setInterval(loadStats, 30000);
 </script>
 </body>
