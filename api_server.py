@@ -267,3 +267,24 @@ def get_customers():
 @app.route('/version')
 def version():
     return {'version': 'latest', 'commit': '512987f', 'customers_endpoint': 'available'}
+
+# ========== CUSTOMER ENDPOINTS ==========
+@app.route("/api/customer/add", methods=["POST"])
+def add_customer():
+    data = request.json
+    name = data.get("name")
+    phone = data.get("phone", "")
+    email = data.get("email", "")
+    
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO customers (name, phone, email)
+        VALUES (?, ?, ?)
+    """, (name, phone, email))
+    conn.commit()
+    customer_id = cursor.lastrowid
+    conn.close()
+    
+    return jsonify({"success": True, "customer_id": customer_id})
+
